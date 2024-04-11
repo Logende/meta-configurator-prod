@@ -83,8 +83,8 @@ export const META_SCHEMA_SIMPLIFIED = {
               metaConfigurator: {
                 advanced: true,
               },
-            }
-          }
+            },
+          },
         },
       ],
     },

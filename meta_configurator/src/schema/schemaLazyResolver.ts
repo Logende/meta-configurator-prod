@@ -1,4 +1,8 @@
-import type {JsonSchemaObjectType, JsonSchemaType, JsonSchemaTypePreprocessed} from '@/model/jsonSchemaType';
+import type {
+  JsonSchemaObjectType,
+  JsonSchemaType,
+  JsonSchemaTypePreprocessed,
+} from '@/model/jsonSchemaType';
 import pointer from 'json-pointer';
 import {nonBooleanSchema} from '@/schema/schemaUtils';
 import {
@@ -61,9 +65,7 @@ function handleAllOfs(schema: JsonSchemaType, rootSchema: JsonSchemaTypePreproce
   }
 
   if (hasAllOfs(schema)) {
-    schema.allOf = schema.allOf!.map(subSchema =>
-      resolveAndTransform(subSchema, rootSchema)
-    );
+    schema.allOf = schema.allOf!.map(subSchema => resolveAndTransform(subSchema, rootSchema));
 
     schema = extractIfsOfAllOfs(schema, rootSchema);
     schema = mergeAllOfs(schema);

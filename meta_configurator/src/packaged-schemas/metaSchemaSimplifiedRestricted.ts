@@ -67,8 +67,8 @@ export const META_SCHEMA_SIMPLIFIED_RESTRICTED = {
               metaConfigurator: {
                 advanced: true,
               },
-            }
-          }
+            },
+          },
         },
       ],
     },
