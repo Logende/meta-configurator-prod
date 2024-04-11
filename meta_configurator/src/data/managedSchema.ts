@@ -100,7 +100,6 @@ export class ManagedSchema {
   }
 
   public reloadSchema() {
-    console.log('reload schema');
     this._schemaPreprocessed = ref(preprocessOneTime(this._schemaRaw.value));
     this._schemaWrapper.value = new TopLevelJsonSchemaWrapper(this.schemaPreprocessed.value);
   }

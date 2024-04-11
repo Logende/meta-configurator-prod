@@ -18,11 +18,7 @@ import PropertyMetadata from '@/components/gui-editor/PropertyMetadata.vue';
 import {ConfigTreeNodeResolver} from '@/components/gui-editor/configTreeNodeResolver';
 import type {Path} from '@/model/path';
 import {GuiConstants} from '@/constants';
-import type {
-  ConfigDataTreeNode,
-  ConfigTreeNodeData,
-  GuiEditorTreeNode,
-} from '@/model/configDataTreeNode';
+import type {ConfigDataTreeNode, ConfigTreeNodeData, GuiEditorTreeNode,} from '@/model/configDataTreeNode';
 import {TreeNodeType} from '@/model/configDataTreeNode';
 import {storeToRefs} from 'pinia';
 import {useSessionStore} from '@/store/sessionStore';
@@ -31,7 +27,7 @@ import SchemaInfoOverlay from '@/components/gui-editor/SchemaInfoOverlay.vue';
 import {refDebounced, useDebounceFn} from '@vueuse/core';
 import type {TreeNode} from 'primevue/tree';
 import {focus, focusOnPath, makeEditableAndSelectContents} from '@/utility/focusUtils';
-import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
+import { useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useValidationResult} from '@/schema/validation/useValidation';
 import {dataAt} from '@/utility/resolveDataAtPath';
 
@@ -70,7 +66,7 @@ watch(
 
 // update tree when the file schema changes
 watch(useCurrentSchema().schemaWrapper, () => {
-  updateTree();
+    updateTree();
 });
 
 // update tree when the current path changes
@@ -98,7 +94,7 @@ function computeTree() {
     undefined,
     props.currentPath
   );
-  currentTree.value.children = treeNodeResolver.createChildNodesOfNode(currentTree.value);
+  currentTree.value.children = treeNodeResolver.createChildNodesOfNode(currentTree.value!);
 
   expandPreviouslyExpandedElements(currentTree.value.children as Array<GuiEditorTreeNode>);
 
