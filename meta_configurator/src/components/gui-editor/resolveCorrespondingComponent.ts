@@ -49,7 +49,9 @@ export function resolveCorrespondingComponent(
     // union type
     return h(OneOfSelectionProperty, {
       ...propsObject,
-      possibleSchemas: nodeData.schema.type.map(type => typeSchema(type, useCurrentSchema().schemaDataPreprocessed)),
+      possibleSchemas: nodeData.schema.type.map(type =>
+        typeSchema(type, useCurrentSchema().schemaDataPreprocessed)
+      ),
       isTypeUnion: true,
     });
   }

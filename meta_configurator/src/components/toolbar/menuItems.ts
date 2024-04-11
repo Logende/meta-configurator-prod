@@ -7,7 +7,7 @@ import type {SchemaOption} from '@/model/schemaOption';
 import {openGenerateDataDialog} from '@/components/toolbar/createSampleData';
 import {getDataForMode, useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useDataSource} from '@/data/dataSource';
-import {SessionMode} from "@/model/sessionMode";
+import {SessionMode} from '@/model/sessionMode';
 
 /**
  * Helper class that contains the menu items for the top menu bar.

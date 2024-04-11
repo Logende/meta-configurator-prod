@@ -7,7 +7,7 @@ import {useSessionStore} from '@/store/sessionStore';
 import {computed} from 'vue';
 import {JsonSchema} from '@/schema/jsonSchema';
 import {getSchemaForMode, useCurrentData, useCurrentSchema} from '@/data/useDataLink';
-import {SessionMode} from "@/model/sessionMode";
+import {SessionMode} from '@/model/sessionMode';
 
 const sessionStore = useSessionStore();
 

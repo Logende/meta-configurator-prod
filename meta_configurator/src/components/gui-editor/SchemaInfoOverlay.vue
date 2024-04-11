@@ -15,7 +15,7 @@ import OverlayPanel from 'primevue/overlaypanel';
 import {computed, Ref, ref} from 'vue';
 import {describeSchema} from '@/schema/schemaDescriptor';
 import type {ErrorObject} from 'ajv';
-import {useCurrentSchema} from "@/data/useDataLink";
+import {useCurrentSchema} from '@/data/useDataLink';
 
 const schemaRef: Ref<JsonSchema | undefined> = ref();
 const propertyNameRef: Ref<String> = ref('');

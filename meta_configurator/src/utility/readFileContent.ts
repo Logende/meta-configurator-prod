@@ -1,5 +1,5 @@
 import {errorService} from '@/main';
-import type {ManagedData} from "@/data/managedData";
+import type {ManagedData} from '@/data/managedData';
 
 /**
  * Reads the content of a file as a string.

@@ -22,7 +22,10 @@ const preprocessedRefSchemas: Map<string, JsonSchemaType> = new Map();
  * @param schema the schema to preprocess
  * @returns the preprocessed schema
  */
-export function preprocessSchema(schema: JsonSchemaType, referenceSchemaPreprocessed: JsonSchemaType): JsonSchemaType {
+export function preprocessSchema(
+  schema: JsonSchemaType,
+  referenceSchemaPreprocessed: JsonSchemaType
+): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }
@@ -58,7 +61,9 @@ function handleAllOfs(schema: JsonSchemaType, referenceSchemaPreprocessed: JsonS
   }
 
   if (hasAllOfs(schema)) {
-    schema.allOf = schema.allOf!.map(subSchema => preprocessSchema(subSchema, referenceSchemaPreprocessed));
+    schema.allOf = schema.allOf!.map(subSchema =>
+      preprocessSchema(subSchema, referenceSchemaPreprocessed)
+    );
 
     schema = extractIfsOfAllOfs(schema, referenceSchemaPreprocessed);
     schema = mergeAllOfs(schema);
@@ -66,7 +71,10 @@ function handleAllOfs(schema: JsonSchemaType, referenceSchemaPreprocessed: JsonS
   return schema;
 }
 
-function extractIfsOfAllOfs(schema: JsonSchemaType, referenceSchemaPreprocessed: JsonSchemaType): JsonSchemaType {
+function extractIfsOfAllOfs(
+  schema: JsonSchemaType,
+  referenceSchemaPreprocessed: JsonSchemaType
+): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }
@@ -204,7 +212,10 @@ function removeIncompatibleOneOfs(schema: JsonSchemaType) {
 }
 
 // if oneOf has just one entry: merge into parent
-function mergeSingularOneOf(schema: JsonSchemaType, referenceSchemaPreprocessed: JsonSchemaType): JsonSchemaType {
+function mergeSingularOneOf(
+  schema: JsonSchemaType,
+  referenceSchemaPreprocessed: JsonSchemaType
+): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }
@@ -212,7 +223,10 @@ function mergeSingularOneOf(schema: JsonSchemaType, referenceSchemaPreprocessed:
     if (schema.oneOf.length == 1) {
       const copiedSchema: JsonSchemaObjectType = {...schema};
       delete copiedSchema.oneOf;
-      return mergeSchemas(preprocessSchema(schema.oneOf![0], referenceSchemaPreprocessed), preprocessSchema(copiedSchema, referenceSchemaPreprocessed));
+      return mergeSchemas(
+        preprocessSchema(schema.oneOf![0], referenceSchemaPreprocessed),
+        preprocessSchema(copiedSchema, referenceSchemaPreprocessed)
+      );
     } else if (schema.oneOf!!.length == 0) {
       throw Error('oneOf array has zero entries for schema ' + JSON.stringify(schema));
     }
@@ -222,7 +236,10 @@ function mergeSingularOneOf(schema: JsonSchemaType, referenceSchemaPreprocessed:
 }
 
 // if anyOf has just one entry: merge into parent
-function mergeSingularAnyOf(schema: JsonSchemaType, referenceSchemaPreprocessed: JsonSchemaType): JsonSchemaType {
+function mergeSingularAnyOf(
+  schema: JsonSchemaType,
+  referenceSchemaPreprocessed: JsonSchemaType
+): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }
@@ -231,7 +248,10 @@ function mergeSingularAnyOf(schema: JsonSchemaType, referenceSchemaPreprocessed:
     if (schema.anyOf.length == 1) {
       const copiedSchema: JsonSchemaObjectType = {...schema};
       delete copiedSchema.anyOf;
-      return mergeSchemas(preprocessSchema(schema.anyOf!![0], referenceSchemaPreprocessed), preprocessSchema(copiedSchema, referenceSchemaPreprocessed));
+      return mergeSchemas(
+        preprocessSchema(schema.anyOf!![0], referenceSchemaPreprocessed),
+        preprocessSchema(copiedSchema, referenceSchemaPreprocessed)
+      );
     } else if (schema.anyOf!!.length == 0) {
       throw Error('anyOf array has zero entries for schema ' + JSON.stringify(schema));
     }
@@ -240,7 +260,10 @@ function mergeSingularAnyOf(schema: JsonSchemaType, referenceSchemaPreprocessed:
   return schema;
 }
 
-function resolveReference(schema: {$ref: string} & JsonSchemaObjectType, referenceSchemaPreprocessed: JsonSchemaType): JsonSchemaType {
+function resolveReference(
+  schema: {$ref: string} & JsonSchemaObjectType,
+  referenceSchemaPreprocessed: JsonSchemaType
+): JsonSchemaType {
   // remove leading # from ref if present
   const refString = schema.$ref.startsWith('#') ? schema.$ref.substring(1) : schema.$ref;
 
@@ -248,10 +271,7 @@ function resolveReference(schema: {$ref: string} & JsonSchemaObjectType, referen
   if (preprocessedRefSchemas.has(refString)) {
     refSchema = preprocessedRefSchemas.get(refString);
   } else {
-    refSchema = pointer.get(
-      nonBooleanSchema(referenceSchemaPreprocessed ?? {}) ?? {},
-      refString
-    );
+    refSchema = pointer.get(nonBooleanSchema(referenceSchemaPreprocessed ?? {}) ?? {}, refString);
     refSchema = preprocessSchema(refSchema, referenceSchemaPreprocessed);
     preprocessedRefSchemas.set(refString, refSchema);
   }

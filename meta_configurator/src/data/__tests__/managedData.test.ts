@@ -1,6 +1,6 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {shallowRef, triggerRef} from 'vue';
-import {ManagedData} from "../managedData";
+import {ManagedData} from '../managedData';
 
 vi.mock('@/formats/formatRegistry', () => ({
   useDataConverter: () => ({

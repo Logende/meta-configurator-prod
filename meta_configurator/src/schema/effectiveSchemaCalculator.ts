@@ -3,7 +3,7 @@ import type {Path} from '@/model/path';
 import _ from 'lodash';
 import {useValidationService} from '@/schema/validation/useValidation';
 import {dataAt} from '@/utility/resolveDataAtPath';
-import {useCurrentSchema} from "@/data/useDataLink";
+import {useCurrentSchema} from '@/data/useDataLink';
 
 /**
  * Wrapper around a schema and the data it was calculated for.
@@ -72,10 +72,13 @@ function resolveDependentRequired(schemaWrapper: JsonSchema, data: any) {
   const baseSchema = {...schemaWrapper.jsonSchema};
   delete baseSchema.dependentRequired;
 
-  return new JsonSchema({
-    ...baseSchema,
-    required: _.union(newRequired),
-  }, useCurrentSchema().schemaDataPreprocessed);
+  return new JsonSchema(
+    {
+      ...baseSchema,
+      required: _.union(newRequired),
+    },
+    useCurrentSchema().schemaDataPreprocessed
+  );
 }
 
 function resolveIfThenElse(schemaWrapper: JsonSchema, data: any) {

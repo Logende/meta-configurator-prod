@@ -41,7 +41,7 @@ function setupPropagationOfEditorContentChanges(editor: Editor) {
       }
 
       currentChangeFromInside = true;
-        useCurrentData().unparsedData.value = editor.getValue();
+      useCurrentData().unparsedData.value = editor.getValue();
     }, 100)
   );
 }

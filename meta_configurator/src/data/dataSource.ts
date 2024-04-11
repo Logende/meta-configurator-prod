@@ -1,7 +1,7 @@
 import {shallowRef} from 'vue';
 import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
-import {META_SCHEMA_SIMPLIFIED} from "@/packaged-schemas/metaSchemaSimplified";
-import {SETTINGS_SCHEMA} from "@/packaged-schemas/settingsSchema";
+import {META_SCHEMA_SIMPLIFIED} from '@/packaged-schemas/metaSchemaSimplified';
+import {SETTINGS_SCHEMA} from '@/packaged-schemas/settingsSchema';
 
 const dataSource = {
   // data of the file editor

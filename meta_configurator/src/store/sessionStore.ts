@@ -5,8 +5,8 @@ import {defineStore} from 'pinia';
 import {pathToString} from '@/utility/pathUtils';
 import type {SearchResult} from '@/utility/search';
 import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
-import {SessionMode} from "@/model/sessionMode";
-import type {EffectiveSchema} from "@/schema/effectiveSchemaCalculator";
+import {SessionMode} from '@/model/sessionMode';
+import type {EffectiveSchema} from '@/schema/effectiveSchemaCalculator';
 
 /**
  * Store that manages all data that is specific to the current session,
@@ -54,7 +54,6 @@ export const useSessionStore = defineStore('sessionStore', () => {
     {immediate: true}
   );
 
-
   function updateCurrentPath(proposedPath: Path): void {
     currentPath.value = proposedPath;
     const schema = effectiveSchemaAtCurrentPath.value.schema;
@@ -87,11 +86,9 @@ export const useSessionStore = defineStore('sessionStore', () => {
     return currentSearchResults.value.some(p => pathToString(p.path) === pathToString(path));
   }
 
-
   const effectiveSchemaAtCurrentPath: Ref<EffectiveSchema> = computed(() =>
-      useCurrentSchema().effectiveSchemaAtPath(currentPath.value)
+    useCurrentSchema().effectiveSchemaAtPath(currentPath.value)
   );
-
 
   return {
     currentMode,
@@ -107,7 +104,7 @@ export const useSessionStore = defineStore('sessionStore', () => {
     updateCurrentPath,
     updateCurrentSelectedElement,
     dataAtCurrentPath: computed(() => useCurrentData().dataAt(currentPath.value)),
-    schemaAtCurrentPath: computed( () => useCurrentSchema().schemaAtPath(currentPath.value)),
+    schemaAtCurrentPath: computed(() => useCurrentSchema().schemaAtPath(currentPath.value)),
     effectiveSchemaAtCurrentPath,
   };
 });

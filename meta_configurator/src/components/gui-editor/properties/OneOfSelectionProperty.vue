@@ -13,7 +13,7 @@ import {safeMergeSchemas} from '@/schema/mergeAllOfs';
 import _ from 'lodash';
 import {useValidationService} from '@/schema/validation/useValidation';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
-import {useCurrentSchema} from "@/data/useDataLink";
+import {useCurrentSchema} from '@/data/useDataLink';
 
 const props = defineProps<{
   propertyName: PathElement;

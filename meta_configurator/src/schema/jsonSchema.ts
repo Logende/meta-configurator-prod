@@ -3,7 +3,7 @@ import {nonBooleanSchema, schemaArray, schemaFromObject, schemaRecord} from '@/s
 import type {Path, PathElement} from '@/model/path';
 import {preprocessSchema} from '@/schema/schemaPreprocessor';
 import _ from 'lodash';
-import {assert} from "@vueuse/core";
+import {assert} from '@vueuse/core';
 
 /**
  * This is a wrapper class for a JSON schema. It provides some utility functions
@@ -33,12 +33,21 @@ export class JsonSchema {
   private _else?: JsonSchema;
   private _contentSchema?: JsonSchema;
 
-  constructor(jsonSchema: JsonSchemaType, referenceSchemaPreprocessed: JsonSchemaType, preprocess = true) {
-    assert(referenceSchemaPreprocessed !== undefined, 'referenceSchemaPreprocessed must be defined')
+  constructor(
+    jsonSchema: JsonSchemaType,
+    referenceSchemaPreprocessed: JsonSchemaType,
+    preprocess = true
+  ) {
+    assert(
+      referenceSchemaPreprocessed !== undefined,
+      'referenceSchemaPreprocessed must be defined'
+    );
     this.referenceSchemaPreprocessed = referenceSchemaPreprocessed;
     this.jsonSchema = nonBooleanSchema(jsonSchema);
     if (preprocess && this.jsonSchema !== undefined) {
-      this.jsonSchema = nonBooleanSchema(preprocessSchema(this.jsonSchema, this.referenceSchemaPreprocessed));
+      this.jsonSchema = nonBooleanSchema(
+        preprocessSchema(this.jsonSchema, this.referenceSchemaPreprocessed)
+      );
     }
   }
 
@@ -234,7 +243,10 @@ export class JsonSchema {
    */
   get additionalProperties(): JsonSchema {
     if (this._additionalProperties === undefined) {
-      this._additionalProperties = new JsonSchema(this.jsonSchema?.additionalProperties ?? true, this.referenceSchemaPreprocessed);
+      this._additionalProperties = new JsonSchema(
+        this.jsonSchema?.additionalProperties ?? true,
+        this.referenceSchemaPreprocessed
+      );
     }
     return this._additionalProperties;
   }
@@ -340,7 +352,10 @@ export class JsonSchema {
    */
   get contains(): JsonSchema | undefined {
     if (this._contains === undefined) {
-      this._contains = schemaFromObject(this.jsonSchema?.contains, this.referenceSchemaPreprocessed);
+      this._contains = schemaFromObject(
+        this.jsonSchema?.contains,
+        this.referenceSchemaPreprocessed
+      );
     }
     return this._contains;
   }
@@ -376,7 +391,10 @@ export class JsonSchema {
    */
   get contentSchema(): JsonSchema | undefined {
     if (this._contentSchema === undefined) {
-      this._contentSchema = schemaFromObject(this.jsonSchema?.contentSchema, this.referenceSchemaPreprocessed);
+      this._contentSchema = schemaFromObject(
+        this.jsonSchema?.contentSchema,
+        this.referenceSchemaPreprocessed
+      );
     }
     return this._contentSchema;
   }
@@ -423,7 +441,10 @@ export class JsonSchema {
       if (this.jsonSchema?.dependentSchemas === undefined) {
         return undefined;
       }
-      this._dependentSchemas = schemaRecord(this.jsonSchema?.dependentSchemas, this.referenceSchemaPreprocessed);
+      this._dependentSchemas = schemaRecord(
+        this.jsonSchema?.dependentSchemas,
+        this.referenceSchemaPreprocessed
+      );
     }
     return this._dependentSchemas;
   }
@@ -527,7 +548,10 @@ export class JsonSchema {
    */
   get items(): JsonSchema {
     if (this._items === undefined) {
-      this._items = schemaFromObject(this.jsonSchema?.items ?? true, this.referenceSchemaPreprocessed) as JsonSchema;
+      this._items = schemaFromObject(
+        this.jsonSchema?.items ?? true,
+        this.referenceSchemaPreprocessed
+      ) as JsonSchema;
     }
     return this._items;
   }
@@ -661,7 +685,10 @@ export class JsonSchema {
    */
   get patternProperties(): Record<string, JsonSchema> {
     if (this._patternProperties === undefined) {
-      this._patternProperties = schemaRecord(this.jsonSchema?.patternProperties, this.referenceSchemaPreprocessed);
+      this._patternProperties = schemaRecord(
+        this.jsonSchema?.patternProperties,
+        this.referenceSchemaPreprocessed
+      );
     }
     return this._patternProperties;
   }
@@ -673,21 +700,30 @@ export class JsonSchema {
    */
   get prefixItems(): JsonSchema[] {
     if (this._prefixItems === undefined) {
-      this._prefixItems = schemaArray(this.jsonSchema?.prefixItems, this.referenceSchemaPreprocessed);
+      this._prefixItems = schemaArray(
+        this.jsonSchema?.prefixItems,
+        this.referenceSchemaPreprocessed
+      );
     }
     return this._prefixItems;
   }
 
   get properties(): Record<string, JsonSchema> {
     if (this._properties === undefined) {
-      this._properties = schemaRecord(this.jsonSchema?.properties, this.referenceSchemaPreprocessed);
+      this._properties = schemaRecord(
+        this.jsonSchema?.properties,
+        this.referenceSchemaPreprocessed
+      );
     }
     return this._properties;
   }
 
   get propertyNames(): JsonSchema {
     if (this._propertyNames === undefined) {
-      this._propertyNames = schemaFromObject(this.jsonSchema?.propertyNames ?? true, this.referenceSchemaPreprocessed) as JsonSchema;
+      this._propertyNames = schemaFromObject(
+        this.jsonSchema?.propertyNames ?? true,
+        this.referenceSchemaPreprocessed
+      ) as JsonSchema;
     }
     return this._propertyNames;
   }
@@ -754,7 +790,7 @@ export class JsonSchema {
     if (this._unevaluatedItems === undefined) {
       this._unevaluatedItems = schemaFromObject(
         this.jsonSchema?.unevaluatedItems ?? true,
-          this.referenceSchemaPreprocessed!
+        this.referenceSchemaPreprocessed!
       ) as JsonSchema;
     }
     return this._unevaluatedItems;
@@ -767,7 +803,7 @@ export class JsonSchema {
     if (this._unevaluatedProperties === undefined) {
       this._unevaluatedProperties = schemaFromObject(
         this.jsonSchema?.unevaluatedProperties ?? true,
-          this.referenceSchemaPreprocessed!
+        this.referenceSchemaPreprocessed!
       ) as JsonSchema;
     }
     return this._unevaluatedProperties;

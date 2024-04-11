@@ -415,7 +415,9 @@ export class ConfigTreeNodeResolver {
       data: {
         absolutePath: absolutePath,
         relativePath: relativePath,
-        schema: schema.additionalProperties || new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false), // not used
+        schema:
+          schema.additionalProperties ||
+          new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false), // not used
         parentSchema: schema,
         name: '', // name is not used for add property node, but we keep it for easier type checking
         depth: depth,
@@ -460,11 +462,16 @@ export class ConfigTreeNodeResolver {
     if (userSelectionOneOf !== undefined) {
       const baseSchema = {...schema.jsonSchema};
       delete baseSchema.type;
-      const newTypeSchema = typeSchema(schema.type[userSelectionOneOf.index], useCurrentSchema().schemaDataPreprocessed);
-      const mergedSchema = new JsonSchema({
-        allOf: [baseSchema, newTypeSchema.jsonSchema ?? {}],
-      },
-          useCurrentSchema().schemaDataPreprocessed);
+      const newTypeSchema = typeSchema(
+        schema.type[userSelectionOneOf.index],
+        useCurrentSchema().schemaDataPreprocessed
+      );
+      const mergedSchema = new JsonSchema(
+        {
+          allOf: [baseSchema, newTypeSchema.jsonSchema ?? {}],
+        },
+        useCurrentSchema().schemaDataPreprocessed
+      );
       return [
         this.createTreeNodeOfProperty(mergedSchema, schema, absolutePath, relativePath, depth + 1),
       ];
@@ -484,9 +491,12 @@ export class ConfigTreeNodeResolver {
       const baseSchema = {...schema.jsonSchema};
       delete baseSchema.oneOf;
       const subSchemaOneOf = schema.oneOf[userSelectionOneOf.index];
-      const mergedSchema = new JsonSchema({
-        allOf: [baseSchema, subSchemaOneOf.jsonSchema ?? {}],
-      }, useCurrentSchema().schemaDataPreprocessed);
+      const mergedSchema = new JsonSchema(
+        {
+          allOf: [baseSchema, subSchemaOneOf.jsonSchema ?? {}],
+        },
+        useCurrentSchema().schemaDataPreprocessed
+      );
       return [
         this.createTreeNodeOfProperty(mergedSchema, schema, absolutePath, relativePath, depth + 1),
       ];

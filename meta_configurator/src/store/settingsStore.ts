@@ -4,7 +4,7 @@ import {computed, ref} from 'vue';
 import {TopLevelJsonSchema} from '@/schema/topLevelJsonSchema';
 import {preprocessOneTime} from '@/schema/oneTimeSchemaPreprocessor';
 import {useDataSource} from '@/data/dataSource';
-import {SETTINGS_SCHEMA} from "@/packaged-schemas/settingsSchema";
+import {SETTINGS_SCHEMA} from '@/packaged-schemas/settingsSchema';
 
 /**
  * Store for the Meta Configurator settings.

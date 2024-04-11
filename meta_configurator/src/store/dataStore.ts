@@ -8,9 +8,9 @@ import {preprocessOneTime} from '@/schema/oneTimeSchemaPreprocessor';
 import {useSessionStore} from '@/store/sessionStore';
 import type {JsonSchemaType} from '@/model/jsonSchemaType';
 import {useDataSource} from '@/data/dataSource';
-import {SessionMode} from "@/model/sessionMode";
-import {META_SCHEMA_SIMPLIFIED} from "@/packaged-schemas/metaSchemaSimplified";
-import {META_SCHEMA_SIMPLIFIED_RESTRICTED} from "@/packaged-schemas/metaSchemaSimplifiedRestricted";
+import {SessionMode} from '@/model/sessionMode';
+import {META_SCHEMA_SIMPLIFIED} from '@/packaged-schemas/metaSchemaSimplified';
+import {META_SCHEMA_SIMPLIFIED_RESTRICTED} from '@/packaged-schemas/metaSchemaSimplifiedRestricted';
 
 /**
  * The store that contains the data of the current file and the current schema.

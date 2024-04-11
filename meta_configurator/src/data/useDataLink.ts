@@ -2,9 +2,9 @@ import {useDataSource} from '@/data/dataSource';
 import {useSessionStore} from '@/store/sessionStore';
 import type {ComputedRef} from 'vue';
 import {computed} from 'vue';
-import {ManagedData} from "@/data/managedData";
-import {ManagedSchema} from "@/data/managedSchema";
-import {SessionMode} from "@/model/sessionMode";
+import {ManagedData} from '@/data/managedData';
+import {ManagedSchema} from '@/data/managedSchema';
+import {SessionMode} from '@/model/sessionMode';
 
 const dataSource = useDataSource();
 
@@ -33,7 +33,6 @@ export function getDataForMode(mode: SessionMode): ManagedData {
   }
 }
 
-
 export function getSchemaForMode(mode: SessionMode): ManagedSchema {
   switch (mode) {
     case SessionMode.FileEditor:
@@ -48,11 +47,11 @@ export function getSchemaForMode(mode: SessionMode): ManagedSchema {
 }
 
 const currentEditorData: ComputedRef<ManagedData> = computed(() =>
-    getDataForMode(useSessionStore().currentMode)
+  getDataForMode(useSessionStore().currentMode)
 );
 
 const currentEditorSchema: ComputedRef<ManagedSchema> = computed(() =>
-    getSchemaForMode(useSessionStore().currentMode)
+  getSchemaForMode(useSessionStore().currentMode)
 );
 
 /**

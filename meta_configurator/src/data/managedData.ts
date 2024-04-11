@@ -23,7 +23,6 @@ export class ManagedData {
   // this is null if the string representation is valid
   private readonly unparseableDataString: Ref<string | null> = ref(null);
 
-
   private history: UndoManager | null = null;
 
   /**
@@ -142,7 +141,6 @@ export class ManagedData {
   public dataAt(path: Path): any | undefined {
     return dataAt(path, this.data.value);
   }
-
 
   public get undoManager(): UndoManager {
     if (this.history === null) {
