@@ -6,7 +6,7 @@
  * - Removed conditionals and not, due to conflict with enforced const types
  * - Removed the option to define different types for a field, making the type selection simpler
  */
-export const simplifiedMetaSchemaRestricted = {
+export const META_SCHEMA_SIMPLIFIED_RESTRICTED = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
   $id: 'com.github.meta_configurator.simplified-meta-schema-restricted',
   title: 'Json schema (simplified and restricted)',
