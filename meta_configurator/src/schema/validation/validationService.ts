@@ -40,6 +40,7 @@ export class ValidationService {
   }
 
   public validate(data: any): ValidationResult {
+    console.log("call validate with data ", this.data)
     if (!this._validationFunction) {
       // schema could not be compiled because it was invalid
       return new ValidationResult([]); // optimistic approach

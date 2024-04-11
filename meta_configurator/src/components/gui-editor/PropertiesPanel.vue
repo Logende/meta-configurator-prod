@@ -69,7 +69,7 @@ watch(
 );
 
 // update tree when the file schema changes
-watch(useCurrentSchema().schemaData, () => {
+watch(useCurrentSchema().schemaProcessed, () => {
   updateTree();
 });
 

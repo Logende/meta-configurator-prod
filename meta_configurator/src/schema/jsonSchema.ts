@@ -523,6 +523,7 @@ export class JsonSchema {
    */
   get items(): JsonSchema {
     if (this._items === undefined) {
+      console.log("_items in json schema undefined, create it based on schema object ", this.jsonSchema)
       this._items = schemaFromObject(this.jsonSchema?.items ?? true) as JsonSchema;
     }
     return this._items;

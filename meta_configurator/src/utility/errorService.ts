@@ -11,7 +11,6 @@ export default class ErrorService {
   }
 
   onError(error: unknown) {
-    console.error(error);
     this.toast.add({
       severity: 'error',
       summary: this.getSummary(error),
