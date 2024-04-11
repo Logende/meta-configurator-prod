@@ -1,11 +1,12 @@
 import type {Ref} from 'vue';
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import type {Path} from '@/model/path';
 import {defineStore} from 'pinia';
 import {pathToString} from '@/utility/pathUtils';
 import type {SearchResult} from '@/utility/search';
-import {useCurrentSchema} from '@/data/useDataLink';
+import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {SessionMode} from "@/model/sessionMode";
+import type {EffectiveSchema} from "@/schema/effectiveSchemaCalculator";
 
 /**
  * Store that manages all data that is specific to the current session,
@@ -56,7 +57,7 @@ export const useSessionStore = defineStore('sessionStore', () => {
 
   function updateCurrentPath(proposedPath: Path): void {
     currentPath.value = proposedPath;
-    const schema = useCurrentSchema().effectiveSchemaAtCurrentPath.value.schema;
+    const schema = effectiveSchemaAtCurrentPath.value.schema;
     if (!schema.hasType('object') && !schema.hasType('array')) {
       currentPath.value = proposedPath.slice(0, -1);
     }
@@ -86,6 +87,12 @@ export const useSessionStore = defineStore('sessionStore', () => {
     return currentSearchResults.value.some(p => pathToString(p.path) === pathToString(path));
   }
 
+
+  const effectiveSchemaAtCurrentPath: Ref<EffectiveSchema> = computed(() =>
+      useCurrentSchema().effectiveSchemaAtPath(currentPath.value)
+  );
+
+
   return {
     currentMode,
     schemaErrorMessage,
@@ -99,5 +106,8 @@ export const useSessionStore = defineStore('sessionStore', () => {
     collapse,
     updateCurrentPath,
     updateCurrentSelectedElement,
+    dataAtCurrentPath: computed(() => useCurrentData().dataAt(currentPath.value)),
+    schemaAtCurrentPath: computed( () => useCurrentSchema().schemaAtPath(currentPath.value)),
+    effectiveSchemaAtCurrentPath,
   };
 });

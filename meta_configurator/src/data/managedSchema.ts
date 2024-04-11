@@ -1,5 +1,5 @@
-import type {ComputedRef, Ref, ShallowRef} from 'vue';
-import {computed, ref} from 'vue';
+import type { Ref, ShallowRef} from 'vue';
+import { ref} from 'vue';
 import type {Path} from '@/model/path';
 import {pathToString} from '@/utility/pathUtils';
 import { watchDebounced} from '@vueuse/core';
@@ -10,7 +10,6 @@ import {JsonSchema} from "@/schema/jsonSchema";
 import {calculateEffectiveSchema, EffectiveSchema} from "@/schema/effectiveSchemaCalculator";
 import {useCurrentData} from "@/data/useDataLink";
 import {useUserSchemaSelectionStore} from "@/store/userSchemaSelectionStore";
-import {useSessionStore} from "@/store/sessionStore";
 
 /**
  * This class manages the schema and provides easy access to its content.
@@ -101,23 +100,6 @@ export class ManagedSchema {
     }
     return currentEffectiveSchema;
   }
-
-
-
-
-  /**
-   * Return the schema at the current path.
-   */
-  public schemaAtCurrentPath: ComputedRef<JsonSchema> = computed(() => this.schemaAtPath(useSessionStore().currentPath));
-
-
-  // todo: check how often effective schema has to be computed
-
-  public effectiveSchemaAtCurrentPath: ComputedRef<EffectiveSchema> = computed(() =>
-      this.effectiveSchemaAtPath(useSessionStore().currentPath)
-  );
-
-
 
   public reloadSchema() {
     console.log("reload schema");

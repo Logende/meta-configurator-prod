@@ -7,7 +7,6 @@ import {pathToString} from '@/utility/pathUtils';
 import _ from 'lodash';
 import {useDebouncedRefHistory} from '@vueuse/core';
 import type {UndoManager} from '@/data/undoManager';
-import {useSessionStore} from "@/store/sessionStore";
 
 /**
  * This class manages the data and keeps the data and the string representation in sync.
@@ -143,10 +142,6 @@ export class ManagedData {
   public dataAt(path: Path): any | undefined {
     return dataAt(path, this.data.value);
   }
-
-
-  public dataAtCurrentPath: ComputedRef<any | undefined> = computed(() => this.dataAt(useSessionStore().currentPath));
-
 
 
   public get undoManager(): UndoManager {

@@ -34,7 +34,7 @@ function selectPath(path: Path) {
 }
 
 const currentSchema = computed(() => {
-  const schema = useCurrentSchema().effectiveSchemaAtCurrentPath?.value.schema;
+  const schema = useSessionStore().effectiveSchemaAtCurrentPath?.schema;
   if (!schema) {
     return new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false);
   }
@@ -53,7 +53,7 @@ const currentSchema = computed(() => {
       <PropertiesPanel
         :currentSchema="currentSchema"
         :currentPath="sessionStore.currentPath"
-        :currentData="useCurrentData().dataAtCurrentPath.value"
+        :currentData="useSessionStore().dataAtCurrentPath"
         @zoom_into_path="pathToAdd => zoomIntoPath(pathToAdd)"
         @remove_property="removeProperty"
         @select_path="selectedPath => selectPath(selectedPath)"
