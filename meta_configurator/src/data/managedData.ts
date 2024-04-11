@@ -7,7 +7,6 @@ import {pathToString} from '@/utility/pathUtils';
 import _ from 'lodash';
 import {useDebouncedRefHistory} from '@vueuse/core';
 import type {UndoManager} from '@/data/undoManager';
-import {JsonSchema} from "@/schema/jsonSchema";
 import {useSessionStore} from "@/store/sessionStore";
 
 /**

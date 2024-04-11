@@ -1,7 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import {SessionMode, useSessionStore} from '@/store/sessionStore';
+import {useSessionStore} from '@/store/sessionStore';
 import {clearPreprocessedRefSchemaCache} from '@/schema/schemaPreprocessor';
 import {useCurrentSchema} from "@/data/useDataLink";
+import {SessionMode} from "@/model/sessionMode";
 
 /**
  * The router of the application.

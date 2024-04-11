@@ -7,9 +7,10 @@ import {watchDebounced} from '@vueuse/core';
 import {simplifiedMetaSchema} from '../../resources/json-schema/simplifiedMetaSchema';
 import {simplifiedMetaSchemaRestricted} from '../../resources/json-schema/simplifiedMetaSchemaRestricted';
 import {preprocessOneTime} from '@/schema/oneTimeSchemaPreprocessor';
-import {SessionMode, useSessionStore} from '@/store/sessionStore';
+import {useSessionStore} from '@/store/sessionStore';
 import type {JsonSchemaType} from '@/model/jsonSchemaType';
 import {useDataSource} from '@/data/dataSource';
+import {SessionMode} from "@/model/sessionMode";
 
 /**
  * The store that contains the data of the current file and the current schema.

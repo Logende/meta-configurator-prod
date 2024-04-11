@@ -1,7 +1,6 @@
 import type {JsonSchemaType, SchemaPropertyType} from '@/model/jsonSchemaType';
 import {JsonSchema} from '@/schema/jsonSchema';
 import {useCurrentSchema} from "@/data/useDataLink";
-import type {Ref} from "vue";
 
 /**
  * @returns the schema if it is not a boolean, otherwise

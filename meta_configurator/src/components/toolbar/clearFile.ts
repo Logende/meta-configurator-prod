@@ -1,10 +1,10 @@
-import {SessionMode, useSessionStore} from '@/store/sessionStore';
+import {useSessionStore} from '@/store/sessionStore';
 import {toastService} from '@/utility/toastService';
 import {confirmationService} from '@/utility/confirmationService';
 import _ from 'lodash';
 import {getDataForMode, useCurrentData} from '@/data/useDataLink';
-import type {DataLink} from '@/data/dataLink';
 import type {ManagedData} from "@/data/managedData";
+import {SessionMode} from "@/model/sessionMode";
 
 /**
  * Presents a confirmation dialog to the user and clears the file if the user confirms.

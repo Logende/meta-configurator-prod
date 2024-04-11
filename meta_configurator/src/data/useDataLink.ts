@@ -1,15 +1,12 @@
-import {DataLink} from '@/data/dataLink';
 import {useDataSource} from '@/data/dataSource';
-import {SessionMode, useSessionStore} from '@/store/sessionStore';
+import {useSessionStore} from '@/store/sessionStore';
 import type {ComputedRef} from 'vue';
 import {computed} from 'vue';
 import {ManagedData} from "@/data/managedData";
 import {ManagedSchema} from "@/data/managedSchema";
+import {SessionMode} from "@/model/sessionMode";
 
 const dataSource = useDataSource();
-const fileEditorDataLink = new DataLink(dataSource.userData, dataSource.userSchemaData);
-const schemaEditorDataLink = new DataLink(dataSource.userSchemaData, dataSource.metaSchemaData);
-const settingsEditorDataLink = new DataLink(dataSource.settingsData, dataSource.settingsSchemaData);
 
 const managedUserData = new ManagedData(dataSource.userData);
 const managedSchemaData = new ManagedData(dataSource.userSchemaData);

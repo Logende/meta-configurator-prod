@@ -1,6 +1,5 @@
 import {JsonSchema} from '@/schema/jsonSchema';
-import type {JsonSchemaType, TopLevelSchema} from '@/model/jsonSchemaType';
-import type {Ref} from "vue";
+import type { TopLevelSchema} from '@/model/jsonSchemaType';
 
 /**
  * Like {@link JsonSchema}, but with additional properties that are only allowed at the top level of a schema.

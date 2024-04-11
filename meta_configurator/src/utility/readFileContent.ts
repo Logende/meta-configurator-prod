@@ -1,5 +1,4 @@
 import {errorService} from '@/main';
-import type {DataLink} from '@/data/dataLink';
 import type {ManagedData} from "@/data/managedData";
 
 /**

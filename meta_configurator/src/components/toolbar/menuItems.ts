@@ -1,12 +1,13 @@
 import {openUploadFileDialog, openUploadSchemaDialog} from '@/components/toolbar/uploadFile';
 import {downloadFile} from '@/components/toolbar/downloadFile';
 import {openClearCurrentFileDialog, openClearSchemaDialog} from '@/components/toolbar/clearFile';
-import {SessionMode, useSessionStore} from '@/store/sessionStore';
+import {useSessionStore} from '@/store/sessionStore';
 import {ref} from 'vue';
 import type {SchemaOption} from '@/model/schemaOption';
 import {openGenerateDataDialog} from '@/components/toolbar/createSampleData';
 import {getDataForMode, useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useDataSource} from '@/data/dataSource';
+import {SessionMode} from "@/model/sessionMode";
 
 /**
  * Helper class that contains the menu items for the top menu bar.

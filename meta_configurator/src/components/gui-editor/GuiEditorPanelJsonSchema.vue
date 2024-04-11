@@ -3,10 +3,11 @@ import SchemaInfoPanel from '@/components/gui-editor/SchemaInfoPanel.vue';
 import CurrentPathBreadcrumb from '@/components/gui-editor/CurrentPathBreadcrump.vue';
 import PropertiesPanel from '@/components/gui-editor/PropertiesPanel.vue';
 import type {Path} from '@/model/path';
-import {SessionMode, useSessionStore} from '@/store/sessionStore';
+import {useSessionStore} from '@/store/sessionStore';
 import {computed} from 'vue';
 import {JsonSchema} from '@/schema/jsonSchema';
 import {getSchemaForMode, useCurrentData, useCurrentSchema} from '@/data/useDataLink';
+import {SessionMode} from "@/model/sessionMode";
 
 const sessionStore = useSessionStore();
 

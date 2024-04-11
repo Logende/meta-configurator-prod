@@ -1,12 +1,8 @@
-import type {ComputedRef, Ref, ShallowRef, WritableComputedRef} from 'vue';
-import {computed, ref, triggerRef} from 'vue';
-import {useDataConverter} from '@/formats/formatRegistry';
+import type {ComputedRef, Ref, ShallowRef} from 'vue';
+import {computed, ref} from 'vue';
 import type {Path} from '@/model/path';
-import {dataAt} from '@/utility/resolveDataAtPath';
 import {pathToString} from '@/utility/pathUtils';
-import _ from 'lodash';
-import {useDebouncedRefHistory, watchDebounced} from '@vueuse/core';
-import type {UndoManager} from '@/data/undoManager';
+import { watchDebounced} from '@vueuse/core';
 import {preprocessOneTime} from "@/schema/oneTimeSchemaPreprocessor";
 import {TopLevelJsonSchema} from "@/schema/topLevelJsonSchema";
 import type {JsonSchemaType} from "@/model/jsonSchemaType";
@@ -15,7 +11,6 @@ import {calculateEffectiveSchema, EffectiveSchema} from "@/schema/effectiveSchem
 import {useCurrentData} from "@/data/useDataLink";
 import {useUserSchemaSelectionStore} from "@/store/userSchemaSelectionStore";
 import {useSessionStore} from "@/store/sessionStore";
-import {schemaArray} from "@/schema/schemaUtils";
 
 /**
  * This class manages the schema and provides easy access to its content.
@@ -25,7 +20,7 @@ export class ManagedSchema {
    * @param _shallowSchemaRef the shallow ref to the schema
    * @param watchSchemaChanges whether to watch for changes in schema data and reprocess the schema accordingly
    */
-  constructor(private _shallowSchemaRef: ShallowRef<any>, watchSchemaChanges: boolean) {
+  constructor(private _shallowSchemaRef: ShallowRef, watchSchemaChanges: boolean) {
     this._schemaDataPreprocessed = ref(preprocessOneTime(this._shallowSchemaRef.value));
     this._schemaProcessed = ref(new TopLevelJsonSchema(this._schemaDataPreprocessed.value));
 

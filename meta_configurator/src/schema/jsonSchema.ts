@@ -3,7 +3,6 @@ import {nonBooleanSchema, schemaArray, schemaFromObject, schemaRecord} from '@/s
 import type {Path, PathElement} from '@/model/path';
 import {preprocessSchema} from '@/schema/schemaPreprocessor';
 import _ from 'lodash';
-import type {Ref} from "vue";
 import {assert} from "@vueuse/core";
 
 /**

@@ -1,6 +1,5 @@
 import type {JsonSchemaObjectType, JsonSchemaType} from '@/model/jsonSchemaType';
 import pointer from 'json-pointer';
-import {useSessionStore} from '@/store/sessionStore';
 import {nonBooleanSchema} from '@/schema/schemaUtils';
 import {
   areSchemasCompatible,
@@ -8,9 +7,6 @@ import {
   mergeSchemas,
   safeMergeSchemas,
 } from '@/schema/mergeAllOfs';
-import {useCurrentSchema} from "@/data/useDataLink";
-import type {JsonSchema} from "@/schema/jsonSchema";
-import type {Ref} from "vue";
 
 const preprocessedRefSchemas: Map<string, JsonSchemaType> = new Map();
 

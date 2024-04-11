@@ -1,37 +1,11 @@
-import type {ComputedRef, Ref} from 'vue';
-import {computed, ref, watch} from 'vue';
+import type {Ref} from 'vue';
+import {ref, watch} from 'vue';
 import type {Path} from '@/model/path';
 import {defineStore} from 'pinia';
-import {useDataStore} from '@/store/dataStore';
-import {JsonSchema} from '@/schema/jsonSchema';
 import {pathToString} from '@/utility/pathUtils';
-import {useSettingsStore} from '@/store/settingsStore';
-import type {TopLevelJsonSchema} from '@/schema/topLevelJsonSchema';
 import type {SearchResult} from '@/utility/search';
-import {calculateEffectiveSchema, EffectiveSchema} from '@/schema/effectiveSchemaCalculator';
-import type {JsonSchemaType} from '@/model/jsonSchemaType';
-import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
-import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
-
-/**
- * The current page/mode of the application.
- */
-export enum SessionMode {
-  FileEditor = 'file_editor',
-  SchemaEditor = 'schema_editor',
-  Settings = 'settings',
-}
-
-/**
- * The last responsible for a change in the data.
- */
-export enum ChangeResponsible {
-  None = 'none',
-  CodeEditor = 'code_editor',
-  GuiEditor = 'gui_editor',
-  Routing = 'routing',
-  Menubar = 'menubar',
-}
+import {useCurrentSchema} from '@/data/useDataLink';
+import {SessionMode} from "@/model/sessionMode";
 
 /**
  * Store that manages all data that is specific to the current session,
