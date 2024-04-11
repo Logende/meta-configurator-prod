@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import {SessionMode, useSessionStore} from '@/store/sessionStore';
 import {clearPreprocessedRefSchemaCache} from '@/schema/schemaPreprocessor';
+import {useCurrentSchema} from "@/data/useDataLink";
 
 /**
  * The router of the application.
@@ -55,7 +56,7 @@ router.beforeEach((to, from, next) => {
   useSessionStore().currentExpandedElements = {};
   useSessionStore().currentSearchResults = [];
 
-  useSessionStore().reloadSchema();
+  useCurrentSchema().reloadSchema();
 
   clearPreprocessedRefSchemaCache();
 

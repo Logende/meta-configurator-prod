@@ -34,6 +34,7 @@ export class ValidationService {
   private initValidationFunction() {
     this._ajv = this.getMatchingAjvVersion(this.topLevelSchema);
     addFormats(this._ajv);
+    console.log("init valid func with topLevelSchema ", this.topLevelSchema)
     this._ajv.addSchema(this.topLevelSchema, this.topLevelSchemaId);
     this._validationFunction = this._ajv.getSchema(this.topLevelSchemaId);
   }

@@ -8,6 +8,7 @@ import {
   mergeSchemas,
   safeMergeSchemas,
 } from '@/schema/mergeAllOfs';
+import {useCurrentSchema} from "@/data/useDataLink";
 
 const preprocessedRefSchemas: Map<string, JsonSchemaType> = new Map();
 
@@ -250,7 +251,7 @@ function resolveReference(schema: {$ref: string} & JsonSchemaObjectType): JsonSc
     refSchema = preprocessedRefSchemas.get(refString);
   } else {
     refSchema = pointer.get(
-      nonBooleanSchema(useSessionStore().fileSchemaDataPreprocessed ?? {}) ?? {},
+      nonBooleanSchema(useCurrentSchema().schemaDataPreprocessed ?? {}) ?? {},
       refString
     );
     refSchema = preprocessSchema(refSchema);

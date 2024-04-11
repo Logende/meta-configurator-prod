@@ -21,7 +21,7 @@ import {toastService} from '@/utility/toastService';
 import {useAppRouter} from '@/router';
 import {useDropZone, useWindowSize} from '@vueuse/core/index';
 import {readFileContentToDataLink} from '@/utility/readFileContent';
-import {useCurrentDataLink} from '@/data/useDataLink';
+import {useCurrentData} from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 
 const panels = computed(() => {
@@ -75,7 +75,7 @@ watch(isOverDropZone, isOverDropZone => {
 });
 
 function onDrop(files: File[] | null) {
-  readFileContentToDataLink(files, useCurrentDataLink());
+  readFileContentToDataLink(files, useCurrentData());
 }
 
 confirmationService.confirm = useConfirm();

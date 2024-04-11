@@ -10,7 +10,7 @@ import {h} from 'vue';
 import {useSessionStore} from '@/store/sessionStore';
 import OneOfSelectionProperty from '@/components/gui-editor/properties/OneOfSelectionProperty.vue';
 import AnyOfSelectionProperty from '@/components/gui-editor/properties/AnyOfSelectionProperty.vue';
-import {useCurrentDataLink} from '@/data/useDataLink';
+import {useCurrentData} from '@/data/useDataLink';
 import {useValidationResult} from '@/schema/validation/useValidation';
 import {typeSchema} from '@/schema/schemaUtils';
 
@@ -98,7 +98,7 @@ function hasTwoOrMoreExamples(schema: any): boolean {
 function buildProperties(nodeData: ConfigTreeNodeData | AddItemTreeNodeData) {
   return {
     propertyName: nodeData.name,
-    propertyData: useCurrentDataLink().dataAt(nodeData.absolutePath),
+    propertyData: useCurrentData().dataAt(nodeData.absolutePath),
     propertySchema: nodeData.schema,
     parentSchema: nodeData.parentSchema,
     relativePath: nodeData.relativePath,
