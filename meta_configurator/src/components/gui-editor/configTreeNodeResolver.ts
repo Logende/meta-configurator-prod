@@ -12,7 +12,7 @@ import _ from 'lodash';
 import type {EffectiveSchema} from '@/schema/effectiveSchemaCalculator';
 import {calculateEffectiveSchema} from '@/schema/effectiveSchemaCalculator';
 import {safeMergeSchemas} from '@/schema/mergeAllOfs';
-import {useCurrentData} from '@/data/useDataLink';
+import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 import {typeSchema} from '@/schema/schemaUtils';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
@@ -415,7 +415,7 @@ export class ConfigTreeNodeResolver {
       data: {
         absolutePath: absolutePath,
         relativePath: relativePath,
-        schema: schema.additionalProperties || new JsonSchema({}), // not used
+        schema: schema.additionalProperties || new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false), // not used
         parentSchema: schema,
         name: '', // name is not used for add property node, but we keep it for easier type checking
         depth: depth,
@@ -463,7 +463,8 @@ export class ConfigTreeNodeResolver {
       const newTypeSchema = typeSchema(schema.type[userSelectionOneOf.index]);
       const mergedSchema = new JsonSchema({
         allOf: [baseSchema, newTypeSchema.jsonSchema ?? {}],
-      });
+      },
+          useCurrentSchema().schemaDataPreprocessed);
       return [
         this.createTreeNodeOfProperty(mergedSchema, schema, absolutePath, relativePath, depth + 1),
       ];
@@ -485,7 +486,7 @@ export class ConfigTreeNodeResolver {
       const subSchemaOneOf = schema.oneOf[userSelectionOneOf.index];
       const mergedSchema = new JsonSchema({
         allOf: [baseSchema, subSchemaOneOf.jsonSchema ?? {}],
-      });
+      }, useCurrentSchema().schemaDataPreprocessed);
       return [
         this.createTreeNodeOfProperty(mergedSchema, schema, absolutePath, relativePath, depth + 1),
       ];
@@ -514,7 +515,7 @@ export class ConfigTreeNodeResolver {
       }
       return [
         this.createTreeNodeOfProperty(
-          new JsonSchema(mergedSchema),
+          new JsonSchema(mergedSchema, useCurrentSchema().schemaDataPreprocessed),
           schema,
           absolutePath,
           relativePath,

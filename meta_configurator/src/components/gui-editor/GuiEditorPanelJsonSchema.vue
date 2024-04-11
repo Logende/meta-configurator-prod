@@ -35,7 +35,7 @@ function selectPath(path: Path) {
 const currentSchema = computed(() => {
   const schema = useCurrentSchema().effectiveSchemaAtCurrentPath?.value.schema;
   if (!schema) {
-    return new JsonSchema({});
+    return new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false);
   }
   return schema;
 });

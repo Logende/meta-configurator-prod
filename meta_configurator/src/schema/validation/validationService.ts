@@ -34,13 +34,11 @@ export class ValidationService {
   private initValidationFunction() {
     this._ajv = this.getMatchingAjvVersion(this.topLevelSchema);
     addFormats(this._ajv);
-    console.log("init valid func with topLevelSchema ", this.topLevelSchema)
     this._ajv.addSchema(this.topLevelSchema, this.topLevelSchemaId);
     this._validationFunction = this._ajv.getSchema(this.topLevelSchemaId);
   }
 
   public validate(data: any): ValidationResult {
-    console.log("call validate with data ", this.data)
     if (!this._validationFunction) {
       // schema could not be compiled because it was invalid
       return new ValidationResult([]); // optimistic approach

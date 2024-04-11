@@ -1,5 +1,6 @@
 import {JsonSchema} from '@/schema/jsonSchema';
-import type {TopLevelSchema} from '@/model/jsonSchemaType';
+import type {JsonSchemaType, TopLevelSchema} from '@/model/jsonSchemaType';
+import type {Ref} from "vue";
 
 /**
  * Like {@link JsonSchema}, but with additional properties that are only allowed at the top level of a schema.
@@ -11,7 +12,7 @@ export class TopLevelJsonSchema extends JsonSchema {
   private _$defs?: Record<string, JsonSchema>;
 
   constructor(schema: TopLevelSchema) {
-    super(schema);
+    super(schema, schema);
     this._$schema = schema.$schema;
   }
 

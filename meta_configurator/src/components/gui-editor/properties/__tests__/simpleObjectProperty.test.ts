@@ -2,6 +2,7 @@ import {mount} from '@vue/test-utils';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import SimpleObjectProperty from '../SimpleObjectProperty.vue';
 import {JsonSchema} from '@/schema/jsonSchema';
+import {useCurrentSchema} from "../../../../data/useDataLink";
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({
@@ -46,7 +47,7 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: {foo: 'bar'},
-        propertySchema: new JsonSchema({}),
+        propertySchema: new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false),
       });
 
       it('should show the correct description', () => {
@@ -62,7 +63,7 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: {foo: 'bar', baz: 'qux'},
-        propertySchema: new JsonSchema({}),
+        propertySchema: new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false),
       });
 
       it('should show the correct description', () => {
@@ -78,7 +79,7 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: {},
-        propertySchema: new JsonSchema({}),
+        propertySchema: new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false),
       });
 
       it('should show the correct description', () => {
@@ -94,7 +95,7 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: {foo: 'bar', baz: 'qux'},
-        propertySchema: new JsonSchema({properties: {foo: {}}}),
+        propertySchema: new JsonSchema({properties: {foo: {}}}, useCurrentSchema().schemaDataPreprocessed, false),
       });
 
       it('should show the correct description', () => {
@@ -110,7 +111,7 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: {foo: 'bar'},
-        propertySchema: new JsonSchema({properties: {foo: {}, baz: {}}}),
+        propertySchema: new JsonSchema({properties: {foo: {}, baz: {}}}, useCurrentSchema().schemaDataPreprocessed, false),
       });
 
       it('should show the correct description', () => {
@@ -126,7 +127,7 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: undefined,
-        propertySchema: new JsonSchema({}),
+        propertySchema: new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false),
       });
 
       it('should show the correct description', () => {

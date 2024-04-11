@@ -26,7 +26,9 @@ export class ManagedSchema {
    * @param watchSchemaChanges whether to watch for changes in schema data and reprocess the schema accordingly
    */
   constructor(private _shallowSchemaRef: ShallowRef<any>, watchSchemaChanges: boolean) {
-    console.log("create managedSchema with shallowSchemaRef " , _shallowSchemaRef.value);
+    this._schemaDataPreprocessed = ref(preprocessOneTime(this._shallowSchemaRef.value));
+    this._schemaProcessed = ref(new TopLevelJsonSchema(this._schemaDataPreprocessed.value));
+
     if (watchSchemaChanges) {
       // make sure that the schema is not preprocessed too often
       watchDebounced(this.schemaData, () => this.reloadSchema(), {
@@ -39,27 +41,21 @@ export class ManagedSchema {
 
 
 
-  private _schemaDataPreprocessed?: Ref<JsonSchemaType>;
+  private _schemaDataPreprocessed: Ref<JsonSchemaType>;
 
   /**
    * The json schema as a TopLevelJsonSchema object
    */
-  private _schemaProcessed?: Ref<TopLevelJsonSchema>;
+  private readonly _schemaProcessed: Ref<TopLevelJsonSchema>;
 
 
 
   get schemaDataPreprocessed(): Ref<JsonSchemaType> {
-    if (this._schemaDataPreprocessed === undefined) {
-      this._schemaDataPreprocessed = ref(preprocessOneTime(this._shallowSchemaRef.value));
-    }
     return this._schemaDataPreprocessed;
   }
 
   get schemaProcessed(): Ref<TopLevelJsonSchema> {
-    if (this._schemaProcessed === undefined) {
-      this._schemaProcessed = ref(new TopLevelJsonSchema(this.schemaDataPreprocessed.value))
-    }
-    return this._schemaProcessed;
+    return this._schemaProcessed!;
   }
 
   get schemaData(): Ref<any> {
@@ -70,7 +66,7 @@ export class ManagedSchema {
    * Returns the schema at the given path.
    */
   public schemaAtPath(path: Path): JsonSchema {
-    return this.schemaProcessed.value.subSchemaAt(path) ?? new JsonSchema({});
+    return this.schemaProcessed.value.subSchemaAt(path) ?? new JsonSchema({}, this._schemaDataPreprocessed, false);
   }
 
   /**
@@ -130,8 +126,8 @@ export class ManagedSchema {
 
   public reloadSchema() {
     console.log("reload schema");
-    const preprocessedSchema = preprocessOneTime(this.schemaData.value);
-    this.schemaProcessed.value = new TopLevelJsonSchema(preprocessedSchema);
+    this._schemaDataPreprocessed = ref(preprocessOneTime(this._shallowSchemaRef.value));
+    this._schemaProcessed.value = new TopLevelJsonSchema(this.schemaDataPreprocessed.value);
   }
 
 }
