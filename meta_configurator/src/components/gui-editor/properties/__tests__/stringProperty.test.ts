@@ -4,7 +4,6 @@ import {ValidationResult} from '../../../../schema/validation/validationService'
 import {JsonSchema} from '@/schema/jsonSchema';
 import StringProperty from '../StringProperty.vue';
 import InputText from 'primevue/inputtext';
-import {useCurrentSchema} from "../../../../data/useDataLink";
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({
@@ -34,7 +33,7 @@ describe('StringProperty', () => {
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchema({
         type: 'string',
-      }, useCurrentSchema().schemaDataPreprocessed, false),
+      }, {}, false),
     });
 
     it('should correctly setup the input field', () => {
@@ -67,7 +66,7 @@ describe('StringProperty', () => {
         validationResults: new ValidationResult([]),
         propertySchema: new JsonSchema({
           type: 'string',
-        }, useCurrentSchema().schemaDataPreprocessed, false),
+        }, {}, false),
       });
       expect(inputField.props().modelValue).toBe('newData');
       expect(wrapper.emitted()).toEqual({});
@@ -84,7 +83,7 @@ describe('StringProperty', () => {
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchema({
         type: 'number',
-      }, useCurrentSchema().schemaDataPreprocessed, false),
+      }, {}, false),
     });
 
     it('should correctly setup the input field', () => {
@@ -99,7 +98,7 @@ describe('StringProperty', () => {
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchema({
         type: 'object',
-      }, useCurrentSchema().schemaDataPreprocessed, false),
+      }, {}, false),
     });
 
     it('should correctly setup the input field', () => {
@@ -114,7 +113,7 @@ describe('StringProperty', () => {
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchema({
         type: 'array',
-      }, useCurrentSchema().schemaDataPreprocessed, false),
+      }, {}, false),
     });
 
     it('should correctly setup the input field', () => {
@@ -129,7 +128,7 @@ describe('StringProperty', () => {
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchema({
         type: 'null',
-      }, undefined, false),
+      }, {}, false),
     });
 
     it('should correctly setup the input field', () => {
@@ -142,7 +141,7 @@ describe('StringProperty', () => {
       propertyName: 'foo',
       propertyData: undefined,
       validationResults: new ValidationResult([]),
-      propertySchema: new JsonSchema({}, useCurrentSchema().schemaDataPreprocessed, false),
+      propertySchema: new JsonSchema({}, {}, false),
     });
 
     it('should correctly setup the input field', () => {

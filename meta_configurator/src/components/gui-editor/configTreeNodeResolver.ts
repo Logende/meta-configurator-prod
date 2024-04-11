@@ -460,7 +460,7 @@ export class ConfigTreeNodeResolver {
     if (userSelectionOneOf !== undefined) {
       const baseSchema = {...schema.jsonSchema};
       delete baseSchema.type;
-      const newTypeSchema = typeSchema(schema.type[userSelectionOneOf.index]);
+      const newTypeSchema = typeSchema(schema.type[userSelectionOneOf.index], useCurrentSchema().schemaDataPreprocessed);
       const mergedSchema = new JsonSchema({
         allOf: [baseSchema, newTypeSchema.jsonSchema ?? {}],
       },

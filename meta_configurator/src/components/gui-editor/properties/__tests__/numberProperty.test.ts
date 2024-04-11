@@ -5,7 +5,6 @@ import NumberProperty from '../NumberProperty.vue';
 import InputNumber from 'primevue/inputnumber';
 import {JsonSchema} from '@/schema/jsonSchema';
 import {GuiConstants} from '@/constants';
-import {useCurrentSchema} from "../../../../data/useDataLink";
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({

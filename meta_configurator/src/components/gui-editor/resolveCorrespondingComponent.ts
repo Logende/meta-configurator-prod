@@ -10,7 +10,7 @@ import {h} from 'vue';
 import {useSessionStore} from '@/store/sessionStore';
 import OneOfSelectionProperty from '@/components/gui-editor/properties/OneOfSelectionProperty.vue';
 import AnyOfSelectionProperty from '@/components/gui-editor/properties/AnyOfSelectionProperty.vue';
-import {useCurrentData} from '@/data/useDataLink';
+import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useValidationResult} from '@/schema/validation/useValidation';
 import {typeSchema} from '@/schema/schemaUtils';
 
@@ -49,7 +49,7 @@ export function resolveCorrespondingComponent(
     // union type
     return h(OneOfSelectionProperty, {
       ...propsObject,
-      possibleSchemas: nodeData.schema.type.map(type => typeSchema(type)),
+      possibleSchemas: nodeData.schema.type.map(type => typeSchema(type, useCurrentSchema().schemaDataPreprocessed)),
       isTypeUnion: true,
     });
   }

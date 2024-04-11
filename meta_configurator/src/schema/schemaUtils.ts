@@ -1,6 +1,5 @@
 import type {JsonSchemaType, SchemaPropertyType} from '@/model/jsonSchemaType';
 import {JsonSchema} from '@/schema/jsonSchema';
-import {useCurrentSchema} from "@/data/useDataLink";
 
 /**
  * @returns the schema if it is not a boolean, otherwise
@@ -51,6 +50,6 @@ export function schemaFromObject(jsonSchema: JsonSchemaType | undefined, referen
  * type constraint with the given type, i.e.,
  * `{type: t}` for the given type `t`.
  */
-export function typeSchema(type: SchemaPropertyType): JsonSchema {
-  return new JsonSchema({type}, useCurrentSchema().schemaDataPreprocessed, false);
+export function typeSchema(type: SchemaPropertyType, referenceSchemaPreprocessed: JsonSchemaType): JsonSchema {
+  return new JsonSchema({type}, referenceSchemaPreprocessed, false);
 }
