@@ -2,8 +2,8 @@ import {shallowRef} from 'vue';
 import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
 import {META_SCHEMA_SIMPLIFIED} from '@/packaged-schemas/metaSchemaSimplified';
 import {SETTINGS_SCHEMA} from '@/packaged-schemas/settingsSchema';
-import type {TopLevelSchema} from "@/schema/jsonSchemaType";
-import {META_SCHEMA_SIMPLIFIED_RESTRICTED} from "@/packaged-schemas/metaSchemaSimplifiedRestricted";
+import type {TopLevelSchema} from '@/schema/jsonSchemaType';
+import {META_SCHEMA_SIMPLIFIED_RESTRICTED} from '@/packaged-schemas/metaSchemaSimplifiedRestricted';
 
 const dataSource = {
   // data of the file editor
@@ -24,7 +24,6 @@ const dataSource = {
   // settings schema of the settings editor
   settingsSchemaData: shallowRef<TopLevelSchema>(SETTINGS_SCHEMA), // TODO add settings schema type
 };
-
 
 /**
  * The data source contains the basic, unprocessed data as JSON objects.

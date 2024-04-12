@@ -11,4 +11,3 @@ export function useSettings(): SettingsInterfaceRoot {
 export function setSettings(settings: SettingsInterfaceRoot): void {
   useDataSource().settingsData.value = settings;
 }
-

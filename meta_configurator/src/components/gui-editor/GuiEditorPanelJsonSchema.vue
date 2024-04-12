@@ -6,7 +6,7 @@ import type {Path} from '@/utility/path';
 import {useSessionStore} from '@/store/sessionStore';
 import {computed} from 'vue';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
-import { useCurrentData, useCurrentSchema} from '@/data/useDataLink';
+import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 
 const sessionStore = useSessionStore();
 

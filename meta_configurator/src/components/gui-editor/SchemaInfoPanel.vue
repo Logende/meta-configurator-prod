@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {computed } from 'vue';
+import {computed} from 'vue';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import {useSessionStore} from '@/store/sessionStore';
-import type {SessionMode} from "@/store/sessionMode";
-import {getSchemaForMode} from "@/data/useDataLink";
+import type {SessionMode} from '@/store/sessionMode';
+import {getSchemaForMode} from '@/data/useDataLink';
 
 const props = defineProps<{
   mode: SessionMode;
 }>();
 
 const schemaInformation = computed(() => {
-    let schema = getSchemaForMode(props.mode).schemaWrapper.value
+  let schema = getSchemaForMode(props.mode).schemaWrapper.value;
   return [
     {
       title: 'Title',
@@ -31,7 +31,10 @@ const schemaInformation = computed(() => {
 
 <template>
   <Accordion :activeIndex="1">
-    <AccordionTab :header="'Schema: ' + (getSchemaForMode(props.mode).schemaWrapper.value?.title ?? 'Untitled schema')">
+    <AccordionTab
+      :header="
+        'Schema: ' + (getSchemaForMode(props.mode).schemaWrapper.value?.title ?? 'Untitled schema')
+      ">
       <p v-for="info in schemaInformation" :key="info.title">
         <span class="font-semibold">{{ info.title }}: </span>
         {{ info.value }}

@@ -31,8 +31,6 @@ export function resolveAndTransform(
   schema: JsonSchemaType,
   rootSchema: JsonSchemaTypePreprocessed
 ): JsonSchemaType {
-
-
   if (typeof schema !== 'object') {
     return schema;
   }

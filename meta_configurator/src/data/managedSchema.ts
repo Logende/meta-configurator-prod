@@ -11,7 +11,7 @@ import {calculateEffectiveSchema, EffectiveSchema} from '@/schema/effectiveSchem
 import {useCurrentData} from '@/data/useDataLink';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
 import {SessionMode} from '@/store/sessionMode';
-import {clearPreprocessedRefSchemaCache} from "@/schema/schemaLazyResolver";
+import {clearPreprocessedRefSchemaCache} from '@/schema/schemaLazyResolver';
 
 /**
  * This class manages the schema and provides easy access to its content.

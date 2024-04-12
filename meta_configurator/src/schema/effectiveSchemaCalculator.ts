@@ -31,7 +31,8 @@ export function calculateEffectiveSchema(
   data: any,
   path: Path
 ): EffectiveSchema {
-  let result = schema ?? new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed.value, false);
+  let result =
+    schema ?? new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed.value, false);
   let iteration = 0;
 
   while (result.isDataDependent && iteration < 1000) {

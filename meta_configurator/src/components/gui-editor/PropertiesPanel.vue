@@ -34,7 +34,7 @@ import {focus, focusOnPath, makeEditableAndSelectContents} from '@/utility/focus
 import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useValidationResult} from '@/schema/validation/useValidation';
 import {dataAt} from '@/utility/resolveDataAtPath';
-import {useSettings} from "@/settings/useSettings";
+import {useSettings} from '@/settings/useSettings';
 
 const props = defineProps<{
   currentSchema: JsonSchemaWrapper;
@@ -71,9 +71,8 @@ watch(
 
 // update tree when the file schema changes
 watch(useCurrentSchema().schemaWrapper, () => {
-    updateTree();
+  updateTree();
 });
-
 
 // update tree when the current path changes
 watch(sessionStore.currentPath, () => {
