@@ -11,10 +11,26 @@ const dataSource = useDataSource();
 const managedUserData = new ManagedData(dataSource.userData, SessionMode.FileEditor);
 const managedSchemaData = new ManagedData(dataSource.userSchemaData, SessionMode.SchemaEditor);
 const managedSettingsData = new ManagedData(dataSource.settingsData, SessionMode.FileEditor);
-const managedUserSchema = new ManagedSchema(dataSource.userSchemaData, true, SessionMode.FileEditor);
-const managedMetaSchema = new ManagedSchema(dataSource.metaSchemaData, false, SessionMode.SchemaEditor);
-const managedMetaSchemaRestricted = new ManagedSchema(dataSource.metaSchemaRestrictedData, false, SessionMode.SchemaEditor);
-const managedSettingsSchema = new ManagedSchema(dataSource.settingsSchemaData, false, SessionMode.Settings);
+const managedUserSchema = new ManagedSchema(
+  dataSource.userSchemaData,
+  true,
+  SessionMode.FileEditor
+);
+const managedMetaSchema = new ManagedSchema(
+  dataSource.metaSchemaData,
+  false,
+  SessionMode.SchemaEditor
+);
+const managedMetaSchemaRestricted = new ManagedSchema(
+  dataSource.metaSchemaRestrictedData,
+  false,
+  SessionMode.SchemaEditor
+);
+const managedSettingsSchema = new ManagedSchema(
+  dataSource.settingsSchemaData,
+  false,
+  SessionMode.Settings
+);
 
 /**
  * Returns the data link for the given mode

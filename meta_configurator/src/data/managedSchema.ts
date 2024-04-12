@@ -10,7 +10,7 @@ import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {calculateEffectiveSchema, EffectiveSchema} from '@/schema/effectiveSchemaCalculator';
 import {useCurrentData} from '@/data/useDataLink';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
-import {SessionMode} from "@/store/sessionMode";
+import {SessionMode} from '@/store/sessionMode';
 
 /**
  * This class manages the schema and provides easy access to its content.
@@ -21,7 +21,11 @@ export class ManagedSchema {
    * @param watchSchemaChanges whether to watch for changes in schema data and reprocess the schema accordingly
    * @param mode the corresponding session mode. Useful to determine corresponding data
    */
-  constructor(private _schemaRaw: ShallowRef<JsonSchemaType>, watchSchemaChanges: boolean, public mode: SessionMode) {
+  constructor(
+    private _schemaRaw: ShallowRef<JsonSchemaType>,
+    watchSchemaChanges: boolean,
+    public mode: SessionMode
+  ) {
     this._schemaPreprocessed = ref(preprocessOneTime(this._schemaRaw.value));
     this._schemaWrapper = ref(new TopLevelJsonSchemaWrapper(this._schemaPreprocessed.value));
 

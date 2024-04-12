@@ -7,7 +7,7 @@ import {pathToString} from '@/utility/pathUtils';
 import _ from 'lodash';
 import {useDebouncedRefHistory} from '@vueuse/core';
 import type {UndoManager} from '@/data/undoManager';
-import type {SessionMode} from "@/store/sessionMode";
+import type {SessionMode} from '@/store/sessionMode';
 
 /**
  * This class manages the data and keeps the data and the string representation in sync.

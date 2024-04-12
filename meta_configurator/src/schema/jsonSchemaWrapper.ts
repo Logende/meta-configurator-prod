@@ -2,7 +2,7 @@ import type {
   JsonSchemaObjectType,
   JsonSchemaType,
   JsonSchemaTypePreprocessed,
-  SchemaPropertyType
+  SchemaPropertyType,
 } from '@/schema/jsonSchemaType';
 import {nonBooleanSchema, schemaArray, schemaFromObject, schemaRecord} from '@/schema/schemaUtils';
 import type {Path, PathElement} from '@/utility/path';
@@ -38,21 +38,12 @@ export class JsonSchemaWrapper {
   private _else?: JsonSchemaWrapper;
   private _contentSchema?: JsonSchemaWrapper;
 
-  constructor(
-    jsonSchema: JsonSchemaType,
-    rootSchema: JsonSchemaTypePreprocessed,
-    resolve = true
-  ) {
-    assert(
-      rootSchema !== undefined,
-      'rootSchema must be defined'
-    );
+  constructor(jsonSchema: JsonSchemaType, rootSchema: JsonSchemaTypePreprocessed, resolve = true) {
+    assert(rootSchema !== undefined, 'rootSchema must be defined');
     this.rootSchema = rootSchema;
     this.jsonSchema = nonBooleanSchema(jsonSchema);
     if (resolve && this.jsonSchema !== undefined) {
-      this.jsonSchema = nonBooleanSchema(
-        resolveAndTransform(this.jsonSchema, this.rootSchema)
-      );
+      this.jsonSchema = nonBooleanSchema(resolveAndTransform(this.jsonSchema, this.rootSchema));
     }
   }
 
@@ -357,10 +348,7 @@ export class JsonSchemaWrapper {
    */
   get contains(): JsonSchemaWrapper | undefined {
     if (this._contains === undefined) {
-      this._contains = schemaFromObject(
-        this.jsonSchema?.contains,
-        this.rootSchema
-      );
+      this._contains = schemaFromObject(this.jsonSchema?.contains, this.rootSchema);
     }
     return this._contains;
   }
@@ -396,10 +384,7 @@ export class JsonSchemaWrapper {
    */
   get contentSchema(): JsonSchemaWrapper | undefined {
     if (this._contentSchema === undefined) {
-      this._contentSchema = schemaFromObject(
-        this.jsonSchema?.contentSchema,
-        this.rootSchema
-      );
+      this._contentSchema = schemaFromObject(this.jsonSchema?.contentSchema, this.rootSchema);
     }
     return this._contentSchema;
   }
@@ -446,10 +431,7 @@ export class JsonSchemaWrapper {
       if (this.jsonSchema?.dependentSchemas === undefined) {
         return undefined;
       }
-      this._dependentSchemas = schemaRecord(
-        this.jsonSchema?.dependentSchemas,
-        this.rootSchema
-      );
+      this._dependentSchemas = schemaRecord(this.jsonSchema?.dependentSchemas, this.rootSchema);
     }
     return this._dependentSchemas;
   }
@@ -690,10 +672,7 @@ export class JsonSchemaWrapper {
    */
   get patternProperties(): Record<string, JsonSchemaWrapper> {
     if (this._patternProperties === undefined) {
-      this._patternProperties = schemaRecord(
-        this.jsonSchema?.patternProperties,
-        this.rootSchema
-      );
+      this._patternProperties = schemaRecord(this.jsonSchema?.patternProperties, this.rootSchema);
     }
     return this._patternProperties;
   }
@@ -705,20 +684,14 @@ export class JsonSchemaWrapper {
    */
   get prefixItems(): JsonSchemaWrapper[] {
     if (this._prefixItems === undefined) {
-      this._prefixItems = schemaArray(
-        this.jsonSchema?.prefixItems,
-        this.rootSchema
-      );
+      this._prefixItems = schemaArray(this.jsonSchema?.prefixItems, this.rootSchema);
     }
     return this._prefixItems;
   }
 
   get properties(): Record<string, JsonSchemaWrapper> {
     if (this._properties === undefined) {
-      this._properties = schemaRecord(
-        this.jsonSchema?.properties,
-        this.rootSchema
-      );
+      this._properties = schemaRecord(this.jsonSchema?.properties, this.rootSchema);
     }
     return this._properties;
   }

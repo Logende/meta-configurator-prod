@@ -1,11 +1,15 @@
-import type {JsonSchemaObjectType, JsonSchemaType, SchemaPropertyType} from '@/schema/jsonSchemaType';
+import type {
+  JsonSchemaObjectType,
+  JsonSchemaType,
+  SchemaPropertyType,
+} from '@/schema/jsonSchemaType';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 
 /**
  * @returns the schema if it is not a boolean, otherwise
  * returns an empty object if the schema is true, or undefined if the schema is false
  */
-export function nonBooleanSchema(schema: JsonSchemaType) : JsonSchemaObjectType | undefined {
+export function nonBooleanSchema(schema: JsonSchemaType): JsonSchemaObjectType | undefined {
   if (schema === true) {
     return {};
   }

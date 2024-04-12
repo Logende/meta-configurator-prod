@@ -1,7 +1,7 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {shallowRef, triggerRef} from 'vue';
 import {ManagedData} from '../managedData';
-import {SessionMode} from "../../store/sessionMode";
+import {SessionMode} from '../../store/sessionMode';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
   useDataConverter: () => ({

@@ -1,4 +1,4 @@
-import type {TopLevelSchema} from "@/schema/jsonSchemaType";
+import type {TopLevelSchema} from '@/schema/jsonSchemaType';
 
 /**
  * This represents a simplified version of the json schema meta schema.
@@ -85,8 +85,8 @@ export const META_SCHEMA_SIMPLIFIED: TopLevelSchema = {
               metaConfigurator: {
                 advanced: true,
               },
-            }
-          }
+            },
+          },
         },
       ],
     },

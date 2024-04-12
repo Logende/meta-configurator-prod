@@ -165,7 +165,10 @@ function describeTitle(schema: JsonSchemaWrapper): string {
   return '';
 }
 
-function describeRequiredProperties(schema: JsonSchemaWrapper, validationErrors: ErrorObject[]): string {
+function describeRequiredProperties(
+  schema: JsonSchemaWrapper,
+  validationErrors: ErrorObject[]
+): string {
   if (schema.required && schema.required.length > 0) {
     return paragraph(`The following properties are ${formatAsErrorIfInvalid(
       bold('required'),
@@ -298,7 +301,10 @@ function describeStringLength(schema: JsonSchemaWrapper, validationErrors: Error
   return paragraph(result);
 }
 
-function describeMinimumAndMaximum(schema: JsonSchemaWrapper, validationErrors: ErrorObject[]): string {
+function describeMinimumAndMaximum(
+  schema: JsonSchemaWrapper,
+  validationErrors: ErrorObject[]
+): string {
   const min = schema.minimum;
   const max = schema.maximum;
   const exclusiveMin = schema.exclusiveMinimum;
@@ -478,7 +484,10 @@ function describeOneOf(schema: JsonSchemaWrapper, validationErrors: ErrorObject[
   return '';
 }
 
-function describeAdditionalProperties(schema: JsonSchemaWrapper, validationErrors: ErrorObject[]): string {
+function describeAdditionalProperties(
+  schema: JsonSchemaWrapper,
+  validationErrors: ErrorObject[]
+): string {
   if (!schema.hasType('object')) {
     return '';
   }
@@ -514,7 +523,10 @@ function describeComment(schema: JsonSchemaWrapper): string {
   return '';
 }
 
-function describeFormatAndPattern(schema: JsonSchemaWrapper, validationErrors: ErrorObject[]): string {
+function describeFormatAndPattern(
+  schema: JsonSchemaWrapper,
+  validationErrors: ErrorObject[]
+): string {
   if (schema.format) {
     let format = `The value must be ${formatValue(schema.format)}`;
     switch (schema.format) {
@@ -633,7 +645,11 @@ function schemaDescriptionList(schemas: JsonSchemaWrapper[]): string {
   return ul(schemas.map(s => describeSubSchema(s, undefined, undefined)));
 }
 
-function describeSubSchema(schema: JsonSchemaWrapper, key?: string, parentSchema?: JsonSchemaWrapper): string {
+function describeSubSchema(
+  schema: JsonSchemaWrapper,
+  key?: string,
+  parentSchema?: JsonSchemaWrapper
+): string {
   let result = describeSchema(schema, key, parentSchema, false, 1);
   if (isBlank(result)) {
     result = describeSchema(schema, key, parentSchema, true, 1);

@@ -1,6 +1,7 @@
 import type {
   JsonSchemaObjectType,
-  JsonSchemaType, JsonSchemaTypePreprocessed,
+  JsonSchemaType,
+  JsonSchemaTypePreprocessed,
   SchemaPropertyType,
 } from '@/schema/jsonSchemaType';
 import _ from 'lodash';
