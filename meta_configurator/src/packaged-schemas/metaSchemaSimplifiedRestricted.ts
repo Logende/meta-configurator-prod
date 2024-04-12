@@ -9,13 +9,13 @@ import type {TopLevelSchema} from '@/schema/jsonSchemaType';
  * - Removed the option to define different types for a field, making the type selection simpler
  */
 export const META_SCHEMA_SIMPLIFIED_RESTRICTED: TopLevelSchema = {
-  $schema: 'https://json-schema.org/draft/2020-12/schema',
-  $id: 'com.github.meta_configurator.simplified-meta-schema-restricted',
-  title: 'Json schema (simplified and restricted)',
   $ref: '#/$defs/jsonMetaSchema',
+  $id: 'com.github.meta_configurator.simplified-meta-schema-restricted',
   $defs: {
     jsonMetaSchema: {
-      title: 'Json meta-schema (simplified and restricted)',
+      title: 'Json meta-schema (restricted)',
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      description: 'This schema is a simplified and restricted version of the json schema meta schema, to be used to edit schemas within MetaConfigurator. It is less expressive and more restricted than the other meta schema, which makes it also easier to work with.',
       allOf: [
         {
           $ref: '#/$defs/core',

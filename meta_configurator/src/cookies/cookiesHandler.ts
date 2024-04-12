@@ -1,8 +1,8 @@
 import {watch} from 'vue';
 import VueCookies from 'vue-cookies';
 import {errorService} from '@/main';
-import {getDataForMode} from '@/data/useDataLink';
-import {SessionMode} from '@/store/sessionMode';
+import {setSettings} from "@/settings/useSettings";
+import {useDataSource} from "@/data/dataSource";
 
 /**
  * We use cookies to store the settings data
@@ -20,7 +20,7 @@ const cookiesHandler = {
       if (settingsDataCookie) {
         try {
           if (settingsDataCookie !== 'undefined') {
-            getDataForMode(SessionMode.Settings).setData(settingsDataCookie);
+            setSettings(settingsDataCookie)
           }
         } catch (error) {
           errorService.onError(error);
@@ -33,7 +33,7 @@ const cookiesHandler = {
 
     // Watch for changes in settingsData and update cookies
     watch(
-      () => getDataForMode(SessionMode.Settings).data,
+      () => useDataSource().settingsData,
 
       newSettingsData => {
         if (estimateSize(newSettingsData) <= maxCookieSize) {

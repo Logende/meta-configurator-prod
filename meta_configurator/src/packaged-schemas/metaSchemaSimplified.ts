@@ -11,13 +11,13 @@ import type {TopLevelSchema} from '@/schema/jsonSchemaType';
  * - added examples to some fields
  */
 export const META_SCHEMA_SIMPLIFIED: TopLevelSchema = {
-  $schema: 'https://json-schema.org/draft/2020-12/schema',
-  $id: 'com.github.meta_configurator.simplified-meta-schema',
-  title: 'Json schema (simplified)',
   $ref: '#/$defs/jsonMetaSchema',
+  $id: 'com.github.meta_configurator.simplified-meta-schema',
   $defs: {
     jsonMetaSchema: {
       title: 'Json meta-schema',
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      description: 'This schema represents a simplified version of the json schema meta schema, to be used to edit schemas within MetaConfigurator.',
       allOf: [
         {
           $ref: '#/$defs/core',

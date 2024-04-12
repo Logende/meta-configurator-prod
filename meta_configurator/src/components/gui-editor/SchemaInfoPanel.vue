@@ -13,15 +13,15 @@ const schemaInformation = computed(() => {
   return [
     {
       title: 'Title',
-      value: props.schema?.title ?? 'Untitled schema',
+      value: props.schema.value?.title ?? 'Untitled schema',
     },
     {
       title: 'Source',
-      value: props.schema?.$id,
+      value: props.schema.value?.$id,
     },
     {
       title: 'Description',
-      value: props.schema?.description,
+      value: props.schema.value?.description,
     },
   ];
 });
@@ -29,7 +29,7 @@ const schemaInformation = computed(() => {
 
 <template>
   <Accordion :activeIndex="1">
-    <AccordionTab :header="'Schema: ' + (schema?.title ?? 'Untitled schema')">
+    <AccordionTab :header="'Schema: ' + (props.schema.value.title ?? 'Untitled schema')">
       <p v-for="info in schemaInformation" :key="info.title">
         <span class="font-semibold">{{ info.title }}: </span>
         {{ info.value }}

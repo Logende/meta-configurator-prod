@@ -44,9 +44,9 @@ const currentSchema = computed(() => {
 
 <template>
   <div class="p-5 space-y-3 flex flex-col">
-    <SchemaInfoPanel :schema="getSchemaForMode(SessionMode.FileEditor).schemaWrapper" />
+    <SchemaInfoPanel :schema="useCurrentSchema().schemaWrapper" />
     <CurrentPathBreadcrumb
-      :root-name="getSchemaForMode(SessionMode.FileEditor).schemaWrapper?.value.title ?? 'root'"
+      :root-name="'document root'"
       :path="sessionStore.currentPath"
       @update:path="newPath => updatePath(newPath)" />
     <div class="flex-grow overflow-y-auto">
