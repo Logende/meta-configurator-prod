@@ -49,9 +49,6 @@ export const META_SCHEMA_SIMPLIFIED_RESTRICTED: TopLevelSchema = {
             },
             type: {
               const: 'object',
-              metaConfigurator: {
-                advanced: true,
-              },
             },
             default: {
               metaConfigurator: {

@@ -62,11 +62,6 @@ export const META_SCHEMA_SIMPLIFIED: TopLevelSchema = {
                 advanced: true,
               },
             },
-            type: {
-              metaConfigurator: {
-                advanced: true,
-              },
-            },
             default: {
               metaConfigurator: {
                 advanced: true,
