@@ -1,8 +1,9 @@
 import {watch} from 'vue';
 import VueCookies from 'vue-cookies';
 import {errorService} from '@/main';
-import {setSettings} from '@/settings/useSettings';
+import {setSettings } from '@/settings/useSettings';
 import {useDataSource} from '@/data/dataSource';
+import {useCurrentSchema} from "@/data/useDataLink";
 
 /**
  * We use cookies to store the settings data
@@ -21,6 +22,7 @@ const cookiesHandler = {
         try {
           if (settingsDataCookie !== 'undefined') {
             setSettings(settingsDataCookie);
+            useCurrentSchema().reloadSchema();
           }
         } catch (error) {
           errorService.onError(error);

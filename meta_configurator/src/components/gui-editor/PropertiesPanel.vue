@@ -34,6 +34,7 @@ import {focus, focusOnPath, makeEditableAndSelectContents} from '@/utility/focus
 import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useValidationResult} from '@/schema/validation/useValidation';
 import {dataAt} from '@/utility/resolveDataAtPath';
+import {useSettings} from "@/settings/useSettings";
 
 const props = defineProps<{
   currentSchema: JsonSchemaWrapper;
@@ -70,8 +71,9 @@ watch(
 
 // update tree when the file schema changes
 watch(useCurrentSchema().schemaWrapper, () => {
-  updateTree();
+    updateTree();
 });
+
 
 // update tree when the current path changes
 watch(sessionStore.currentPath, () => {
@@ -320,7 +322,7 @@ function addEmptyProperty(relativePath: Path, absolutePath: Path) {
   const treeData: ConfigTreeNodeData = {
     absolutePath: absolutePath.concat(name),
     relativePath: relativePath.concat(name),
-    schema: new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed, false),
+    schema: new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed.value, false),
     parentSchema: objectSchema,
     depth: ((objectNode?.data?.depth as number) ?? 0) + 1,
     name: name,

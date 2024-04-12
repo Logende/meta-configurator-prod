@@ -11,6 +11,7 @@ import {calculateEffectiveSchema, EffectiveSchema} from '@/schema/effectiveSchem
 import {useCurrentData} from '@/data/useDataLink';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
 import {SessionMode} from '@/store/sessionMode';
+import {clearPreprocessedRefSchemaCache} from "@/schema/schemaLazyResolver";
 
 /**
  * This class manages the schema and provides easy access to its content.
@@ -31,7 +32,7 @@ export class ManagedSchema {
 
     if (watchSchemaChanges) {
       // make sure that the schema is not preprocessed too often
-      watchDebounced(this.schemaRaw, () => this.reloadSchema(), {
+      watchDebounced(this._schemaRaw, () => this.reloadSchema(), {
         debounce: 1000,
         immediate: true,
       });
@@ -63,7 +64,7 @@ export class ManagedSchema {
   public schemaAtPath(path: Path): JsonSchemaWrapper {
     return (
       this.schemaWrapper.value.subSchemaAt(path) ??
-      new JsonSchemaWrapper({}, this._schemaPreprocessed, false)
+      new JsonSchemaWrapper({}, this._schemaPreprocessed.value, false)
     );
   }
 
@@ -106,7 +107,8 @@ export class ManagedSchema {
   }
 
   public reloadSchema() {
+    clearPreprocessedRefSchemaCache();
     this._schemaPreprocessed = ref(preprocessOneTime(this._schemaRaw.value));
-    this._schemaWrapper.value = new TopLevelJsonSchemaWrapper(this.schemaPreprocessed.value);
+    this._schemaWrapper.value = new TopLevelJsonSchemaWrapper(this._schemaPreprocessed.value);
   }
 }

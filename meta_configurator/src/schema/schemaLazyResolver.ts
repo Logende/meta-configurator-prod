@@ -24,12 +24,15 @@ const preprocessedRefSchemas: Map<string, JsonSchemaType> = new Map();
  * - If it is possible: merges oneOfs into anyOfs
  *
  * @param schema the schema to preprocess
+ * @param rootSchema used for resolving references
  * @returns the preprocessed schema
  */
 export function resolveAndTransform(
   schema: JsonSchemaType,
   rootSchema: JsonSchemaTypePreprocessed
 ): JsonSchemaType {
+
+
   if (typeof schema !== 'object') {
     return schema;
   }

@@ -4,6 +4,7 @@ export interface SettingsInterfaceRoot {
   dataFormat: DataFormat;
   codeEditor: SettingsInterfaceCodeEditor;
   guiEditor: SettingsInterfaceGuiEditor;
+  metaSchema: SettingsInterfaceMetaSchema;
 }
 
 export interface SettingsInterfaceCodeEditor {
@@ -13,6 +14,10 @@ export interface SettingsInterfaceCodeEditor {
 export interface SettingsInterfaceGuiEditor {
   maximumDepth: number;
   propertySorting: PropertySorting;
+}
+
+export interface SettingsInterfaceMetaSchema {
+  restricted: boolean;
 }
 
 export enum PropertySorting {

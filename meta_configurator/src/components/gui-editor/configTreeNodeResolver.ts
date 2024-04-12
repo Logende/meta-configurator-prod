@@ -417,7 +417,7 @@ export class ConfigTreeNodeResolver {
         relativePath: relativePath,
         schema:
           schema.additionalProperties ||
-          new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed, false), // not used
+          new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed.value, false), // not used
         parentSchema: schema,
         name: '', // name is not used for add property node, but we keep it for easier type checking
         depth: depth,
@@ -470,7 +470,7 @@ export class ConfigTreeNodeResolver {
         {
           allOf: [baseSchema, newTypeSchema.jsonSchema ?? {}],
         },
-        useCurrentSchema().schemaPreprocessed
+        useCurrentSchema().schemaPreprocessed.value
       );
       return [
         this.createTreeNodeOfProperty(mergedSchema, schema, absolutePath, relativePath, depth + 1),
@@ -495,7 +495,7 @@ export class ConfigTreeNodeResolver {
         {
           allOf: [baseSchema, subSchemaOneOf.jsonSchema ?? {}],
         },
-        useCurrentSchema().schemaPreprocessed
+        useCurrentSchema().schemaPreprocessed.value
       );
       return [
         this.createTreeNodeOfProperty(mergedSchema, schema, absolutePath, relativePath, depth + 1),
@@ -525,7 +525,7 @@ export class ConfigTreeNodeResolver {
       }
       return [
         this.createTreeNodeOfProperty(
-          new JsonSchemaWrapper(mergedSchema, useCurrentSchema().schemaPreprocessed),
+          new JsonSchemaWrapper(mergedSchema, useCurrentSchema().schemaPreprocessed.value),
           schema,
           absolutePath,
           relativePath,
