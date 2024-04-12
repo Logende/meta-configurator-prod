@@ -27,6 +27,7 @@ export function resolveCorrespondingComponent(
   const propsObject = buildProperties(nodeData);
 
   if (nodeData.schema.oneOf.length > 0) {
+    // @ts-ignore
     return h(OneOfSelectionProperty, {
       ...propsObject,
       possibleSchemas: nodeData.schema.oneOf,
@@ -34,6 +35,7 @@ export function resolveCorrespondingComponent(
     });
   }
   if (nodeData.schema.anyOf.length > 0) {
+    // @ts-ignore
     return h(AnyOfSelectionProperty, {
       ...propsObject,
       possibleSchemas: nodeData.schema.anyOf,
@@ -50,6 +52,7 @@ export function resolveCorrespondingComponent(
 
   if (nodeData.schema.type.length > 1) {
     // union type
+    // @ts-ignore
     return h(OneOfSelectionProperty, {
       ...propsObject,
       possibleSchemas: nodeData.schema.type.map(type =>
@@ -60,6 +63,7 @@ export function resolveCorrespondingComponent(
   }
 
   if (nodeData.schema.hasType('string') && hasTwoOrMoreExamples(nodeData.schema)) {
+    // @ts-ignore
     return h(EnumProperty, {
       ...propsObject,
       possibleValues: nodeData.schema.examples,
@@ -67,26 +71,32 @@ export function resolveCorrespondingComponent(
   }
 
   if (nodeData.schema.hasType('string')) {
+    // @ts-ignore
     return h(StringProperty, propsObject);
   }
 
   if (nodeData.schema.hasType('boolean')) {
+    // @ts-ignore
     return h(BooleanProperty, propsObject);
   }
 
   if (nodeData.schema.hasType('number') || nodeData.schema.hasType('integer')) {
+    // @ts-ignore
     return h(NumberProperty, propsObject);
   }
 
   if (nodeData.schema.hasType('object')) {
+    // @ts-ignore
     return h(SimpleObjectProperty, propsObject);
   }
 
   if (nodeData.schema.hasType('array')) {
+    // @ts-ignore
     return h(SimpleArrayProperty, propsObject);
   }
 
   if (nodeData.schema.hasType('null')) {
+    // @ts-ignore
     return h(EnumProperty, {
       ...propsObject,
       possibleValues: [null],

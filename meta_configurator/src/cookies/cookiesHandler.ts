@@ -12,7 +12,9 @@ import {SessionMode} from '@/store/sessionMode';
  */
 const cookiesHandler = {
   initializeFromCookies: () => {
+    // @ts-ignore
     if (VueCookies.isKey('settingsData')) {
+      // @ts-ignore
       const settingsDataCookie = VueCookies.get('settingsData');
 
       if (settingsDataCookie) {
@@ -26,11 +28,6 @@ const cookiesHandler = {
       }
     }
 
-    // Size estimation function
-    const estimateSize = data => {
-      return encodeURIComponent(JSON.stringify(data)).length;
-    };
-
     // Check and handle cookie size limit
     const maxCookieSize = 4000; // 4KB limit
 
@@ -43,6 +40,7 @@ const cookiesHandler = {
           const expiryDate = new Date();
           expiryDate.setDate(expiryDate.getDate() + 7); // Expires in 7 days
 
+          // @ts-ignore
           VueCookies.set('settingsData', newSettingsData, {
             expires: expiryDate,
           });
@@ -51,5 +49,10 @@ const cookiesHandler = {
     );
   },
 };
+
+
+function estimateSize(data: any) {
+  return encodeURIComponent(JSON.stringify(data)).length;
+}
 
 export default cookiesHandler;
