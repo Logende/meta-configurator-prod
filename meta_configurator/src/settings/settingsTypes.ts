@@ -1,4 +1,3 @@
-
 export interface SettingsInterfaceRoot {
   debuggingActive: boolean;
   guiEditorOnRightSide: boolean;
@@ -8,7 +7,7 @@ export interface SettingsInterfaceRoot {
 }
 
 export interface SettingsInterfaceCodeEditor {
-  fontSize: number
+  fontSize: number;
 }
 
 export interface SettingsInterfaceGuiEditor {
@@ -16,15 +15,13 @@ export interface SettingsInterfaceGuiEditor {
   propertySorting: PropertySorting;
 }
 
-
 export enum PropertySorting {
   PRIORITY_ORDER = 'priorityOrder',
   SCHEMA_ORDER = 'schemaOrder',
   DATA_ORDER = 'dataOrder',
 }
 
-
 export enum DataFormat {
-    JSON = 'json',
-    YAML = 'yaml',
+  JSON = 'json',
+  YAML = 'yaml',
 }

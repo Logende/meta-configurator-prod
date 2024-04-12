@@ -15,7 +15,8 @@ export const META_SCHEMA_SIMPLIFIED_RESTRICTED: TopLevelSchema = {
     jsonMetaSchema: {
       title: 'Json meta-schema (restricted)',
       $schema: 'https://json-schema.org/draft/2020-12/schema',
-      description: 'This schema is a simplified and restricted version of the json schema meta schema, to be used to edit schemas within MetaConfigurator. It is less expressive and more restricted than the other meta schema, which makes it also easier to work with.',
+      description:
+        'This schema is a simplified and restricted version of the json schema meta schema, to be used to edit schemas within MetaConfigurator. It is less expressive and more restricted than the other meta schema, which makes it also easier to work with.',
       allOf: [
         {
           $ref: '#/$defs/core',

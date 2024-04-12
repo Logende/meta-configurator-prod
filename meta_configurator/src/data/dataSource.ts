@@ -20,8 +20,6 @@ const dataSource = {
   settingsSchemaData: shallowRef<any>(SETTINGS_SCHEMA), // TODO add settings schema type
 };
 
-
-
 /**
  * The data source contains the basic, unprocessed data as JSON objects.
  * The data is stored in shallow refs, so any update on sub properties of the data

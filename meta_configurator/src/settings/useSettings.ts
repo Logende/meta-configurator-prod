@@ -1,11 +1,9 @@
 import {useDataSource} from '@/data/dataSource';
-import {dataAt} from "@/utility/resolveDataAtPath";
-import type {Path} from "@/utility/path";
+import {dataAt} from '@/utility/resolveDataAtPath';
+import type {Path} from '@/utility/path';
 import _ from 'lodash';
-import {pathToString} from "@/utility/pathUtils";
-import type {SettingsInterfaceRoot} from "@/settings/settingsTypes";
-
-
+import {pathToString} from '@/utility/pathUtils';
+import type {SettingsInterfaceRoot} from '@/settings/settingsTypes';
 
 /**
  * Use this hook to access the settings data for reading.

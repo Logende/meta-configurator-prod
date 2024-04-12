@@ -1,8 +1,8 @@
 import {watch} from 'vue';
 import VueCookies from 'vue-cookies';
 import {errorService} from '@/main';
-import {setSettings} from "@/settings/useSettings";
-import {useDataSource} from "@/data/dataSource";
+import {setSettings} from '@/settings/useSettings';
+import {useDataSource} from '@/data/dataSource';
 
 /**
  * We use cookies to store the settings data
@@ -20,7 +20,7 @@ const cookiesHandler = {
       if (settingsDataCookie) {
         try {
           if (settingsDataCookie !== 'undefined') {
-            setSettings(settingsDataCookie)
+            setSettings(settingsDataCookie);
           }
         } catch (error) {
           errorService.onError(error);
@@ -49,7 +49,6 @@ const cookiesHandler = {
     );
   },
 };
-
 
 function estimateSize(data: any) {
   return encodeURIComponent(JSON.stringify(data)).length;
