@@ -1,3 +1,5 @@
+import type {TopLevelSchema} from "@/schema/jsonSchemaType";
+
 /**
  * This represents a simplified version of the json schema meta schema.
  * It is identical to simplifiedMetaSchema, but with the following additional changes:
@@ -6,7 +8,7 @@
  * - Removed conditionals and not, due to conflict with enforced const types
  * - Removed the option to define different types for a field, making the type selection simpler
  */
-export const META_SCHEMA_SIMPLIFIED_RESTRICTED = {
+export const META_SCHEMA_SIMPLIFIED_RESTRICTED: TopLevelSchema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
   $id: 'com.github.meta_configurator.simplified-meta-schema-restricted',
   title: 'Json schema (simplified and restricted)',
@@ -32,6 +34,7 @@ export const META_SCHEMA_SIMPLIFIED_RESTRICTED = {
     rootObjectSubSchema: {
       title: 'Root Subschema',
       type: 'object',
+      required: ['type'],
       allOf: [
         {
           $ref: '#/$defs/objectSubSchema',
@@ -44,6 +47,7 @@ export const META_SCHEMA_SIMPLIFIED_RESTRICTED = {
               },
             },
             type: {
+              const: 'object',
               metaConfigurator: {
                 advanced: true,
               },
@@ -68,7 +72,7 @@ export const META_SCHEMA_SIMPLIFIED_RESTRICTED = {
                 advanced: true,
               },
             }
-          }
+          },
         },
       ],
     },
@@ -483,27 +487,6 @@ export const META_SCHEMA_SIMPLIFIED_RESTRICTED = {
           metaConfigurator: {
             advanced: true,
           },
-        },
-      },
-    },
-    metaObjectProperty: {
-      title: 'Meta Object property',
-      properties: {
-        properties: {
-          type: 'object',
-          description:
-            'The value of "properties" MUST be an object. Each value of this object MUST be a valid JSON Schema.\n' +
-            '\n' +
-            "Validation succeeds if, for each name that appears in both the instance and as a name within this keyword's value, the child instance for that name successfully validates against the corresponding schema.\n" +
-            '\n' +
-            'The annotation result of this keyword is the set of instance property names matched by this keyword. This annotation affects the behavior of "additionalProperties" (in this vocabulary) and "unevaluatedProperties" in the Unevaluated vocabulary.\n' +
-            '\n' +
-            'Omitting this keyword has the same assertion behavior as an empty object.',
-          additionalProperties: {
-            $ref: '#/$defs/jsonSchema',
-          },
-          $comment: 'https://json-schema.org/draft/2020-12/json-schema-core#name-properties',
-          default: {},
         },
       },
     },

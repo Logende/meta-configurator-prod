@@ -1,4 +1,4 @@
-import type {JsonSchemaObjectType, JsonSchemaType, JsonSchemaTypePreprocessed} from '@/model/jsonSchemaType';
+import type {JsonSchemaObjectType, JsonSchemaType, JsonSchemaTypePreprocessed} from '@/schema/jsonSchemaType';
 import pointer from 'json-pointer';
 import {nonBooleanSchema} from '@/schema/schemaUtils';
 import {

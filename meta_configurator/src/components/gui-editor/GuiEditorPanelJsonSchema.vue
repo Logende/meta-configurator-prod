@@ -2,12 +2,12 @@
 import SchemaInfoPanel from '@/components/gui-editor/SchemaInfoPanel.vue';
 import CurrentPathBreadcrumb from '@/components/gui-editor/CurrentPathBreadcrump.vue';
 import PropertiesPanel from '@/components/gui-editor/PropertiesPanel.vue';
-import type {Path} from '@/model/path';
+import type {Path} from '@/utility/path';
 import {useSessionStore} from '@/store/sessionStore';
 import {computed} from 'vue';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {getSchemaForMode, useCurrentData, useCurrentSchema} from '@/data/useDataLink';
-import {SessionMode} from '@/model/sessionMode';
+import {SessionMode} from '@/store/sessionMode';
 
 const sessionStore = useSessionStore();
 

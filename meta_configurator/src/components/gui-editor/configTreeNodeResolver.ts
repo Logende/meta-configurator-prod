@@ -3,11 +3,11 @@ import type {
   AddPropertyTreeNode,
   ConfigDataTreeNodeType,
   GuiEditorTreeNode,
-} from '@/model/configDataTreeNode';
-import {TreeNodeType} from '@/model/configDataTreeNode';
-import type {Path} from '@/model/path';
+} from '@/components/gui-editor/configDataTreeNode';
+import {TreeNodeType} from '@/components/gui-editor/configDataTreeNode';
+import type {Path} from '@/utility/path';
 import {pathToString} from '@/utility/pathUtils';
-import {PropertySorting} from '@/model/settingsTypes';
+import {PropertySorting} from '@/settings/settingsTypes';
 import _ from 'lodash';
 import type {EffectiveSchema} from '@/schema/effectiveSchemaCalculator';
 import {calculateEffectiveSchema} from '@/schema/effectiveSchemaCalculator';

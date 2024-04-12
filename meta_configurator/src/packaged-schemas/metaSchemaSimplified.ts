@@ -1,3 +1,5 @@
+import type {TopLevelSchema} from "@/schema/jsonSchemaType";
+
 /**
  * This represents a simplified version of the json schema meta schema.
  * We made the following changes:
@@ -8,7 +10,7 @@
  * - usage of $ref instead of anchors because we don't support anchors and dynamic anchors
  * - added examples to some fields
  */
-export const META_SCHEMA_SIMPLIFIED = {
+export const META_SCHEMA_SIMPLIFIED: TopLevelSchema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
   $id: 'com.github.meta_configurator.simplified-meta-schema',
   title: 'Json schema (simplified)',

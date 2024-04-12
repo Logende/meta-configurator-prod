@@ -2,7 +2,7 @@ import {watch} from 'vue';
 import VueCookies from 'vue-cookies';
 import {errorService} from '@/main';
 import {getDataForMode} from '@/data/useDataLink';
-import {SessionMode} from '@/model/sessionMode';
+import {SessionMode} from '@/store/sessionMode';
 
 /**
  * We use cookies to store the settings data

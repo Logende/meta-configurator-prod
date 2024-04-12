@@ -1,5 +1,5 @@
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
-import type {Path} from '@/model/path';
+import type {Path} from '@/utility/path';
 import _ from 'lodash';
 import {useValidationService} from '@/schema/validation/useValidation';
 import {dataAt} from '@/utility/resolveDataAtPath';
