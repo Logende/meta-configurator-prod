@@ -92,7 +92,13 @@ export type JsonSchemaObjectType = {
   };
   $recursiveAnchor?: string;
   $recursiveRef?: string;
+  metaConfigurator?: {
+    hideAddPropertyButton?: boolean;
+    advanced?: boolean;
+  }
+
   [k: string]: any;
+
 };
 export type TopLevelSchema = JsonSchemaType & {
   $schema?: string;

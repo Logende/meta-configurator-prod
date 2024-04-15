@@ -17,7 +17,10 @@ export interface SettingsInterfaceGuiEditor {
 }
 
 export interface SettingsInterfaceMetaSchema {
-  simple: boolean;
+  showButtonToAddAdditionalProperties: boolean;
+  allowBooleanSchema: boolean;
+  allowMultipleTypes: boolean;
+  forceSameTypeForExamplesEnumConstantAndDefault: boolean;
 }
 
 export enum PropertySorting {
