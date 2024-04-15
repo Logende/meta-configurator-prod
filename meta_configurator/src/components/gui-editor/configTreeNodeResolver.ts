@@ -314,7 +314,10 @@ export class ConfigTreeNodeResolver {
         // apply given filter
         .filter(([key]) => filter(key))
         // apply "advanced" filter
-        .filter(([key , value]) => (this.isKeepInAdvancedSection(value, absolutePath.concat(key))) === advanced)
+        .filter(
+          ([key, value]) =>
+            this.isKeepInAdvancedSection(value, absolutePath.concat(key)) === advanced
+        )
         .map(([key, value]) => {
           const childPath = absolutePath.concat(key);
           return this.createTreeNodeOfProperty(
@@ -330,7 +333,10 @@ export class ConfigTreeNodeResolver {
 
   private isKeepInAdvancedSection(schema: JsonSchemaWrapper, absolutePath: Path) {
     // only keep objects in advanced section if they are marked as advanced and do not contain data
-    return (schema.metaConfigurator?.advanced ?? false ) && useCurrentData().dataAt(absolutePath) === undefined;
+    return (
+      (schema.metaConfigurator?.advanced ?? false) &&
+      useCurrentData().dataAt(absolutePath) === undefined
+    );
   }
 
   private createDataPropertiesChildNodes(
