@@ -56,7 +56,8 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
     },
     metaSchema: {
       type: 'object',
-      description: 'Meta Schema related settings belong here. They affect the functionality of the schema editor. By making the meta schema more expressive (e.g., by allowing multiple data types for a property), the schema editor will be more powerful but also more complicated.',
+      description:
+        'Meta Schema related settings belong here. They affect the functionality of the schema editor. By making the meta schema more expressive (e.g., by allowing multiple data types for a property), the schema editor will be more powerful but also more complicated.',
       properties: {
         allowBooleanSchema: {
           type: 'boolean',
