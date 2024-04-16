@@ -4,6 +4,7 @@ import {ValidationResult} from '../../../../schema/validation/validationService'
 import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
 import StringProperty from '../StringProperty.vue';
 import InputText from 'primevue/inputtext';
+import {SessionMode} from "../../../../store/sessionMode";
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({
@@ -36,7 +37,7 @@ describe('StringProperty', () => {
         {
           type: 'string',
         },
-        {},
+        SessionMode.FileEditor,
         false
       ),
     });
@@ -73,7 +74,7 @@ describe('StringProperty', () => {
           {
             type: 'string',
           },
-          {},
+          SessionMode.FileEditor,
           false
         ),
       });
@@ -94,7 +95,7 @@ describe('StringProperty', () => {
         {
           type: 'number',
         },
-        {},
+        SessionMode.FileEditor,
         false
       ),
     });
@@ -113,7 +114,7 @@ describe('StringProperty', () => {
         {
           type: 'object',
         },
-        {},
+        SessionMode.FileEditor,
         false
       ),
     });
@@ -132,7 +133,7 @@ describe('StringProperty', () => {
         {
           type: 'array',
         },
-        {},
+        SessionMode.FileEditor,
         false
       ),
     });
@@ -151,7 +152,7 @@ describe('StringProperty', () => {
         {
           type: 'null',
         },
-        {},
+        SessionMode.FileEditor,
         false
       ),
     });
@@ -166,7 +167,7 @@ describe('StringProperty', () => {
       propertyName: 'foo',
       propertyData: undefined,
       validationResults: new ValidationResult([]),
-      propertySchema: new JsonSchemaWrapper({}, {}, false),
+      propertySchema: new JsonSchemaWrapper({}, SessionMode.FileEditor, false),
     });
 
     it('should correctly setup the input field', () => {

@@ -34,10 +34,11 @@ import {focus, focusOnPath, makeEditableAndSelectContents} from '@/utility/focus
 import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useValidationResult} from '@/schema/validation/useValidation';
 import {dataAt} from '@/utility/resolveDataAtPath';
-import {useSettings} from '@/settings/useSettings';
+import type {SessionMode} from "@/store/sessionMode";
 
 const props = defineProps<{
   currentSchema: JsonSchemaWrapper;
+  currentMode: SessionMode
   currentData: any;
   currentPath: Path;
 }>();
@@ -99,11 +100,11 @@ function computeTree() {
     undefined,
     props.currentPath
   );
-  currentTree.value.children = treeNodeResolver.createChildNodesOfNode(currentTree.value!);
+  currentTree.value!.children = treeNodeResolver.createChildNodesOfNode(currentTree.value!, props.currentMode);
 
-  expandPreviouslyExpandedElements(currentTree.value.children as Array<GuiEditorTreeNode>);
+  expandPreviouslyExpandedElements(currentTree.value!.children as Array<GuiEditorTreeNode>);
 
-  return currentTree.value;
+  return currentTree.value!;
 }
 
 /**
@@ -114,7 +115,7 @@ function expandPreviouslyExpandedElements(nodes: Array<GuiEditorTreeNode>) {
   for (const node of nodes) {
     const expanded = useSessionStore().currentExpandedElements[node.key] ?? false;
     if (expanded) {
-      node.children = treeNodeResolver.createChildNodesOfNode(node);
+      node.children = treeNodeResolver.createChildNodesOfNode(node, props.currentMode);
       if (node.children && node.children.length > 0) {
         expandPreviouslyExpandedElements(node.children as Array<GuiEditorTreeNode>);
       }
@@ -250,12 +251,12 @@ function addItem(relativePath: Path, newValue: any) {
  * @param relativePath the relative path to the property to focus on
  */
 function focusOnFirstProperty(relativePath?: Path) {
-  let pathToFirstProperty = currentTree.value?.children[0]?.data?.absolutePath;
+  let pathToFirstProperty = currentTree.value?.children?.[0]?.data?.absolutePath;
 
   if (relativePath) {
     const node = findNode(relativePath);
     if (node !== undefined) {
-      pathToFirstProperty = node.children[0]?.data?.absolutePath;
+      pathToFirstProperty = node?.children?.[0]?.data?.absolutePath;
     }
   }
   if (pathToFirstProperty) {
@@ -321,7 +322,7 @@ function addEmptyProperty(relativePath: Path, absolutePath: Path) {
   const treeData: ConfigTreeNodeData = {
     absolutePath: absolutePath.concat(name),
     relativePath: relativePath.concat(name),
-    schema: new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed.value, false),
+    schema: new JsonSchemaWrapper({}, props.currentMode, false),
     parentSchema: objectSchema,
     depth: ((objectNode?.data?.depth as number) ?? 0) + 1,
     name: name,
@@ -335,8 +336,8 @@ function addEmptyProperty(relativePath: Path, absolutePath: Path) {
   } as GuiEditorTreeNode;
 
   // insert the new node before the "add property" node
-  const indexOfAddPropertyNode = objectNode.children.length - 1;
-  objectNode.children.splice(indexOfAddPropertyNode, 0, nodeToInsert);
+  const indexOfAddPropertyNode = objectNode!.children!.length - 1;
+  objectNode!.children!.splice(indexOfAddPropertyNode, 0, nodeToInsert);
 
   if (nodeToInsert.key) {
     const id = '_label_' + nodeToInsert.key;
@@ -397,7 +398,7 @@ function expandElementsByPath(relativePath: Path) {
     let childNodeToExpand = undefined;
 
     // search child node to expand
-    for (const child of currentNode.children) {
+    for (const child of currentNode!.children) {
       if (child.key === absolutePathToExpand) {
         childNodeToExpand = child;
         break;
@@ -431,7 +432,7 @@ function expandElementChildren(node: any) {
   if (node.type === TreeNodeType.ADVANCED_PROPERTY) {
     return;
   }
-  node.children = treeNodeResolver.createChildNodesOfNode(node);
+  node.children = treeNodeResolver.createChildNodesOfNode(node, props.currentMode);
   expandPreviouslyExpandedElements(node.children as Array<GuiEditorTreeNode>);
 }
 

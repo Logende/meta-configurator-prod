@@ -56,7 +56,7 @@ export function resolveCorrespondingComponent(
     return h(OneOfSelectionProperty, {
       ...propsObject,
       possibleSchemas: nodeData.schema.type.map(type =>
-        typeSchema(type, useCurrentSchema().schemaPreprocessed)
+        typeSchema(type, useSessionStore().currentMode)
       ),
       isTypeUnion: true,
     });

@@ -5,6 +5,7 @@ import NumberProperty from '../NumberProperty.vue';
 import InputNumber from 'primevue/inputnumber';
 import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
 import {GuiConstants} from '@/constants';
+import {useSessionStore} from "../../../../store/sessionStore";
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({
@@ -38,7 +39,7 @@ describe('NumberProperty', () => {
           {
             type: 'integer',
           },
-          {},
+            useSessionStore().currentMode,
           false
         ),
       };
@@ -68,7 +69,7 @@ describe('NumberProperty', () => {
             type: 'number',
             multipleOf: 0.5,
           },
-          {},
+            useSessionStore().currentMode,
           false
         ),
       };
@@ -96,7 +97,7 @@ describe('NumberProperty', () => {
         {
           type: 'integer',
         },
-        {},
+          useSessionStore().currentMode,
         false
       ),
     });

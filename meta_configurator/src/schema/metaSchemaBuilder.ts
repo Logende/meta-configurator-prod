@@ -2,6 +2,7 @@ import type {SettingsInterfaceMetaSchema} from '@/settings/settingsTypes';
 import type {TopLevelSchema} from '@/schema/jsonSchemaType';
 import {META_SCHEMA_SIMPLIFIED} from '@/packaged-schemas/metaSchemaSimplified';
 
+// TODO: auto-suggest or enable features if user loads a schema that requires them
 export function buildMetaSchema(metaSchemaSettings: SettingsInterfaceMetaSchema): TopLevelSchema {
   let metaSchema = structuredClone(META_SCHEMA_SIMPLIFIED);
 

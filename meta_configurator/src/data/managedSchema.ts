@@ -28,7 +28,6 @@ export class ManagedSchema {
     public mode: SessionMode
   ) {
     this._schemaPreprocessed = ref(preprocessOneTime(this._schemaRaw.value));
-    this._schemaWrapper = ref(new TopLevelJsonSchemaWrapper(this._schemaPreprocessed.value));
 
     if (watchSchemaChanges) {
       // make sure that the schema is not preprocessed too often
@@ -44,13 +43,16 @@ export class ManagedSchema {
   /**
    * The json schema as a TopLevelJsonSchema object
    */
-  private readonly _schemaWrapper: Ref<TopLevelJsonSchemaWrapper>;
+  private _schemaWrapper?: Ref<TopLevelJsonSchemaWrapper>;
 
   get schemaPreprocessed(): Ref<JsonSchemaTypePreprocessed> {
     return this._schemaPreprocessed;
   }
 
   get schemaWrapper(): Ref<TopLevelJsonSchemaWrapper> {
+    if (this._schemaWrapper === undefined) {
+      this._schemaWrapper = ref(new TopLevelJsonSchemaWrapper(this._schemaPreprocessed.value, this.mode));
+    }
     return this._schemaWrapper!;
   }
 
@@ -64,7 +66,7 @@ export class ManagedSchema {
   public schemaAtPath(path: Path): JsonSchemaWrapper {
     return (
       this.schemaWrapper.value.subSchemaAt(path) ??
-      new JsonSchemaWrapper({}, this._schemaPreprocessed.value, false)
+      new JsonSchemaWrapper({}, this.mode, false)
     );
   }
 
@@ -109,6 +111,6 @@ export class ManagedSchema {
   public reloadSchema() {
     clearPreprocessedRefSchemaCache();
     this._schemaPreprocessed = ref(preprocessOneTime(this._schemaRaw.value));
-    this._schemaWrapper.value = new TopLevelJsonSchemaWrapper(this._schemaPreprocessed.value);
+    this.schemaWrapper.value = new TopLevelJsonSchemaWrapper(this._schemaPreprocessed.value, this.mode);
   }
 }

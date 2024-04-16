@@ -35,7 +35,7 @@ function selectPath(path: Path) {
 const currentSchema = computed(() => {
   const schema = useSessionStore().effectiveSchemaAtCurrentPath?.schema;
   if (!schema) {
-    return new JsonSchemaWrapper({}, useCurrentSchema().schemaPreprocessed.value, false);
+    return new JsonSchemaWrapper({}, useSessionStore().currentMode, false);
   }
   return schema;
 });
@@ -53,6 +53,7 @@ const currentSchema = computed(() => {
         :currentSchema="currentSchema"
         :currentPath="sessionStore.currentPath"
         :currentData="useSessionStore().dataAtCurrentPath"
+        :current-mode="useSessionStore().currentMode"
         @zoom_into_path="pathToAdd => zoomIntoPath(pathToAdd)"
         @remove_property="removeProperty"
         @select_path="selectedPath => selectPath(selectedPath)"
