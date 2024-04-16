@@ -3,7 +3,7 @@ import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
 import {META_SCHEMA_SIMPLIFIED} from '@/packaged-schemas/metaSchemaSimplified';
 import {SETTINGS_SCHEMA} from '@/packaged-schemas/settingsSchema';
 import type {TopLevelSchema} from '@/schema/jsonSchemaType';
-import {buildMetaSchema} from "@/schema/metaSchemaBuilder";
+import {buildMetaSchema} from '@/schema/metaSchemaBuilder';
 
 const dataSource = {
   // data of the file editor
@@ -16,15 +16,15 @@ const dataSource = {
   metaSchemaData: shallowRef<TopLevelSchema>(META_SCHEMA_SIMPLIFIED),
 
   // restricted meta schema of the schema editor
-  metaSchemaRestrictedData: shallowRef<TopLevelSchema>(buildMetaSchema(
-      {
-            allowBooleanSchema: false,
-            allowMultipleTypes: false,
-            showAdditionalPropertiesButton: false,
-            objectTypesComfort: true,
-            rootMustBeObject: true,
-      }
-  )),
+  metaSchemaRestrictedData: shallowRef<TopLevelSchema>(
+    buildMetaSchema({
+      allowBooleanSchema: false,
+      allowMultipleTypes: false,
+      showAdditionalPropertiesButton: false,
+      objectTypesComfort: true,
+      rootMustBeObject: true,
+    })
+  ),
 
   // data of the settings editor
   settingsData: shallowRef<any>(SETTINGS_DATA_DEFAULT), // TODO add settings type

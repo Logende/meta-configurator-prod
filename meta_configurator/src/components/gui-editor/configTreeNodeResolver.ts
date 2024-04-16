@@ -334,7 +334,8 @@ export class ConfigTreeNodeResolver {
   private isKeepInAdvancedSection(schema: JsonSchemaWrapper, absolutePath: Path) {
     // only keep objects in advanced section if they are marked as advanced and do not contain data
     return (
-      (schema.metaConfigurator?.advanced ?? false) && ( useCurrentData().dataAt(absolutePath) === undefined)
+      (schema.metaConfigurator?.advanced ?? false) &&
+      useCurrentData().dataAt(absolutePath) === undefined
     );
   }
 
