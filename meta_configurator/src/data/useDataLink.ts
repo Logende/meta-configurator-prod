@@ -19,12 +19,12 @@ const managedUserSchema = new ManagedSchema(
   SessionMode.FileEditor
 );
 const managedMetaSchema = new ManagedSchema(
-    schemaSource.metaSchemaData,
+  schemaSource.metaSchemaData,
   true,
   SessionMode.SchemaEditor
 );
 const managedSettingsSchema = new ManagedSchema(
-    schemaSource.settingsSchemaData,
+  schemaSource.settingsSchemaData,
   false,
   SessionMode.Settings
 );

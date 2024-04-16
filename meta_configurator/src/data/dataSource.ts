@@ -3,33 +3,28 @@ import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
 import {SETTINGS_SCHEMA} from '@/packaged-schemas/settingsSchema';
 import type {TopLevelSchema} from '@/schema/jsonSchemaType';
 import {buildMetaSchema} from '@/schema/metaSchemaBuilder';
-import {getSchemaForMode} from "@/data/useDataLink";
-import {SessionMode} from "@/store/sessionMode";
+import {getSchemaForMode} from '@/data/useDataLink';
+import {SessionMode} from '@/store/sessionMode';
 
 const dataSource = {
-    // data of the file editor
-    userData: shallowRef<any>({}),
-    // data of the schema editor, used as the schema for the file editor
-    userSchemaData: shallowRef<any>({
-        title: 'No schema loaded',
-    }),
+  // data of the file editor
+  userData: shallowRef<any>({}),
+  // data of the schema editor, used as the schema for the file editor
+  userSchemaData: shallowRef<any>({
+    title: 'No schema loaded',
+  }),
 
-    // data of the settings editor
-    settingsData: shallowRef<any>(SETTINGS_DATA_DEFAULT), // TODO add settings type
-
+  // data of the settings editor
+  settingsData: shallowRef<any>(SETTINGS_DATA_DEFAULT), // TODO add settings type
 };
 
 const schemaSource = {
-    // restricted meta schema of the schema editor
-    metaSchemaData: computed(() =>
-        buildMetaSchema(dataSource.settingsData.value.metaSchema)
-    ),
+  // restricted meta schema of the schema editor
+  metaSchemaData: computed(() => buildMetaSchema(dataSource.settingsData.value.metaSchema)),
 
-    // settings schema of the settings editor
-    settingsSchemaData: shallowRef<TopLevelSchema>(SETTINGS_SCHEMA), // TODO add settings schema type
+  // settings schema of the settings editor
+  settingsSchemaData: shallowRef<TopLevelSchema>(SETTINGS_SCHEMA), // TODO add settings schema type
 };
-
-
 
 /**
  * The data source contains the basic, unprocessed data as JSON objects.
@@ -39,10 +34,9 @@ const schemaSource = {
  * updating the data.
  */
 export function useDataSource() {
-    return dataSource;
+  return dataSource;
 }
 
-
 export function useSchemaSource() {
-    return schemaSource;
+  return schemaSource;
 }
