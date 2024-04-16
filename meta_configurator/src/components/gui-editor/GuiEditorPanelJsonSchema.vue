@@ -7,8 +7,15 @@ import {useSessionStore} from '@/store/sessionStore';
 import {computed} from 'vue';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
+import {ConfigTreeNodeData} from "@/components/gui-editor/configDataTreeNode";
+import type {SessionMode} from "@/store/sessionMode";
 
 const sessionStore = useSessionStore();
+
+
+const props = defineProps<{
+    mode: SessionMode;
+}>();
 
 function updatePath(newPath: Path) {
   sessionStore.currentPath = newPath;
@@ -43,7 +50,7 @@ const currentSchema = computed(() => {
 
 <template>
   <div class="p-5 space-y-3 flex flex-col">
-    <SchemaInfoPanel :mode="useSessionStore().currentMode" />
+    <SchemaInfoPanel :mode="props.mode" />
     <CurrentPathBreadcrumb
       :root-name="'document root'"
       :path="sessionStore.currentPath"

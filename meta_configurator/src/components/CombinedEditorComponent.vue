@@ -102,7 +102,9 @@ toastService.toast = useToast();
             :key="index"
             :min-size="10"
             :resizable="true">
-            <component :is="panel" />
+            <component
+                    :is="panel"
+            :mode="SessionMode.SchemaEditor"/>
           </SplitterPanel>
         </Splitter>
       </div>
