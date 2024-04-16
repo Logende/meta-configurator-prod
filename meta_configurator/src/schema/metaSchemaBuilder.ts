@@ -3,8 +3,7 @@ import type {TopLevelSchema} from '@/schema/jsonSchemaType';
 import {META_SCHEMA_SIMPLIFIED} from '@/packaged-schemas/metaSchemaSimplified';
 
 export function buildMetaSchema(metaSchemaSettings: SettingsInterfaceMetaSchema): TopLevelSchema {
-  // @ts-ignore
-  let metaSchema = {...META_SCHEMA_SIMPLIFIED};
+  let metaSchema = structuredClone(META_SCHEMA_SIMPLIFIED);
 
   if (!metaSchemaSettings.allowBooleanSchema) {
     metaSchema.$defs!.jsonSchema = DEF_JSON_SCHEMA_WITHOUT_BOOLEAN_SCHEMA;
