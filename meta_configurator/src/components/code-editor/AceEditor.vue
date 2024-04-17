@@ -25,6 +25,7 @@ const props = defineProps<{
     sessionMode: SessionMode
 }>();
 
+// random id is used to enable multiple Ace Editors on the same page
 const editor_id = 'code-editor-' + Math.random();
 
 
@@ -79,7 +80,7 @@ function setupAceProperties(editor: Editor) {
 </script>
 
 <template>
-  <div class="h-full" id="editor" />
+  <div class="h-full" :id="editor_id" />
 </template>
 
 <style scoped></style>
