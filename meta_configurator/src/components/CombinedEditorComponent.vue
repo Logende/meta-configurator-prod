@@ -21,7 +21,7 @@ import {getDataForMode } from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
 import {useSessionStore} from "@/store/sessionStore";
-import {getComponentByPanelType} from "@/components/PanelType";
+import {getComponentByPanelType} from "@/components/panelType";
 
 
 

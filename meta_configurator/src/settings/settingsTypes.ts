@@ -1,4 +1,4 @@
-import type {PanelType} from "@/components/PanelType";
+import type {PanelType} from "@/components/panelType";
 import type {SessionMode} from "@/store/sessionMode";
 
 export interface SettingsInterfaceRoot {
