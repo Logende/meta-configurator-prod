@@ -7,6 +7,7 @@ vi.mock('@/store/sessionStore', () => ({
   useSessionStore: vi.fn(),
 }));
 
+
 describe('SimpleArrayProperty', () => {
   let wrapper: any;
   let spanWithDescription: any;

@@ -14,9 +14,8 @@ import {calculateEffectiveSchema} from '@/schema/effectiveSchemaCalculator';
 import {safeMergeSchemas} from '@/schema/mergeAllOfs';
 import {useSettings} from '@/settings/useSettings';
 import {typeSchema} from '@/schema/schemaUtils';
-import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
 import type {SessionMode} from "@/store/sessionMode";
-import {getDataForMode} from "@/data/useDataLink";
+import {getDataForMode, getUserSelectionForMode} from "@/data/useDataLink";
 
 interface TreeNodeResolvingParameters {
   absolutePath: Path;
@@ -79,11 +78,11 @@ export class ConfigTreeNodeResolver {
     if (dependsOnUserSelection) {
       const path = pathToString(absolutePath);
       const hasUserSelectionOneOf =
-        useUserSchemaSelectionStore().currentSelectedOneOfOptions.has(path);
+        getUserSelectionForMode(mode).currentSelectedOneOfOptions.value.has(path);
       const hasUserSelectionAnyOf =
-        useUserSchemaSelectionStore().currentSelectedAnyOfOptions.has(path);
+          getUserSelectionForMode(mode).currentSelectedAnyOfOptions.value.has(path);
       const hasUserSelectionTypeUnion =
-        useUserSchemaSelectionStore().currentSelectedTypeUnionOptions.has(path);
+          getUserSelectionForMode(mode).currentSelectedTypeUnionOptions.value.has(path);
       if (!(hasUserSelectionOneOf || hasUserSelectionAnyOf || hasUserSelectionTypeUnion)) {
         return true; // no user selection -> leaf node
       }
@@ -453,7 +452,7 @@ export class ConfigTreeNodeResolver {
                                              depth,
                                            }: TreeNodeResolvingParameters) {
     const userSelectionOneOf =
-      useUserSchemaSelectionStore().getSelectedTypeUnionOption(absolutePath);
+      getUserSelectionForMode(mode).getSelectedTypeUnionOption(absolutePath);
 
     if (userSelectionOneOf !== undefined) {
       const baseSchema = {...schema.jsonSchema};
@@ -482,7 +481,7 @@ export class ConfigTreeNodeResolver {
                                          schema,
                                          depth,
                                        }: TreeNodeResolvingParameters) {
-    const userSelectionOneOf = useUserSchemaSelectionStore().getSelectedOneOfOption(absolutePath);
+    const userSelectionOneOf = getUserSelectionForMode(mode).getSelectedOneOfOption(absolutePath);
 
     if (userSelectionOneOf !== undefined) {
       const baseSchema = {...schema.jsonSchema};
@@ -508,7 +507,7 @@ export class ConfigTreeNodeResolver {
                                          schema,
                                          depth,
                                        }: TreeNodeResolvingParameters) {
-    const userSelectionAnyOf = useUserSchemaSelectionStore().getSelectedAnyOfOptions(absolutePath);
+    const userSelectionAnyOf = getUserSelectionForMode(mode).getSelectedAnyOfOptions(absolutePath);
 
     if (userSelectionAnyOf !== undefined) {
       const baseSchema = {...schema.jsonSchema};

@@ -7,6 +7,7 @@ import {ManagedData} from '@/data/managedData';
 import {ManagedSchema} from '@/data/managedSchema';
 import {ManagedSession} from "@/data/managedSession";
 import {ManagedValidation} from "@/data/managedValidation";
+import {ManagedUserSchemaSelection} from "@/data/managedUserSchemaSelection";
 
 const dataSource = useDataSource();
 const schemaSource = useSchemaSource();
@@ -33,6 +34,12 @@ const validationList: ManagedValidation[] = [
     new ManagedValidation(SessionMode.FileEditor),
     new ManagedValidation(SessionMode.SchemaEditor),
     new ManagedValidation(SessionMode.Settings),
+    ];
+
+const userSelectionList: ManagedUserSchemaSelection[] = [
+    new ManagedUserSchemaSelection(SessionMode.FileEditor),
+    new ManagedUserSchemaSelection(SessionMode.SchemaEditor),
+    new ManagedUserSchemaSelection(SessionMode.Settings),
     ];
 
 /**
@@ -74,7 +81,15 @@ export function getValidationForMode(mode: SessionMode): ManagedValidation {
         }
     }
     throw new Error(`Unknown mode ${mode}`);
+}
 
+export function getUserSelectionForMode(mode: SessionMode): ManagedUserSchemaSelection {
+    for (const userSelection of userSelectionList) {
+        if (userSelection.mode === mode) {
+        return userSelection;
+        }
+    }
+    throw new Error(`Unknown mode ${mode}`);
 }
 
 const currentEditorData: ComputedRef<ManagedData> = computed(() =>

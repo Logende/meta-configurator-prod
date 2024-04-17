@@ -14,9 +14,8 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import 'primeicons/primeicons.css';
 import {focus, makeEditableAndSelectContents} from '@/utility/focusUtils';
 import {useSettings} from '@/settings/useSettings';
-import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
 import type {SessionMode} from "@/store/sessionMode";
-import {getSessionForMode} from "@/data/useDataLink";
+import {getSessionForMode, getUserSelectionForMode} from "@/data/useDataLink";
 import type {ValidationResult} from "@/schema/validationService";
 
 const props = defineProps<{
@@ -52,9 +51,9 @@ function canZoomIn(): boolean {
   if (dependsOnUserSelection) {
     const path = pathToString(props.node.data.absolutePath);
     const hasUserSelectionOneOf =
-      useUserSchemaSelectionStore().currentSelectedOneOfOptions.has(path);
+        getUserSelectionForMode(props.sessionMode).currentSelectedOneOfOptions.value.has(path);
     const hasUserSelectionAnyOf =
-      useUserSchemaSelectionStore().currentSelectedAnyOfOptions.has(path);
+        getUserSelectionForMode(props.sessionMode).currentSelectedAnyOfOptions.value.has(path);
     return hasUserSelectionOneOf || hasUserSelectionAnyOf;
   }
 

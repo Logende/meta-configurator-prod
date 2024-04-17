@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router';
+import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router';
 import {useSessionStore} from '@/store/sessionStore';
 import {SessionMode} from '@/store/sessionMode';
 import SchemaEditorView from "@/views/SchemaEditorView.vue";
@@ -10,7 +10,7 @@ import SettingsEditorView from "@/views/SettingsEditorView.vue";
  * It defines the routes and the corresponding components.
  */
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createMemoryHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',

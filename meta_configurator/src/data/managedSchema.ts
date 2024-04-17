@@ -8,8 +8,7 @@ import {TopLevelJsonSchemaWrapper} from '@/schema/topLevelJsonSchemaWrapper';
 import type {JsonSchemaType, JsonSchemaTypePreprocessed} from '@/schema/jsonSchemaType';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {calculateEffectiveSchema, EffectiveSchema} from '@/schema/effectiveSchemaCalculator';
-import {getDataForMode } from '@/data/useDataLink';
-import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
+import {getDataForMode, getUserSelectionForMode} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
 import {clearPreprocessedRefSchemaCache} from '@/schema/schemaLazyResolver';
 
@@ -86,7 +85,7 @@ export class ManagedSchema {
       const schema = currentEffectiveSchema.schema.subSchema(key);
 
       if (schema?.oneOf) {
-        const oneOfSelection = useUserSchemaSelectionStore().currentSelectedOneOfOptions.get(
+        const oneOfSelection = getUserSelectionForMode(this.mode).currentSelectedOneOfOptions.value.get(
           pathToString(currentPath)
         );
         if (oneOfSelection !== undefined) {

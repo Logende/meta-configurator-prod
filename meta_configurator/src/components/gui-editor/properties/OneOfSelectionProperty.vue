@@ -6,13 +6,13 @@ import Dropdown from 'primevue/dropdown';
 import type {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import type {Path, PathElement} from '@/utility/path';
 import {pathToString} from '@/utility/pathUtils';
-import {OneOfAnyOfSelectionOption, schemaOptionToString} from '@/store/oneOfAnyOfSelectionOption';
 import type {JsonSchemaType} from '@/schema/jsonSchemaType';
 import {safeMergeSchemas} from '@/schema/mergeAllOfs';
 import _ from 'lodash';
-import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
-import {getSchemaForMode, getSessionForMode, getValidationForMode} from '@/data/useDataLink';
+import {getSchemaForMode, getSessionForMode, getUserSelectionForMode, getValidationForMode} from '@/data/useDataLink';
 import type {SessionMode} from "@/store/sessionMode";
+import {OneOfAnyOfSelectionOption} from "@/data/oneOfAnyOfSelectionOption";
+import {schemaOptionToString} from "@/data/oneOfAnyOfSelectionOption";
 
 const props = defineProps<{
   propertyName: PathElement;
@@ -26,9 +26,9 @@ const props = defineProps<{
 
 function getCurrentSelectedOptions(): Map<string, OneOfAnyOfSelectionOption> {
   if (props.isTypeUnion) {
-    return useUserSchemaSelectionStore().currentSelectedTypeUnionOptions;
+    return getUserSelectionForMode(props.sessionMode).currentSelectedTypeUnionOptions.value;
   } else {
-    return useUserSchemaSelectionStore().currentSelectedOneOfOptions;
+    return getUserSelectionForMode(props.sessionMode).currentSelectedOneOfOptions.value;
   }
 }
 
