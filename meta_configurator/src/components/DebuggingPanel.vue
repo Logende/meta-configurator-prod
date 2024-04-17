@@ -8,13 +8,10 @@ import {
     getDataForMode,
     getSchemaForMode,
     getSessionForMode,
-    useCurrentData,
-    useCurrentSchema
 } from '@/data/useDataLink';
 
-const store = useSessionStore();
 
-const mode = computed(() => store.currentMode);
+const sessionMode = computed(() => useSessionStore().currentMode);
 
 
 const fileData = computed(() => getFileData());
@@ -34,9 +31,9 @@ function getDataAtCurrentPath() {
 </script>
 
 <template>
-  <div><b>currentMode:</b> {{ store.currentMode }}</div>
-  <div><b>currentPath:</b> {{ store.currentPath }}</div>
-  <div><b>currentSelectedElement:</b> {{ store.currentSelectedElement }}</div>
+  <div><b>currentMode:</b> {{ sessionMode }}</div>
+  <div><b>currentPath:</b> {{ getSessionForMode(sessionMode).currentPath }}</div>
+  <div><b>currentSelectedElement:</b> {{ getSessionForMode(sessionMode).currentSelectedElement }}</div>
   <div><b>fileData</b></div>
   <textarea class="bg-amber-300" v-model="fileData" />
   <div><b>schemaContent</b></div>

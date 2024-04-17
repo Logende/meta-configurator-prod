@@ -8,14 +8,14 @@ import type {SessionMode} from "@/store/sessionMode";
 
 
 const props = defineProps<{
-    mode: SessionMode;
+    sessionMode: SessionMode;
 }>();
 
 
 </script>
 
 <template>
-  <GuiEditorPanelJsonSchema class="h-full" :mode="props.mode" />
+  <GuiEditorPanelJsonSchema class="h-full" :sessionMode="props.sessionMode" />
 </template>
 
 <style scoped></style>

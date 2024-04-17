@@ -19,7 +19,7 @@ const props = defineProps<{
   propertyData: any | undefined;
   absolutePath: Path;
   possibleSchemas: Array<JsonSchemaWrapper>;
-  mode: SessionMode;
+  sessionMode: SessionMode;
 }>();
 
 const possibleOptions = props.possibleSchemas.map(
@@ -56,7 +56,7 @@ const valueProperty: WritableComputedRef<OneOfAnyOfSelectionOption[] | undefined
   set(selectedOptions: OneOfAnyOfSelectionOption[] | undefined) {
     if (selectedOptions) {
       useUserSchemaSelectionStore().setSelectedAnyOfOptions(props.absolutePath, selectedOptions);
-      getSessionForMode(props.mode).expand(props.absolutePath);
+      getSessionForMode(props.sessionMode).expand(props.absolutePath);
       emit('update:tree');
     }
   },

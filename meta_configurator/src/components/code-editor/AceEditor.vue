@@ -22,7 +22,7 @@ import {SessionMode} from "@/store/sessionMode";
 
 
 const props = defineProps<{
-    mode: SessionMode
+    sessionMode: SessionMode
 }>();
 
 
@@ -32,9 +32,9 @@ onMounted(() => {
   setupAceMode(editor);
   setupAceProperties(editor);
 
-  setupLinkToData(editor, props.mode);
-  setupLinkToCurrentSelection(editor, props.mode);
-  setupAnnotationsFromValidationErrors(editor, props.mode);
+  setupLinkToData(editor, props.sessionMode);
+  setupLinkToCurrentSelection(editor, props.sessionMode);
+  setupAnnotationsFromValidationErrors(editor, props.sessionMode);
 });
 
 /**

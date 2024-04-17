@@ -28,7 +28,7 @@ import {SessionMode} from '@/store/sessionMode';
 
 
 const props = defineProps<{
-    mode: SessionMode;
+    sessionMode: SessionMode;
 }>();
 
 
@@ -47,6 +47,7 @@ let {width} = useWindowSize();
 
 function updateMode(newMode: SessionMode) {
   const router = useAppRouter();
+  console.log("update mode to ", newMode)
   switch (newMode) {
     case SessionMode.FileEditor:
       router.push('/');
@@ -83,7 +84,7 @@ watch(isOverDropZone, isOverDropZone => {
 });
 
 function onDrop(files: File[] | null) {
-  readFileContentToDataLink(files, getDataForMode(props.mode));
+  readFileContentToDataLink(files, getDataForMode(props.sessionMode));
 }
 
 confirmationService.confirm = useConfirm();
@@ -100,7 +101,7 @@ toastService.toast = useToast();
       <TopToolbar
         ref="topToolbarRef"
         class="h-12 flex-none"
-        :current-mode="props.mode"
+        :current-mode="props.sessionMode"
         @mode-selected="updateMode" />
       <div class="flex-grow overflow-hidden" ref="mainPanel" id="mainpanel">
         <Splitter class="h-full" :layout="width < 600 ? 'vertical' : 'horizontal'">
@@ -111,7 +112,7 @@ toastService.toast = useToast();
             :resizable="true">
             <component
                     :is="panel"
-            :mode="props.mode"/>
+            :sessionMode="props.sessionMode"/>
           </SplitterPanel>
         </Splitter>
       </div>

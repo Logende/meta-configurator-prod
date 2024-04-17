@@ -38,7 +38,7 @@ import type {SessionMode} from "@/store/sessionMode";
 
 const props = defineProps<{
   currentSchema: JsonSchemaWrapper;
-  mode: SessionMode
+  sessionMode: SessionMode
   currentData: any;
   currentPath: Path;
 }>();
@@ -51,8 +51,8 @@ const emit = defineEmits<{
   (e: 'remove_property', path: Path): void;
 }>();
 
-const session = getSessionForMode(props.mode);
-const data = getDataForMode(props.mode);
+const session = getSessionForMode(props.sessionMode);
+const data = getDataForMode(props.sessionMode);
 
 // scroll to the current selected element when it changes
 watch(
@@ -72,7 +72,7 @@ watch(
 );
 
 // update tree when the file schema changes
-watch(getSchemaForMode(props.mode).schemaWrapper, () => {
+watch(getSchemaForMode(props.sessionMode).schemaWrapper, () => {
   updateTree();
 });
 
@@ -97,12 +97,12 @@ const currentTree = ref<GuiEditorTreeNode>();
  */
 function computeTree() {
   currentTree.value = treeNodeResolver.createTreeNodeOfProperty(
-      props.mode,
+      props.sessionMode,
     props.currentSchema,
     undefined,
     props.currentPath
   );
-  currentTree.value!.children = treeNodeResolver.createChildNodesOfNode(props.mode, currentTree.value!);
+  currentTree.value!.children = treeNodeResolver.createChildNodesOfNode(props.sessionMode, currentTree.value!);
 
   expandPreviouslyExpandedElements(currentTree.value!.children as Array<GuiEditorTreeNode>);
 
@@ -117,7 +117,7 @@ function expandPreviouslyExpandedElements(nodes: Array<GuiEditorTreeNode>) {
   for (const node of nodes) {
     const expanded = session.currentExpandedElements.value[node.key] ?? false;
     if (expanded) {
-      node.children = treeNodeResolver.createChildNodesOfNode(props.mode, node);
+      node.children = treeNodeResolver.createChildNodesOfNode(props.sessionMode, node);
       if (node.children && node.children.length > 0) {
         expandPreviouslyExpandedElements(node.children as Array<GuiEditorTreeNode>);
       }
@@ -318,7 +318,7 @@ function addEmptyProperty(relativePath: Path, absolutePath: Path) {
   const treeData: ConfigTreeNodeData = {
     absolutePath: absolutePath.concat(name),
     relativePath: relativePath.concat(name),
-    schema: new JsonSchemaWrapper({}, props.mode, false),
+    schema: new JsonSchemaWrapper({}, props.sessionMode, false),
     parentSchema: objectSchema,
     depth: ((objectNode?.data?.depth as number) ?? 0) + 1,
     name: name,
@@ -428,7 +428,7 @@ function expandElementChildren(node: any) {
   if (node.type === TreeNodeType.ADVANCED_PROPERTY) {
     return;
   }
-  node.children = treeNodeResolver.createChildNodesOfNode(props.mode, node);
+  node.children = treeNodeResolver.createChildNodesOfNode(props.sessionMode, node);
   expandPreviouslyExpandedElements(node.children as Array<GuiEditorTreeNode>);
 }
 
@@ -469,7 +469,7 @@ function closeInfoOverlayPanel() {
 }
 
 function getValidationResults(absolutePath: Path) {
-  return getValidationForMode(props.mode).currentValidationResult.value.filterForPath(absolutePath);
+  return getValidationForMode(props.sessionMode).currentValidationResult.value.filterForPath(absolutePath);
 }
 
 function zoomIntoPath(path: Path) {
@@ -506,7 +506,7 @@ function zoomIntoPath(path: Path) {
           @mouseenter="event => showInfoOverlayPanel(slotProps.node.data, event)"
           @mouseleave="closeInfoOverlayPanel">
           <PropertyMetadata
-                  :mode="props.mode"
+                  :sessionMode="props.sessionMode"
             :validationResults="getValidationResults(slotProps.node.data.absolutePath)"
             :node="slotProps.node"
             :type="slotProps.node.type"
@@ -525,7 +525,7 @@ function zoomIntoPath(path: Path) {
           <PropertyData
             class="w-full"
             :nodeData="slotProps.node.data"
-            :mode="props.mode"
+            :sessionMode="props.sessionMode"
             @update_property_value="updateData"
             @remove_property="removeProperty"
             @update_tree="updateTree"

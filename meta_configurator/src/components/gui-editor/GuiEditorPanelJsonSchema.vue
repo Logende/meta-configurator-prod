@@ -11,11 +11,11 @@ import type {SessionMode} from "@/store/sessionMode";
 
 
 const props = defineProps<{
-    mode: SessionMode;
+    sessionMode: SessionMode;
 }>();
 
-const session = getSessionForMode(props.mode);
-const data = getDataForMode(props.mode);
+const session = getSessionForMode(props.sessionMode);
+const data = getDataForMode(props.sessionMode);
 
 function updatePath(newPath: Path) {
   session.updateCurrentPath(newPath);
@@ -42,7 +42,7 @@ function selectPath(path: Path) {
 const currentSchema = computed(() => {
   const schema = session.effectiveSchemaAtCurrentPath?.value.schema;
   if (!schema) {
-    return new JsonSchemaWrapper({}, props.mode, false);
+    return new JsonSchemaWrapper({}, props.sessionMode, false);
   }
   return schema;
 });
@@ -50,7 +50,7 @@ const currentSchema = computed(() => {
 
 <template>
   <div class="p-5 space-y-3 flex flex-col">
-    <SchemaInfoPanel :mode="props.mode" />
+    <SchemaInfoPanel :sessionMode="props.sessionMode" />
     <CurrentPathBreadcrumb
       :root-name="'document root'"
       :path="session.currentPath.value"
@@ -60,7 +60,7 @@ const currentSchema = computed(() => {
         :currentSchema="currentSchema"
         :currentPath="session.currentPath.value"
         :currentData="session.dataAtCurrentPath"
-        :mode="props.mode"
+        :sessionMode="props.sessionMode"
         @zoom_into_path="pathToAdd => zoomIntoPath(pathToAdd)"
         @remove_property="removeProperty"
         @select_path="selectedPath => selectPath(selectedPath)"

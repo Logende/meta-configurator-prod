@@ -9,7 +9,6 @@ import {TreeNodeType} from '@/components/gui-editor/configDataTreeNode';
 import type {Path, PathElement} from '@/utility/path';
 import {NUMBER_OF_PROPERTY_TYPES} from '@/schema/jsonSchemaType';
 import {ref} from 'vue';
-import type {ValidationResult} from '@/schema/validation/validationService';
 import {pathToString} from '@/utility/pathUtils';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import 'primeicons/primeicons.css';
@@ -18,13 +17,14 @@ import {useSettings} from '@/settings/useSettings';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
 import type {SessionMode} from "@/store/sessionMode";
 import {getSessionForMode} from "@/data/useDataLink";
+import type {ValidationResult} from "@/schema/validationService";
 
 const props = defineProps<{
   node: GuiEditorTreeNode;
   type: ConfigDataTreeNodeType;
   highlighted: boolean;
   validationResults: ValidationResult;
-  mode: SessionMode;
+  sessionMode: SessionMode;
 }>();
 
 const emit = defineEmits<{
@@ -79,7 +79,7 @@ function onPressEnter() {
     return;
   }
 
-  const session = getSessionForMode(props.mode);
+  const session = getSessionForMode(props.sessionMode);
   if (session.isExpanded(props.node.data.absolutePath)) {
       session.collapse(props.node.data.absolutePath);
   } else {

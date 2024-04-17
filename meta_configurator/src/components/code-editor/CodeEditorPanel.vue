@@ -2,7 +2,7 @@
  of this panel. When the panel or underlying editor changes, the changes can be applied here
  and the main view does not need to know about any of that. -->
 <template>
-  <AceEditor :mode="props.mode"/>
+  <AceEditor :sessionMode="props.sessionMode"/>
 </template>
 
 <script setup lang="ts">
@@ -11,7 +11,7 @@ import {SessionMode} from "@/store/sessionMode";
 
 
 const props = defineProps<{
-    mode: SessionMode
+    sessionMode: SessionMode
 }>();
 
 

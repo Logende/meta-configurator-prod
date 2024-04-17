@@ -21,7 +21,7 @@ const props = defineProps<{
   absolutePath: Path;
   possibleSchemas: Array<JsonSchemaWrapper>;
   isTypeUnion: boolean;
-  mode: SessionMode;
+  sessionMode: SessionMode;
 }>();
 
 function getCurrentSelectedOptions(): Map<string, OneOfAnyOfSelectionOption> {
@@ -65,7 +65,7 @@ const valueProperty: WritableComputedRef<OneOfAnyOfSelectionOption | undefined> 
 
     if (selectedOption) {
       getCurrentSelectedOptions().set(path, selectedOption);
-      getSessionForMode(props.mode).expand(props.absolutePath);
+      getSessionForMode(props.sessionMode).expand(props.absolutePath);
       applySchemaConstantsOnDataBasedOnSelection(props.absolutePath, selectedOption);
     } else {
       getCurrentSelectedOptions().delete(path);
@@ -88,7 +88,7 @@ function findOptionBySubSchemaIndex(index: number): OneOfAnyOfSelectionOption | 
 
 function inferOneOfUserSelection() {
   const pathAsString = pathToString(props.absolutePath);
-  const validationService = getValidationForMode(props.mode).currentValidationService.value;
+  const validationService = getValidationForMode(props.sessionMode).currentValidationService.value;
 
   if (getCurrentSelectedOptions().has(pathAsString)) {
     return;
@@ -132,7 +132,7 @@ function applySchemaConstantsOnDataBasedOnSelection(
   // even without a new oneOf selection by the user, due to JSON schema features
   // such as if and else.
 
-  const schemaAtPath = getSchemaForMode(props.mode).effectiveSchemaAtPath(path).schema;
+  const schemaAtPath = getSchemaForMode(props.sessionMode).effectiveSchemaAtPath(path).schema;
   const baseSchema = {...schemaAtPath.jsonSchema};
   delete baseSchema.oneOf;
   const mergedSchema = safeMergeSchemas(
