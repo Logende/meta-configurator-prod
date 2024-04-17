@@ -62,3 +62,11 @@ To launch the application, follow these steps:
 
 This project is licensed under the [MIT License](LICENSE).
 For more information, see the LICENSE file.
+
+
+
+Todo: in schema editor, make $ref actually show dropdown of available refs
+and currently bug in renaming objects (data loss / actually only renaming of subfield)
+
+
+Todo: add support for metaconfigurator metadata in meta schema

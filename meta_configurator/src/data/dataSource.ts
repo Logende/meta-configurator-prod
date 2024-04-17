@@ -1,8 +1,8 @@
 import {computed, shallowRef } from 'vue';
 import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
-import {SETTINGS_SCHEMA} from '@/packaged-schemas/settingsSchema';
 import type {TopLevelSchema} from '@/schema/jsonSchemaType';
 import {buildMetaSchema} from '@/schema/metaSchemaBuilder';
+import {SETTINGS_SCHEMA} from "@/settings/settingsSchema";
 
 const dataSource = {
   // data of the file editor

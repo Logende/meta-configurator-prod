@@ -6,12 +6,9 @@ Combines the code editor and the gui editor.
 import {computed, onMounted, ref, watch} from 'vue';
 import 'primeicons/primeicons.css';
 import SplitterPanel from 'primevue/splitterpanel';
-import CodeEditorPanel from '@/components/code-editor/CodeEditorPanel.vue';
-import GuiEditorPanel from '@/components/gui-editor/GuiEditorPanel.vue';
 import Splitter from 'primevue/splitter';
 import TopToolbar from '@/components/toolbar/TopToolbar.vue';
 import Toast from 'primevue/toast';
-import PanelDataCurrentPath from '@/components/DebuggingPanel.vue';
 import ConfirmDialog from 'primevue/confirmdialog';
 import {useToast} from 'primevue/usetoast';
 import {useConfirm} from 'primevue/useconfirm';
@@ -24,6 +21,7 @@ import {getDataForMode } from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
 import {useSessionStore} from "@/store/sessionStore";
+import {getComponentByPanelType} from "@/components/PanelType";
 
 
 
@@ -34,13 +32,13 @@ const props = defineProps<{
 
 
 const panels = computed(() => {
-  let result = [CodeEditorPanel, GuiEditorPanel];
-  if (!useSettings().guiEditorOnRightSide) {
-    result = result.reverse();
-  }
-  if (useSettings().debuggingActive) {
-    result.push(PanelDataCurrentPath);
-  }
+    let panelDefinition = useSettings().panels[props.sessionMode];
+    let result = panelDefinition.map((panel) => {
+        return {
+            component: getComponentByPanelType(panel.panelType),
+            sessionMode: panel.mode}
+        ;
+    });
   return result;
 });
 
@@ -114,8 +112,8 @@ toastService.toast = useToast();
             :min-size="10"
             :resizable="true">
             <component
-                    :is="panel"
-            :sessionMode="props.sessionMode"/>
+                    :is="panel.component"
+            :sessionMode="panel.sessionMode"/>
           </SplitterPanel>
         </Splitter>
       </div>

@@ -43,6 +43,8 @@ export function buildMetaSchema(metaSchemaSettings: SettingsInterfaceMetaSchema)
     delete metaSchema.$defs.objectProperty.properties.dependentSchemas;
     delete metaSchema.$defs.objectProperty.properties.unevaluatedProperties;
     delete metaSchema.$defs.arrayProperty.properties.unevaluatedItems;
+
+    //TODO: seems like even items in an array does not work with this!
   }
 
   return metaSchema;
