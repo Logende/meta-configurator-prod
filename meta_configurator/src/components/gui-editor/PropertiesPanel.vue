@@ -313,6 +313,7 @@ function addEmptyProperty(relativePath: Path, absolutePath: Path) {
   const dataAtParentPath = dataAt(relativePath.slice(0, -1), props.currentData);
   const name = findNameForNewProperty(objectSchema, dataAtParentPath);
 
+
   // insert a new node in the tree
   const objectNode = findNode(relativePath);
   const treeData: ConfigTreeNodeData = {

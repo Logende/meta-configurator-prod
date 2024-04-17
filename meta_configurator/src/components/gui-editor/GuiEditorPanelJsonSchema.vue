@@ -59,7 +59,7 @@ const currentSchema = computed(() => {
       <PropertiesPanel
         :currentSchema="currentSchema"
         :currentPath="session.currentPath.value"
-        :currentData="session.dataAtCurrentPath"
+        :currentData="session.dataAtCurrentPath.value"
         :sessionMode="props.sessionMode"
         @zoom_into_path="pathToAdd => zoomIntoPath(pathToAdd)"
         @remove_property="removeProperty"

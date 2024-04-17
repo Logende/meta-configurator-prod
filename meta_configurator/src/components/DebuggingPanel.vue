@@ -33,7 +33,7 @@ function getDataAtCurrentPath() {
 <template>
   <div><b>currentMode:</b> {{ sessionMode }}</div>
   <div><b>currentPath:</b> {{ getSessionForMode(sessionMode).currentPath }}</div>
-  <div><b>currentSelectedElement:</b> {{ getSessionForMode(sessionMode).currentSelectedElement }}</div>
+  <div><b>currentSelectedElement:</b> {{ getSessionForMode(sessionMode).currentSelectedElement.value }}</div>
   <div><b>fileData</b></div>
   <textarea class="bg-amber-300" v-model="fileData" />
   <div><b>schemaContent</b></div>

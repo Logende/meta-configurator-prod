@@ -1,10 +1,10 @@
 import {shallowMount} from '@vue/test-utils';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
-import {ValidationResult} from '../../../../schema/validation/validationService';
 import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
 import StringProperty from '../StringProperty.vue';
 import InputText from 'primevue/inputtext';
 import {SessionMode} from "../../../../store/sessionMode";
+import {ValidationResult} from "../../../../schema/validationService";
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({

@@ -1,11 +1,11 @@
 import {shallowMount} from '@vue/test-utils';
 import {afterEach, beforeEach, describe, expect, it, test, vi} from 'vitest';
-import {ValidationResult} from '../../../../schema/validation/validationService';
 import NumberProperty from '../NumberProperty.vue';
 import InputNumber from 'primevue/inputnumber';
 import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
 import {GuiConstants} from '@/constants';
-import {useSessionStore} from "../../../../store/sessionStore";
+import {SessionMode} from "../../../../store/sessionMode";
+import {ValidationResult} from "../../../../schema/validationService";
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({
@@ -39,7 +39,7 @@ describe('NumberProperty', () => {
           {
             type: 'integer',
           },
-            useSessionStore().currentMode,
+            SessionMode.FileEditor,
           false
         ),
       };
@@ -69,7 +69,7 @@ describe('NumberProperty', () => {
             type: 'number',
             multipleOf: 0.5,
           },
-            useSessionStore().currentMode,
+            SessionMode.FileEditor,
           false
         ),
       };
@@ -97,7 +97,7 @@ describe('NumberProperty', () => {
         {
           type: 'integer',
         },
-          useSessionStore().currentMode,
+          SessionMode.FileEditor,
         false
       ),
     });

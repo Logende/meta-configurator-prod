@@ -279,7 +279,12 @@ function resolveReference(
     refSchema = preprocessedRefSchemas.get(refString);
   } else {
     let rootSchema = getSchemaForMode(mode).schemaPreprocessed.value;
-    refSchema = pointer.get(nonBooleanSchema(rootSchema ?? {}) ?? {}, refString);
+    try {
+      refSchema = pointer.get(nonBooleanSchema(rootSchema ?? {}) ?? {}, refString);
+    } catch (e) {
+      throw e;
+      refSchema = {};
+    }
     refSchema = resolveAndTransform(refSchema, mode);
     preprocessedRefSchemas.set(refString, refSchema);
   }
