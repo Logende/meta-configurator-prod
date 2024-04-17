@@ -7,9 +7,15 @@ import {GuiConstants} from '@/constants';
 import {SessionMode} from "../../../../store/sessionMode";
 import {ValidationResult} from "../../../../schema/validationService";
 
-// avoid constructing the session store through imports, it is not required for this component
-vi.mock('@/store/sessionStore', () => ({
-  useSessionStore: vi.fn(),
+// avoid constructing useDataLink store through imports, it is not required for this component
+vi.mock('@/data/useDataLink', () => ({
+  getSchemaForMode: vi.fn(),
+  getDataForMode: vi.fn(),
+  useCurrentData: vi.fn(),
+  useCurrentSchema: vi.fn(),
+  getUserSelectionForMode: vi.fn(),
+  getValidationForMode: vi.fn(),
+  getSessionForMode: vi.fn(),
 }));
 
 describe('NumberProperty', () => {

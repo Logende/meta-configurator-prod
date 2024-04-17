@@ -25,10 +25,11 @@ const props = defineProps<{
     sessionMode: SessionMode
 }>();
 
+const editor_id = 'code-editor-' + Math.random();
 
 
 onMounted(() => {
-  const editor: Editor = ace.edit('code-editor');
+  const editor: Editor = ace.edit(editor_id);
   setupAceMode(editor);
   setupAceProperties(editor);
 
@@ -78,7 +79,7 @@ function setupAceProperties(editor: Editor) {
 </script>
 
 <template>
-  <div class="h-full" id="code-editor" />
+  <div class="h-full" id="editor" />
 </template>
 
 <style scoped></style>

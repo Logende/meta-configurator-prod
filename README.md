@@ -70,3 +70,7 @@ and currently bug in renaming objects (data loss / actually only renaming of sub
 
 
 Todo: add support for metaconfigurator metadata in meta schema
+
+Todo: statt Cookies für Settings einfach LocalStorage verwenden. Statt ref einfach useLocalStorage verwenden
+
+# https://vueuse.org/core/uselocalstorage/
