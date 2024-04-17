@@ -1,7 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import {useSessionStore} from '@/store/sessionStore';
-import {clearPreprocessedRefSchemaCache} from '@/schema/schemaLazyResolver';
-import {useCurrentSchema} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
 
 /**
@@ -43,23 +41,11 @@ const router = createRouter({
 
 const DEFAULT_TITLE = 'MetaConfigurator';
 
-/**
- * We make sure that important session variables are reset when the
- * user switches between the different views.
- */
 router.beforeEach((to, from, next) => {
   // Update the page title based on the current route
   document.title = (to.meta.title || DEFAULT_TITLE) as string;
 
   useSessionStore().currentMode = to.meta.sessionMode as SessionMode;
-  useSessionStore().currentPath = [];
-  useSessionStore().currentSelectedElement = [];
-  useSessionStore().currentExpandedElements = {};
-  useSessionStore().currentSearchResults = [];
-
-  useCurrentSchema().reloadSchema();
-
-  clearPreprocessedRefSchemaCache();
 
   next();
 });

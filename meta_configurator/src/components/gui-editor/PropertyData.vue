@@ -8,10 +8,12 @@ import type {Path} from '@/utility/path';
 import {resolveCorrespondingComponent} from '@/components/gui-editor/resolveCorrespondingComponent';
 import {pathToString} from '@/utility/pathUtils';
 import Button from 'primevue/button';
-import {useCurrentData} from '@/data/useDataLink';
+import {getDataForMode} from '@/data/useDataLink';
+import type {SessionMode} from "@/store/sessionMode";
 
 const props = defineProps<{
   nodeData: ConfigTreeNodeData;
+  mode: SessionMode;
 }>();
 
 const emit = defineEmits<{
@@ -36,7 +38,7 @@ function isRequired(): boolean {
 }
 
 function shouldShowRemove(): boolean {
-  return !isRequired() && useCurrentData().dataAt(props.nodeData.absolutePath) !== undefined;
+  return !isRequired() && getDataForMode(props.mode).dataAt(props.nodeData.absolutePath) !== undefined;
 }
 </script>
 
@@ -44,9 +46,10 @@ function shouldShowRemove(): boolean {
   <div class="grid-cols-5 content-center justify-between">
     <Component
       :id="pathToString(nodeData.absolutePath)"
+      :mode="props.mode"
       class="truncate col-span-4"
       style="width: 90%; max-width: 90%"
-      :is="resolveCorrespondingComponent(nodeData)"
+      :is="resolveCorrespondingComponent(nodeData, props.mode)"
       @update:propertyData="(newValue: any) => propagateUpdateValueEvent(newValue)"
       @update:tree="() => propagateUpdateTreeEvent()" />
 

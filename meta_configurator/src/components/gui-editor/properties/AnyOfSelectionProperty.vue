@@ -10,6 +10,8 @@ import {useSessionStore} from '@/store/sessionStore';
 import type {Path, PathElement} from '@/utility/path';
 import {OneOfAnyOfSelectionOption, schemaOptionToString} from '@/store/oneOfAnyOfSelectionOption';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
+import type {SessionMode} from "@/store/sessionMode";
+import {getSessionForMode} from "@/data/useDataLink";
 
 const props = defineProps<{
   propertyName: PathElement;
@@ -17,6 +19,7 @@ const props = defineProps<{
   propertyData: any | undefined;
   absolutePath: Path;
   possibleSchemas: Array<JsonSchemaWrapper>;
+  mode: SessionMode;
 }>();
 
 const possibleOptions = props.possibleSchemas.map(
@@ -53,7 +56,7 @@ const valueProperty: WritableComputedRef<OneOfAnyOfSelectionOption[] | undefined
   set(selectedOptions: OneOfAnyOfSelectionOption[] | undefined) {
     if (selectedOptions) {
       useUserSchemaSelectionStore().setSelectedAnyOfOptions(props.absolutePath, selectedOptions);
-      useSessionStore().expand(props.absolutePath);
+      getSessionForMode(props.mode).expand(props.absolutePath);
       emit('update:tree');
     }
   },

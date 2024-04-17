@@ -19,26 +19,26 @@ import {ConfigTreeNodeResolver} from '@/components/gui-editor/configTreeNodeReso
 import type {Path} from '@/utility/path';
 import {GuiConstants} from '@/constants';
 import type {
-  ConfigDataTreeNode,
   ConfigTreeNodeData,
   GuiEditorTreeNode,
 } from '@/components/gui-editor/configDataTreeNode';
 import {TreeNodeType} from '@/components/gui-editor/configDataTreeNode';
-import {storeToRefs} from 'pinia';
-import {useSessionStore} from '@/store/sessionStore';
 import {pathToString} from '@/utility/pathUtils';
 import SchemaInfoOverlay from '@/components/gui-editor/SchemaInfoOverlay.vue';
 import {refDebounced, useDebounceFn} from '@vueuse/core';
 import type {TreeNode} from 'primevue/tree';
 import {focus, focusOnPath, makeEditableAndSelectContents} from '@/utility/focusUtils';
-import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
-import {useValidationResult} from '@/schema/validation/useValidation';
+import {
+    getDataForMode,
+    getSchemaForMode,
+    getSessionForMode, getValidationForMode,
+} from '@/data/useDataLink';
 import {dataAt} from '@/utility/resolveDataAtPath';
 import type {SessionMode} from "@/store/sessionMode";
 
 const props = defineProps<{
   currentSchema: JsonSchemaWrapper;
-  currentMode: SessionMode
+  mode: SessionMode
   currentData: any;
   currentPath: Path;
 }>();
@@ -51,14 +51,15 @@ const emit = defineEmits<{
   (e: 'remove_property', path: Path): void;
 }>();
 
-const sessionStore = storeToRefs(useSessionStore());
+const session = getSessionForMode(props.mode);
+const data = getDataForMode(props.mode);
 
 // scroll to the current selected element when it changes
 watch(
-  sessionStore.currentSelectedElement,
+  session.currentSelectedElement,
   () => {
-    const absolutePath = useSessionStore().currentSelectedElement;
-    const pathToCutOff = useSessionStore().currentPath;
+    const absolutePath = session.currentSelectedElement.value;
+    const pathToCutOff = session.currentPath.value;
     const relativePath = absolutePath.slice(pathToCutOff.length);
     if (relativePath.length > 0) {
       // cut off last element, because we want to expand until last element, but not expand children of last element
@@ -71,12 +72,12 @@ watch(
 );
 
 // update tree when the file schema changes
-watch(useCurrentSchema().schemaWrapper, () => {
+watch(getSchemaForMode(props.mode).schemaWrapper, () => {
   updateTree();
 });
 
 // update tree when the current path changes
-watch(sessionStore.currentPath, () => {
+watch(session.currentPath, () => {
   updateTree();
   focusOnFirstProperty();
   allowShowOverlay.value = true; // reset in case the user was editing a property name
@@ -96,11 +97,12 @@ const currentTree = ref<GuiEditorTreeNode>();
  */
 function computeTree() {
   currentTree.value = treeNodeResolver.createTreeNodeOfProperty(
+      props.mode,
     props.currentSchema,
     undefined,
     props.currentPath
   );
-  currentTree.value!.children = treeNodeResolver.createChildNodesOfNode(currentTree.value!, props.currentMode);
+  currentTree.value!.children = treeNodeResolver.createChildNodesOfNode(props.mode, currentTree.value!);
 
   expandPreviouslyExpandedElements(currentTree.value!.children as Array<GuiEditorTreeNode>);
 
@@ -113,9 +115,9 @@ function computeTree() {
  */
 function expandPreviouslyExpandedElements(nodes: Array<GuiEditorTreeNode>) {
   for (const node of nodes) {
-    const expanded = useSessionStore().currentExpandedElements[node.key] ?? false;
+    const expanded = session.currentExpandedElements.value[node.key] ?? false;
     if (expanded) {
-      node.children = treeNodeResolver.createChildNodesOfNode(node, props.currentMode);
+      node.children = treeNodeResolver.createChildNodesOfNode(props.mode, node);
       if (node.children && node.children.length > 0) {
         expandPreviouslyExpandedElements(node.children as Array<GuiEditorTreeNode>);
       }
@@ -169,19 +171,13 @@ function updateData(subPath: Path, newValue: any) {
 
 function clickedPropertyData(nodeData: ConfigTreeNodeData) {
   const path = nodeData.absolutePath;
-  if (useCurrentData().dataAt(path) != undefined) {
+  if (data.dataAt(path) != undefined) {
     emit('select_path', path);
   }
 }
 
 function removeProperty(subPath: Path) {
   const completePath = props.currentPath.concat(subPath);
-  // const parentPath = completePath.slice(0, -1);
-  /* const propertyName: string | number = completePath.slice(completePath.length - 1);
-  const dataAtParentPath = dataAt(parentPath, props.currentData) ?? {};
-  delete dataAtParentPath[propertyName];
-  updateData(parentPath, dataAtParentPath); */
-
   emit('remove_property', completePath);
   updateTree();
 }
@@ -216,7 +212,7 @@ function updatePropertyName(subPath: Path, oldName: string, newName: string) {
   focusOnPath(newAbsolutePath);
   const subSchema = props.currentSchema.subSchemaAt(newRelativePath);
   if (subSchema?.hasType('object') || subSchema?.hasType('array')) {
-    useSessionStore().expand(newAbsolutePath);
+    session.expand(newAbsolutePath);
 
     window.setTimeout(() => {
       focusOnFirstProperty(newRelativePath);
@@ -232,7 +228,7 @@ function addItem(relativePath: Path, newValue: any) {
 
   const subSchema = props.currentSchema.subSchemaAt(relativePath);
   if (subSchema?.hasType('object') || subSchema?.hasType('array')) {
-    useSessionStore().expand(absolutePath);
+    session.expand(absolutePath);
 
     window.setTimeout(() => {
       focusOnFirstProperty(relativePath);
@@ -322,7 +318,7 @@ function addEmptyProperty(relativePath: Path, absolutePath: Path) {
   const treeData: ConfigTreeNodeData = {
     absolutePath: absolutePath.concat(name),
     relativePath: relativePath.concat(name),
-    schema: new JsonSchemaWrapper({}, props.currentMode, false),
+    schema: new JsonSchemaWrapper({}, props.mode, false),
     parentSchema: objectSchema,
     depth: ((objectNode?.data?.depth as number) ?? 0) + 1,
     name: name,
@@ -409,7 +405,7 @@ function expandElementsByPath(relativePath: Path) {
     }
 
     expandElementChildren(childNodeToExpand);
-    useSessionStore().currentExpandedElements[childNodeToExpand.key] = true;
+    session.expand([childNodeToExpand.key]);
 
     // update current node, so the next iteration which is one level deeper will use this node to search next child
     currentNode = childNodeToExpand;
@@ -432,7 +428,7 @@ function expandElementChildren(node: any) {
   if (node.type === TreeNodeType.ADVANCED_PROPERTY) {
     return;
   }
-  node.children = treeNodeResolver.createChildNodesOfNode(node, props.currentMode);
+  node.children = treeNodeResolver.createChildNodesOfNode(props.mode, node);
   expandPreviouslyExpandedElements(node.children as Array<GuiEditorTreeNode>);
 }
 
@@ -472,18 +468,8 @@ function closeInfoOverlayPanel() {
   closeInfoOverlayPanelDebounced();
 }
 
-/**
- * Returns true if the node or any of its children is highlighted.
- */
-function isHighlighted(node: ConfigDataTreeNode) {
-  return useSessionStore()
-    .currentSearchResults.map(searchResult => searchResult.path)
-    .map(path => pathToString(path))
-    .some(path => node.key && path.startsWith(node.key));
-}
-
 function getValidationResults(absolutePath: Path) {
-  return useValidationResult().filterForPath(absolutePath);
+  return getValidationForMode(props.mode).currentValidationResult.value.filterForPath(absolutePath);
 }
 
 function zoomIntoPath(path: Path) {
@@ -507,7 +493,7 @@ function zoomIntoPath(path: Path) {
     scroll-height="flex"
     :lazy="true"
     :loading="loadingDebounced"
-    v-model:expandedKeys="useSessionStore().currentExpandedElements"
+    v-model:expandedKeys="session.currentExpandedElements.value"
     @nodeExpand="expandElementChildren"
     :filters="treeTableFilters">
     <Column field="name" header="Property" :sortable="true" expander>
@@ -520,10 +506,11 @@ function zoomIntoPath(path: Path) {
           @mouseenter="event => showInfoOverlayPanel(slotProps.node.data, event)"
           @mouseleave="closeInfoOverlayPanel">
           <PropertyMetadata
+                  :mode="props.mode"
             :validationResults="getValidationResults(slotProps.node.data.absolutePath)"
             :node="slotProps.node"
             :type="slotProps.node.type"
-            :highlighted="isHighlighted(slotProps.node)"
+            :highlighted="session.isNodeHighlighted(slotProps.node)"
             @zoom_into_path="zoomIntoPath"
             @update_property_name="
               (oldName, newName) =>
@@ -538,6 +525,7 @@ function zoomIntoPath(path: Path) {
           <PropertyData
             class="w-full"
             :nodeData="slotProps.node.data"
+            :mode="props.mode"
             @update_property_value="updateData"
             @remove_property="removeProperty"
             @update_tree="updateTree"

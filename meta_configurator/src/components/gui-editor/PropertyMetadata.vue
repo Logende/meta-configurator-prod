@@ -8,7 +8,6 @@ import type {
 import {TreeNodeType} from '@/components/gui-editor/configDataTreeNode';
 import type {Path, PathElement} from '@/utility/path';
 import {NUMBER_OF_PROPERTY_TYPES} from '@/schema/jsonSchemaType';
-import {useSessionStore} from '@/store/sessionStore';
 import {ref} from 'vue';
 import type {ValidationResult} from '@/schema/validation/validationService';
 import {pathToString} from '@/utility/pathUtils';
@@ -17,12 +16,15 @@ import 'primeicons/primeicons.css';
 import {focus, makeEditableAndSelectContents} from '@/utility/focusUtils';
 import {useSettings} from '@/settings/useSettings';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
+import type {SessionMode} from "@/store/sessionMode";
+import {getSessionForMode} from "@/data/useDataLink";
 
 const props = defineProps<{
   node: GuiEditorTreeNode;
   type: ConfigDataTreeNodeType;
   highlighted: boolean;
   validationResults: ValidationResult;
+  mode: SessionMode;
 }>();
 
 const emit = defineEmits<{
@@ -77,11 +79,11 @@ function onPressEnter() {
     return;
   }
 
-  const store = useSessionStore();
-  if (store.isExpanded(props.node.data.absolutePath)) {
-    store.collapse(props.node.data.absolutePath);
+  const session = getSessionForMode(props.mode);
+  if (session.isExpanded(props.node.data.absolutePath)) {
+      session.collapse(props.node.data.absolutePath);
   } else {
-    store.expand(props.node.data.absolutePath);
+      session.expand(props.node.data.absolutePath);
   }
 }
 

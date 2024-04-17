@@ -1,10 +1,9 @@
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import type {Path} from '@/utility/path';
 import _ from 'lodash';
-import {useValidationService} from '@/schema/validation/useValidation';
 import {dataAt} from '@/utility/resolveDataAtPath';
-import {useCurrentSchema} from '@/data/useDataLink';
 import {useSessionStore} from "@/store/sessionStore";
+import {getValidationForMode} from "@/data/useDataLink";
 
 /**
  * Wrapper around a schema and the data it was calculated for.
@@ -88,7 +87,7 @@ function resolveIfThenElse(schemaWrapper: JsonSchemaWrapper, data: any) {
     return schemaWrapper;
   }
 
-  const validationService = useValidationService();
+  const validationService = getValidationForMode(schemaWrapper.mode).currentValidationService.value;
   const valid = validationService.validateSubSchema(schemaWrapper.if.jsonSchema, data).valid;
 
   const baseSchema = {...schemaWrapper.jsonSchema};

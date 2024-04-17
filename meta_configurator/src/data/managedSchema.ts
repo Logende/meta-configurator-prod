@@ -8,7 +8,7 @@ import {TopLevelJsonSchemaWrapper} from '@/schema/topLevelJsonSchemaWrapper';
 import type {JsonSchemaType, JsonSchemaTypePreprocessed} from '@/schema/jsonSchemaType';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {calculateEffectiveSchema, EffectiveSchema} from '@/schema/effectiveSchemaCalculator';
-import {useCurrentData} from '@/data/useDataLink';
+import {getDataForMode } from '@/data/useDataLink';
 import {useUserSchemaSelectionStore} from '@/store/userSchemaSelectionStore';
 import {SessionMode} from '@/store/sessionMode';
 import {clearPreprocessedRefSchemaCache} from '@/schema/schemaLazyResolver';
@@ -76,7 +76,7 @@ export class ManagedSchema {
   public effectiveSchemaAtPath(path: Path): EffectiveSchema {
     let currentEffectiveSchema: EffectiveSchema = calculateEffectiveSchema(
       this.schemaWrapper.value,
-      useCurrentData().data.value,
+      getDataForMode(this.mode).data.value,
       []
     );
 
@@ -92,7 +92,7 @@ export class ManagedSchema {
         if (oneOfSelection !== undefined) {
           currentEffectiveSchema = calculateEffectiveSchema(
             schema.oneOf[oneOfSelection.index],
-            useCurrentData().dataAt(currentPath),
+            getDataForMode(this.mode).dataAt(currentPath),
             currentPath
           );
           continue;
@@ -101,7 +101,7 @@ export class ManagedSchema {
 
       currentEffectiveSchema = calculateEffectiveSchema(
         schema,
-        useCurrentData().dataAt(currentPath),
+        getDataForMode(this.mode).dataAt(currentPath),
         currentPath
       );
     }

@@ -4,23 +4,32 @@ Panel for debugging purposes
 <script setup lang="ts">
 import {computed} from 'vue';
 import {useSessionStore} from '@/store/sessionStore';
-import {useCurrentData, useCurrentSchema} from '@/data/useDataLink';
+import {
+    getDataForMode,
+    getSchemaForMode,
+    getSessionForMode,
+    useCurrentData,
+    useCurrentSchema
+} from '@/data/useDataLink';
 
 const store = useSessionStore();
+
+const mode = computed(() => store.currentMode);
+
 
 const fileData = computed(() => getFileData());
 const schemaContent = computed(() => getSchema());
 const dataAtCurrentPathContent = computed(() => getDataAtCurrentPath());
 function getFileData() {
-  return useCurrentData().unparsedData.value;
+  return getDataForMode(this.mode).unparsedData.value;
 }
 
 function getSchema() {
-  return JSON.stringify(useCurrentSchema().schemaWrapper.value);
+  return JSON.stringify(getSchemaForMode(this.mode).schemaWrapper.value);
 }
 
 function getDataAtCurrentPath() {
-  return JSON.stringify(store.dataAtCurrentPath);
+  return JSON.stringify(getSessionForMode(this.mode).dataAtCurrentPath);
 }
 </script>
 
