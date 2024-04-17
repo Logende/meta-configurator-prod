@@ -23,6 +23,7 @@ import {readFileContentToDataLink} from '@/utility/readFileContent';
 import {getDataForMode } from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
+import {useSessionStore} from "@/store/sessionStore";
 
 
 
@@ -47,7 +48,6 @@ let {width} = useWindowSize();
 
 function updateMode(newMode: SessionMode) {
   const router = useAppRouter();
-  console.log("update mode to ", newMode)
   switch (newMode) {
     case SessionMode.FileEditor:
       router.push('/');
@@ -65,7 +65,10 @@ const topToolbarRef = ref();
 const mainPanel = ref();
 
 onMounted(() => {
-  topToolbarRef.value?.showInitialSchemaDialog();
+    if (!useSessionStore().hasShownInitialDialog) {
+        topToolbarRef.value?.showInitialSchemaDialog();
+        useSessionStore().hasShownInitialDialog = true;
+    }
 });
 
 const {isOverDropZone} = useDropZone(mainPanel, {

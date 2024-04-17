@@ -13,8 +13,10 @@ export const useSessionStore = defineStore('sessionStore', () => {
    * The current mode of the application.
    */
   const currentMode: Ref<SessionMode> = ref<SessionMode>(SessionMode.FileEditor);
+  const hasShownInitialDialog = ref<boolean>(false);
 
   return {
     currentMode,
+    hasShownInitialDialog,
   };
 });
