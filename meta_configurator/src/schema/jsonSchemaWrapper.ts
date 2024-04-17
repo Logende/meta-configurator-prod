@@ -44,7 +44,7 @@ export class JsonSchemaWrapper {
     this.mode = mode;
     this.jsonSchema = nonBooleanSchema(jsonSchema);
     if (resolve && this.jsonSchema !== undefined) {
-      this.jsonSchema = nonBooleanSchema(resolveAndTransform(this.jsonSchema, getSchemaForMode(this.mode).schemaPreprocessed.value));
+      this.jsonSchema = nonBooleanSchema(resolveAndTransform(this.jsonSchema,this.mode));
     }
   }
 
