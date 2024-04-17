@@ -5,8 +5,8 @@ import type {Path} from '@/utility/path';
 import {useDebounceFn, watchArray} from '@vueuse/core';
 import _ from 'lodash';
 import {determinePath, updateCursorPositionBasedOnPath} from '@/components/code-editor/aceUtility';
-import type {SessionMode} from "@/store/sessionMode";
-import {getSessionForMode} from "@/data/useDataLink";
+import type {SessionMode} from '@/store/sessionMode';
+import {getSessionForMode} from '@/data/useDataLink';
 
 // variables to prevent updating functions to trigger each other
 let selectionChangeFromOutside = false;

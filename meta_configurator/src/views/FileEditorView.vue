@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import CombinedEditorComponent from '@/components/CombinedEditorComponent.vue';
-import {SessionMode} from "@/store/sessionMode";
+import {SessionMode} from '@/store/sessionMode';
 </script>
 
 <template>
-  <CombinedEditorComponent :sessionMode="SessionMode.FileEditor"/>
+  <CombinedEditorComponent :sessionMode="SessionMode.FileEditor" />
 </template>
 
 <style scoped></style>

@@ -14,9 +14,9 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import 'primeicons/primeicons.css';
 import {focus, makeEditableAndSelectContents} from '@/utility/focusUtils';
 import {useSettings} from '@/settings/useSettings';
-import type {SessionMode} from "@/store/sessionMode";
-import {getSessionForMode, getUserSelectionForMode} from "@/data/useDataLink";
-import type {ValidationResult} from "@/schema/validationService";
+import type {SessionMode} from '@/store/sessionMode';
+import {getSessionForMode, getUserSelectionForMode} from '@/data/useDataLink';
+import type {ValidationResult} from '@/schema/validationService';
 
 const props = defineProps<{
   node: GuiEditorTreeNode;
@@ -50,10 +50,12 @@ function canZoomIn(): boolean {
   const dependsOnUserSelection = schema.anyOf.length > 0 || schema.oneOf.length > 0;
   if (dependsOnUserSelection) {
     const path = pathToString(props.node.data.absolutePath);
-    const hasUserSelectionOneOf =
-        getUserSelectionForMode(props.sessionMode).currentSelectedOneOfOptions.value.has(path);
-    const hasUserSelectionAnyOf =
-        getUserSelectionForMode(props.sessionMode).currentSelectedAnyOfOptions.value.has(path);
+    const hasUserSelectionOneOf = getUserSelectionForMode(
+      props.sessionMode
+    ).currentSelectedOneOfOptions.value.has(path);
+    const hasUserSelectionAnyOf = getUserSelectionForMode(
+      props.sessionMode
+    ).currentSelectedAnyOfOptions.value.has(path);
     return hasUserSelectionOneOf || hasUserSelectionAnyOf;
   }
 
@@ -80,9 +82,9 @@ function onPressEnter() {
 
   const session = getSessionForMode(props.sessionMode);
   if (session.isExpanded(props.node.data.absolutePath)) {
-      session.collapse(props.node.data.absolutePath);
+    session.collapse(props.node.data.absolutePath);
   } else {
-      session.expand(props.node.data.absolutePath);
+    session.expand(props.node.data.absolutePath);
   }
 }
 

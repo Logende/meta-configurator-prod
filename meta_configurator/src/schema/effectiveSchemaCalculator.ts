@@ -2,8 +2,8 @@ import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import type {Path} from '@/utility/path';
 import _ from 'lodash';
 import {dataAt} from '@/utility/resolveDataAtPath';
-import {useSessionStore} from "@/store/sessionStore";
-import {getValidationForMode} from "@/data/useDataLink";
+import {useSessionStore} from '@/store/sessionStore';
+import {getValidationForMode} from '@/data/useDataLink';
 
 /**
  * Wrapper around a schema and the data it was calculated for.
@@ -31,8 +31,7 @@ export function calculateEffectiveSchema(
   data: any,
   path: Path
 ): EffectiveSchema {
-  let result =
-    schema ?? new JsonSchemaWrapper({}, useSessionStore().currentMode, false);
+  let result = schema ?? new JsonSchemaWrapper({}, useSessionStore().currentMode, false);
   let iteration = 0;
 
   while (result.isDataDependent && iteration < 1000) {

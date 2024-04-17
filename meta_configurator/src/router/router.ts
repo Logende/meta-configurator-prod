@@ -1,9 +1,9 @@
 import {createMemoryHistory, createRouter, createWebHistory} from 'vue-router';
 import {useSessionStore} from '@/store/sessionStore';
 import {SessionMode} from '@/store/sessionMode';
-import SchemaEditorView from "@/views/SchemaEditorView.vue";
-import FileEditorView from "@/views/FileEditorView.vue";
-import SettingsEditorView from "@/views/SettingsEditorView.vue";
+import SchemaEditorView from '@/views/SchemaEditorView.vue';
+import FileEditorView from '@/views/FileEditorView.vue';
+import SettingsEditorView from '@/views/SettingsEditorView.vue';
 
 /**
  * The router of the application.

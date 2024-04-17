@@ -2,7 +2,7 @@ import {shallowMount} from '@vue/test-utils';
 import {afterEach, beforeEach, describe, expect, it, test, vi} from 'vitest';
 import BooleanProperty from '../BooleanProperty.vue';
 import SelectButton from 'primevue/selectbutton';
-import {ValidationResult} from "../../../../schema/validationService";
+import {ValidationResult} from '../../../../schema/validationService';
 
 // avoid constructing the session store through imports, it is not required for this component
 vi.mock('@/store/sessionStore', () => ({

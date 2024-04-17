@@ -1,7 +1,4 @@
-import type {
-  JsonSchemaObjectType,
-  JsonSchemaType,
-} from '@/schema/jsonSchemaType';
+import type {JsonSchemaObjectType, JsonSchemaType} from '@/schema/jsonSchemaType';
 import pointer from 'json-pointer';
 import {nonBooleanSchema} from '@/schema/schemaUtils';
 import {
@@ -10,11 +7,11 @@ import {
   mergeSchemas,
   safeMergeSchemas,
 } from '@/schema/mergeAllOfs';
-import {SessionMode} from "@/store/sessionMode";
-import {getSchemaForMode} from "@/data/useDataLink";
+import {SessionMode} from '@/store/sessionMode';
+import {getSchemaForMode} from '@/data/useDataLink';
 
 const preprocessedRefSchemasMap: Map<SessionMode, Map<string, JsonSchemaType>> = new Map(
-    Object.values(SessionMode).map(mode => [mode, new Map()])
+  Object.values(SessionMode).map(mode => [mode, new Map()])
 );
 
 /**
@@ -30,10 +27,7 @@ const preprocessedRefSchemasMap: Map<SessionMode, Map<string, JsonSchemaType>> =
  * @param rootSchema used for resolving references
  * @returns the preprocessed schema
  */
-export function resolveAndTransform(
-  schema: JsonSchemaType,
-  mode: SessionMode
-): JsonSchemaType {
+export function resolveAndTransform(schema: JsonSchemaType, mode: SessionMode): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }
@@ -77,10 +71,7 @@ function handleAllOfs(schema: JsonSchemaType, mode: SessionMode) {
   return schema;
 }
 
-function extractIfsOfAllOfs(
-  schema: JsonSchemaType,
-  mode: SessionMode
-): JsonSchemaType {
+function extractIfsOfAllOfs(schema: JsonSchemaType, mode: SessionMode): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }
@@ -218,10 +209,7 @@ function removeIncompatibleOneOfs(schema: JsonSchemaType) {
 }
 
 // if oneOf has just one entry: merge into parent
-function mergeSingularOneOf(
-  schema: JsonSchemaType,
-  mode: SessionMode
-): JsonSchemaType {
+function mergeSingularOneOf(schema: JsonSchemaType, mode: SessionMode): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }
@@ -242,10 +230,7 @@ function mergeSingularOneOf(
 }
 
 // if anyOf has just one entry: merge into parent
-function mergeSingularAnyOf(
-  schema: JsonSchemaType,
-  mode: SessionMode
-): JsonSchemaType {
+function mergeSingularAnyOf(schema: JsonSchemaType, mode: SessionMode): JsonSchemaType {
   if (typeof schema !== 'object') {
     return schema;
   }

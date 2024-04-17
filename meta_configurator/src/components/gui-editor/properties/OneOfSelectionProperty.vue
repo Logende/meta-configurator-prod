@@ -9,10 +9,15 @@ import {pathToString} from '@/utility/pathUtils';
 import type {JsonSchemaType} from '@/schema/jsonSchemaType';
 import {safeMergeSchemas} from '@/schema/mergeAllOfs';
 import _ from 'lodash';
-import {getSchemaForMode, getSessionForMode, getUserSelectionForMode, getValidationForMode} from '@/data/useDataLink';
-import type {SessionMode} from "@/store/sessionMode";
-import {OneOfAnyOfSelectionOption} from "@/data/oneOfAnyOfSelectionOption";
-import {schemaOptionToString} from "@/data/oneOfAnyOfSelectionOption";
+import {
+  getSchemaForMode,
+  getSessionForMode,
+  getUserSelectionForMode,
+  getValidationForMode,
+} from '@/data/useDataLink';
+import type {SessionMode} from '@/store/sessionMode';
+import {OneOfAnyOfSelectionOption} from '@/data/oneOfAnyOfSelectionOption';
+import {schemaOptionToString} from '@/data/oneOfAnyOfSelectionOption';
 
 const props = defineProps<{
   propertyName: PathElement;

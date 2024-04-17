@@ -5,8 +5,8 @@ import {computed} from 'vue';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {generatePlaceholderText} from '@/utility/propertyPlaceholderGenerator';
 import {GuiConstants} from '@/constants';
-import type {ValidationResult} from "@/schema/validationService";
-import type {PathElement} from "@/utility/path";
+import type {ValidationResult} from '@/schema/validationService';
+import type {PathElement} from '@/utility/path';
 
 const props = defineProps<{
   propertyName: PathElement;

@@ -5,8 +5,8 @@ import {determineCursorPosition} from '@/components/code-editor/aceUtility';
 import {computed} from 'vue';
 import {useDataConverter} from '@/dataformats/formatRegistry';
 import {watchDebounced} from '@vueuse/core';
-import type {SessionMode} from "@/store/sessionMode";
-import {getValidationForMode} from "@/data/useDataLink";
+import type {SessionMode} from '@/store/sessionMode';
+import {getValidationForMode} from '@/data/useDataLink';
 
 /**
  * Sets up the editor to show validation errors.

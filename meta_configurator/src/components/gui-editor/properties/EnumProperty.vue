@@ -6,8 +6,8 @@ import {computed} from 'vue';
 import Dropdown from 'primevue/dropdown';
 import _ from 'lodash';
 import {dataToString} from '@/utility/dataToString';
-import type {PathElement} from "@/utility/path";
-import type {ValidationResult} from "@/schema/validationService";
+import type {PathElement} from '@/utility/path';
+import type {ValidationResult} from '@/schema/validationService';
 
 const props = defineProps<{
   propertyName: PathElement;

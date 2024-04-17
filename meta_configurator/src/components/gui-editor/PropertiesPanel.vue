@@ -29,16 +29,17 @@ import {refDebounced, useDebounceFn} from '@vueuse/core';
 import type {TreeNode} from 'primevue/tree';
 import {focus, focusOnPath, makeEditableAndSelectContents} from '@/utility/focusUtils';
 import {
-    getDataForMode,
-    getSchemaForMode,
-    getSessionForMode, getValidationForMode,
+  getDataForMode,
+  getSchemaForMode,
+  getSessionForMode,
+  getValidationForMode,
 } from '@/data/useDataLink';
 import {dataAt} from '@/utility/resolveDataAtPath';
-import type {SessionMode} from "@/store/sessionMode";
+import type {SessionMode} from '@/store/sessionMode';
 
 const props = defineProps<{
   currentSchema: JsonSchemaWrapper;
-  sessionMode: SessionMode
+  sessionMode: SessionMode;
   currentData: any;
   currentPath: Path;
 }>();
@@ -97,12 +98,15 @@ const currentTree = ref<GuiEditorTreeNode>();
  */
 function computeTree() {
   currentTree.value = treeNodeResolver.createTreeNodeOfProperty(
-      props.sessionMode,
+    props.sessionMode,
     props.currentSchema,
     undefined,
     props.currentPath
   );
-  currentTree.value!.children = treeNodeResolver.createChildNodesOfNode(props.sessionMode, currentTree.value!);
+  currentTree.value!.children = treeNodeResolver.createChildNodesOfNode(
+    props.sessionMode,
+    currentTree.value!
+  );
 
   expandPreviouslyExpandedElements(currentTree.value!.children as Array<GuiEditorTreeNode>);
 
@@ -313,7 +317,6 @@ function addEmptyProperty(relativePath: Path, absolutePath: Path) {
   const dataAtParentPath = dataAt(relativePath.slice(0, -1), props.currentData);
   const name = findNameForNewProperty(objectSchema, dataAtParentPath);
 
-
   // insert a new node in the tree
   const objectNode = findNode(relativePath);
   const treeData: ConfigTreeNodeData = {
@@ -470,7 +473,9 @@ function closeInfoOverlayPanel() {
 }
 
 function getValidationResults(absolutePath: Path) {
-  return getValidationForMode(props.sessionMode).currentValidationResult.value.filterForPath(absolutePath);
+  return getValidationForMode(props.sessionMode).currentValidationResult.value.filterForPath(
+    absolutePath
+  );
 }
 
 function zoomIntoPath(path: Path) {
@@ -507,7 +512,7 @@ function zoomIntoPath(path: Path) {
           @mouseenter="event => showInfoOverlayPanel(slotProps.node.data, event)"
           @mouseleave="closeInfoOverlayPanel">
           <PropertyMetadata
-                  :sessionMode="props.sessionMode"
+            :sessionMode="props.sessionMode"
             :validationResults="getValidationResults(slotProps.node.data.absolutePath)"
             :node="slotProps.node"
             :type="slotProps.node.type"

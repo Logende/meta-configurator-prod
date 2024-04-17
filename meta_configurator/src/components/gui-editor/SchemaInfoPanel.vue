@@ -33,14 +33,17 @@ const schemaInformation = computed(() => {
   <Accordion :activeIndex="1">
     <AccordionTab
       :header="
-        'Schema: ' + (getSchemaForMode(props.sessionMode).schemaWrapper.value?.title ?? 'Untitled schema')
+        'Schema: ' +
+        (getSchemaForMode(props.sessionMode).schemaWrapper.value?.title ?? 'Untitled schema')
       ">
       <p v-for="info in schemaInformation" :key="info.title">
         <span class="font-semibold">{{ info.title }}: </span>
         {{ info.value }}
       </p>
-      <p v-if="getSessionForMode(props.sessionMode).schemaErrorMessage.value != null" class="text-red-700">
-          Schema Error: {{ getSessionForMode(props.sessionMode).schemaErrorMessage.value }}
+      <p
+        v-if="getSessionForMode(props.sessionMode).schemaErrorMessage.value != null"
+        class="text-red-700">
+        Schema Error: {{ getSessionForMode(props.sessionMode).schemaErrorMessage.value }}
       </p>
     </AccordionTab>
   </Accordion>

@@ -7,9 +7,9 @@ import {computed} from 'vue';
 import MultiSelect from 'primevue/multiselect';
 import type {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import type {Path, PathElement} from '@/utility/path';
-import type {SessionMode} from "@/store/sessionMode";
-import {getSessionForMode, getUserSelectionForMode} from "@/data/useDataLink";
-import {OneOfAnyOfSelectionOption, schemaOptionToString} from "@/data/oneOfAnyOfSelectionOption";
+import type {SessionMode} from '@/store/sessionMode';
+import {getSessionForMode, getUserSelectionForMode} from '@/data/useDataLink';
+import {OneOfAnyOfSelectionOption, schemaOptionToString} from '@/data/oneOfAnyOfSelectionOption';
 
 const props = defineProps<{
   propertyName: PathElement;
@@ -53,7 +53,10 @@ const valueProperty: WritableComputedRef<OneOfAnyOfSelectionOption[] | undefined
 
   set(selectedOptions: OneOfAnyOfSelectionOption[] | undefined) {
     if (selectedOptions) {
-        getUserSelectionForMode(props.sessionMode).setSelectedAnyOfOptions(props.absolutePath, selectedOptions);
+      getUserSelectionForMode(props.sessionMode).setSelectedAnyOfOptions(
+        props.absolutePath,
+        selectedOptions
+      );
       getSessionForMode(props.sessionMode).expand(props.absolutePath);
       emit('update:tree');
     }

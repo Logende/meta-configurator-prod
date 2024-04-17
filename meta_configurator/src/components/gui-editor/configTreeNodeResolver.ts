@@ -14,8 +14,8 @@ import {calculateEffectiveSchema} from '@/schema/effectiveSchemaCalculator';
 import {safeMergeSchemas} from '@/schema/mergeAllOfs';
 import {useSettings} from '@/settings/useSettings';
 import {typeSchema} from '@/schema/schemaUtils';
-import type {SessionMode} from "@/store/sessionMode";
-import {getDataForMode, getUserSelectionForMode} from "@/data/useDataLink";
+import type {SessionMode} from '@/store/sessionMode';
+import {getDataForMode, getUserSelectionForMode} from '@/data/useDataLink';
 
 interface TreeNodeResolvingParameters {
   absolutePath: Path;
@@ -42,13 +42,13 @@ export class ConfigTreeNodeResolver {
    * @param nodeType The type of the node, e.g. {@link TreeNodeType.SCHEMA_PROPERTY} by default.
    */
   public createTreeNodeOfProperty(
-      mode: SessionMode,
+    mode: SessionMode,
     schema: JsonSchemaWrapper,
     parentSchema?: JsonSchemaWrapper,
     absolutePath: Path = [],
     relativePath: Path = [],
     depth: number = 0,
-    nodeType: ConfigDataTreeNodeType = TreeNodeType.SCHEMA_PROPERTY,
+    nodeType: ConfigDataTreeNodeType = TreeNodeType.SCHEMA_PROPERTY
   ): GuiEditorTreeNode {
     const name = absolutePath[absolutePath.length - 1] ?? schema.title ?? 'root';
     const parentName = absolutePath[absolutePath.length - 2] ?? parentSchema?.title ?? 'root';
@@ -73,16 +73,21 @@ export class ConfigTreeNodeResolver {
   /**
    * Determines whether a node is a leaf node.
    */
-  private isLeaf(mode: SessionMode, schema: JsonSchemaWrapper, depth: number, absolutePath: Path): boolean {
+  private isLeaf(
+    mode: SessionMode,
+    schema: JsonSchemaWrapper,
+    depth: number,
+    absolutePath: Path
+  ): boolean {
     const dependsOnUserSelection = this.dependsOnUserSelection(schema);
     if (dependsOnUserSelection) {
       const path = pathToString(absolutePath);
       const hasUserSelectionOneOf =
         getUserSelectionForMode(mode).currentSelectedOneOfOptions.value.has(path);
       const hasUserSelectionAnyOf =
-          getUserSelectionForMode(mode).currentSelectedAnyOfOptions.value.has(path);
+        getUserSelectionForMode(mode).currentSelectedAnyOfOptions.value.has(path);
       const hasUserSelectionTypeUnion =
-          getUserSelectionForMode(mode).currentSelectedTypeUnionOptions.value.has(path);
+        getUserSelectionForMode(mode).currentSelectedTypeUnionOptions.value.has(path);
       if (!(hasUserSelectionOneOf || hasUserSelectionAnyOf || hasUserSelectionTypeUnion)) {
         return true; // no user selection -> leaf node
       }
@@ -107,7 +112,10 @@ export class ConfigTreeNodeResolver {
    * Creates the children of a {@link GuiEditorTreeNode}.
    * @param guiEditorTreeNode The node for which the children should be created.
    */
-  public createChildNodesOfNode(mode: SessionMode, guiEditorTreeNode: GuiEditorTreeNode): GuiEditorTreeNode[] {
+  public createChildNodesOfNode(
+    mode: SessionMode,
+    guiEditorTreeNode: GuiEditorTreeNode
+  ): GuiEditorTreeNode[] {
     if (guiEditorTreeNode.type === TreeNodeType.ADVANCED_PROPERTY) {
       return guiEditorTreeNode.children as GuiEditorTreeNode[]; // children were already created
     }
@@ -124,26 +132,42 @@ export class ConfigTreeNodeResolver {
       guiEditorTreeNode.data.absolutePath
     );
 
-    guiEditorTreeNode.children = this.createChildNodes(mode, guiEditorTreeNode.data.absolutePath, guiEditorTreeNode.data.relativePath, effectiveSchema, guiEditorTreeNode.data.depth);
+    guiEditorTreeNode.children = this.createChildNodes(
+      mode,
+      guiEditorTreeNode.data.absolutePath,
+      guiEditorTreeNode.data.relativePath,
+      effectiveSchema,
+      guiEditorTreeNode.data.depth
+    );
     return guiEditorTreeNode.children as GuiEditorTreeNode[];
   }
 
   private createChildNodes(
-      mode: SessionMode,
-      absolutePath: Path,
-      relativePath: Path = [],
-      effectiveSchema: EffectiveSchema,
-      depth = 0
+    mode: SessionMode,
+    absolutePath: Path,
+    relativePath: Path = [],
+    effectiveSchema: EffectiveSchema,
+    depth = 0
   ): GuiEditorTreeNode[] {
     const depthLimit = useSettings().guiEditor.maximumDepth;
     const schema = effectiveSchema.schema;
 
     let children: GuiEditorTreeNode[] = [];
     if (schema.type.length > 1) {
-      children = this.createTypeUnionChildrenTreeNodes(mode, {absolutePath, relativePath, schema, depth});
+      children = this.createTypeUnionChildrenTreeNodes(mode, {
+        absolutePath,
+        relativePath,
+        schema,
+        depth,
+      });
     }
     if (schema.oneOf.length > 0) {
-      children = this.createOneOfChildrenTreeNodes(mode, {absolutePath, relativePath, schema, depth});
+      children = this.createOneOfChildrenTreeNodes(mode, {
+        absolutePath,
+        relativePath,
+        schema,
+        depth,
+      });
     }
     if (schema.anyOf.length > 0) {
       children = children.concat(
@@ -174,7 +198,10 @@ export class ConfigTreeNodeResolver {
    * Creates children nodes for an object node, sorted according to the order defined
    * in the settings.
    */
-  private createObjectChildrenTreeNodes(mode: SessionMode, parameters: TreeNodeResolvingParameters) {
+  private createObjectChildrenTreeNodes(
+    mode: SessionMode,
+    parameters: TreeNodeResolvingParameters
+  ) {
     const propertySorting = useSettings().guiEditor.propertySorting;
     let result: GuiEditorTreeNode[] = [];
 
@@ -207,12 +234,10 @@ export class ConfigTreeNodeResolver {
    * Creates the tree node that represents the "Advanced" section.
    * Returns undefined if there are no advanced properties.
    */
-  private createTreeNodeOfAdvancedProperty(mode: SessionMode, {
-    absolutePath,
-    relativePath,
-    schema,
-    depth,
-  }: TreeNodeResolvingParameters): GuiEditorTreeNode | undefined {
+  private createTreeNodeOfAdvancedProperty(
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters
+  ): GuiEditorTreeNode | undefined {
     const advanced = {
       data: {
         name: schema.title ?? '',
@@ -225,12 +250,17 @@ export class ConfigTreeNodeResolver {
       },
       type: TreeNodeType.ADVANCED_PROPERTY,
       key: pathToString(absolutePath) + '$advanced',
-      children: this.createSchemaPropertiesChildNodes(mode, {
-        absolutePath,
-        relativePath,
-        schema,
-        depth: depth + 1,
-      }, () => true, true),
+      children: this.createSchemaPropertiesChildNodes(
+        mode,
+        {
+          absolutePath,
+          relativePath,
+          schema,
+          depth: depth + 1,
+        },
+        () => true,
+        true
+      ),
     };
 
     if (advanced.children.length > 0) {
@@ -248,12 +278,28 @@ export class ConfigTreeNodeResolver {
    * 3. additional properties (including pattern properties)
    * 4. deprecated properties
    */
-  private createObjectChildrenNodesPriorityOrder(mode: SessionMode, parameters: TreeNodeResolvingParameters) {
+  private createObjectChildrenNodesPriorityOrder(
+    mode: SessionMode,
+    parameters: TreeNodeResolvingParameters
+  ) {
     const requiredProperties = this.createSchemaPropertiesChildNodes(mode, parameters, key =>
-        parameters.schema.isRequired(key));
-    const optionalProperties = this.createSchemaPropertiesChildNodes(mode, parameters, key => !parameters.schema.isRequired(key) && !parameters.schema.properties[key].deprecated);
-    const additionalProperties = this.createDataPropertiesChildNodes(mode, parameters, key => !parameters.schema.properties || !parameters.schema.properties[key]); // filter out properties that are already in the schema
-    const deprecatedProperties = this.createSchemaPropertiesChildNodes(mode, parameters, key => parameters.schema.properties[key].deprecated && !parameters.schema.isRequired(key));
+      parameters.schema.isRequired(key)
+    );
+    const optionalProperties = this.createSchemaPropertiesChildNodes(
+      mode,
+      parameters,
+      key => !parameters.schema.isRequired(key) && !parameters.schema.properties[key].deprecated
+    );
+    const additionalProperties = this.createDataPropertiesChildNodes(
+      mode,
+      parameters,
+      key => !parameters.schema.properties || !parameters.schema.properties[key]
+    ); // filter out properties that are already in the schema
+    const deprecatedProperties = this.createSchemaPropertiesChildNodes(
+      mode,
+      parameters,
+      key => parameters.schema.properties[key].deprecated && !parameters.schema.isRequired(key)
+    );
     return requiredProperties.concat(
       optionalProperties,
       additionalProperties,
@@ -264,9 +310,16 @@ export class ConfigTreeNodeResolver {
   /**
    * Creates property children nodes for an object node, sorted in the same order as the properties occur in the data.
    */
-  private createObjectChildrenNodesAccordingToDataOrder(mode: SessionMode, parameters: TreeNodeResolvingParameters) {
+  private createObjectChildrenNodesAccordingToDataOrder(
+    mode: SessionMode,
+    parameters: TreeNodeResolvingParameters
+  ) {
     const dataProperties = this.createDataPropertiesChildNodes(mode, parameters);
-    const schemaProperties = this.createSchemaPropertiesChildNodes(mode, parameters, key => !dataProperties.find(node => node.data.name === key));
+    const schemaProperties = this.createSchemaPropertiesChildNodes(
+      mode,
+      parameters,
+      key => !dataProperties.find(node => node.data.name === key)
+    );
 
     return dataProperties.concat(schemaProperties);
   }
@@ -274,17 +327,24 @@ export class ConfigTreeNodeResolver {
   /**
    * Creates property children nodes for an object node, sorted in the same order as the properties occur in the schema.
    */
-  private createObjectChildrenNodesAccordingToSchemaOrder(mode: SessionMode, parameters: TreeNodeResolvingParameters) {
+  private createObjectChildrenNodesAccordingToSchemaOrder(
+    mode: SessionMode,
+    parameters: TreeNodeResolvingParameters
+  ) {
     const schemaProperties = this.createSchemaPropertiesChildNodes(mode, parameters);
-    const dataProperties = this.createDataPropertiesChildNodes(mode, parameters, key => !parameters.schema.properties || !parameters.schema.properties[key]);
+    const dataProperties = this.createDataPropertiesChildNodes(
+      mode,
+      parameters,
+      key => !parameters.schema.properties || !parameters.schema.properties[key]
+    );
     return schemaProperties.concat(dataProperties);
   }
 
   private createSchemaPropertiesChildNodes(
-      mode: SessionMode,
-      {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters,
-      filter: (key: string) => boolean = () => true,
-      advanced = false
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters,
+    filter: (key: string) => boolean = () => true,
+    advanced = false
   ) {
     return (
       Object.entries(schema.properties)
@@ -298,7 +358,7 @@ export class ConfigTreeNodeResolver {
         .map(([key, value]) => {
           const childPath = absolutePath.concat(key);
           return this.createTreeNodeOfProperty(
-              mode,
+            mode,
             value,
             schema,
             childPath,
@@ -309,7 +369,11 @@ export class ConfigTreeNodeResolver {
     );
   }
 
-  private isKeepInAdvancedSection(mode: SessionMode, schema: JsonSchemaWrapper, absolutePath: Path) {
+  private isKeepInAdvancedSection(
+    mode: SessionMode,
+    schema: JsonSchemaWrapper,
+    absolutePath: Path
+  ) {
     // only keep objects in advanced section if they are marked as advanced and do not contain data
     return (
       (schema.metaConfigurator?.advanced ?? false) &&
@@ -318,9 +382,9 @@ export class ConfigTreeNodeResolver {
   }
 
   private createDataPropertiesChildNodes(
-      mode: SessionMode,
-      {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters,
-      filter: (key: string) => boolean = () => true
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters,
+    filter: (key: string) => boolean = () => true
   ) {
     const data = getDataForMode(mode).dataAt(absolutePath);
     if (!data) {
@@ -335,7 +399,7 @@ export class ConfigTreeNodeResolver {
           if (schema.properties && schema.properties[key]) {
             const childPath = absolutePath.concat(key);
             return this.createTreeNodeOfProperty(
-                mode,
+              mode,
               schema.properties[key],
               schema,
               childPath,
@@ -357,7 +421,7 @@ export class ConfigTreeNodeResolver {
 
           const childPath = absolutePath.concat(key);
           return this.createTreeNodeOfProperty(
-              mode,
+            mode,
             childSchema,
             schema,
             childPath,
@@ -369,19 +433,17 @@ export class ConfigTreeNodeResolver {
     );
   }
 
-  private createArrayChildrenTreeNodes(mode: SessionMode, {
-    absolutePath,
-    relativePath,
-    schema,
-    depth,
-  }: TreeNodeResolvingParameters) {
+  private createArrayChildrenTreeNodes(
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters
+  ) {
     const data = getDataForMode(mode).dataAt(absolutePath);
     let children: GuiEditorTreeNode[] = [];
     if (Array.isArray(data)) {
       children = data.map((value: any, index: number) => {
         const childPath = absolutePath.concat(index);
         return this.createTreeNodeOfProperty(
-            mode,
+          mode,
           schema.items,
           schema,
           childPath,
@@ -398,20 +460,15 @@ export class ConfigTreeNodeResolver {
     return children;
   }
 
-  private createAddPropertyTreeNode(mode: SessionMode,
-                                    {
-                                      absolutePath,
-                                      relativePath,
-                                      schema,
-                                      depth,
-                                    }: TreeNodeResolvingParameters): AddPropertyTreeNode {
+  private createAddPropertyTreeNode(
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters
+  ): AddPropertyTreeNode {
     return {
       data: {
         absolutePath: absolutePath,
         relativePath: relativePath,
-        schema:
-          schema.additionalProperties ||
-          new JsonSchemaWrapper({}, mode, false), // not used
+        schema: schema.additionalProperties || new JsonSchemaWrapper({}, mode, false), // not used
         parentSchema: schema,
         name: '', // name is not used for add property node, but we keep it for easier type checking
         depth: depth,
@@ -444,23 +501,17 @@ export class ConfigTreeNodeResolver {
     };
   }
 
-  private createTypeUnionChildrenTreeNodes(mode: SessionMode,
-                                           {
-                                             absolutePath,
-                                             relativePath,
-                                             schema,
-                                             depth,
-                                           }: TreeNodeResolvingParameters) {
+  private createTypeUnionChildrenTreeNodes(
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters
+  ) {
     const userSelectionOneOf =
       getUserSelectionForMode(mode).getSelectedTypeUnionOption(absolutePath);
 
     if (userSelectionOneOf !== undefined) {
       const baseSchema = {...schema.jsonSchema};
       delete baseSchema.type;
-      const newTypeSchema = typeSchema(
-        schema.type[userSelectionOneOf.index],
-        mode
-      );
+      const newTypeSchema = typeSchema(schema.type[userSelectionOneOf.index], mode);
       const mergedSchema = new JsonSchemaWrapper(
         {
           allOf: [baseSchema, newTypeSchema.jsonSchema ?? {}],
@@ -468,19 +519,23 @@ export class ConfigTreeNodeResolver {
         mode
       );
       return [
-        this.createTreeNodeOfProperty(mode, mergedSchema, schema, absolutePath, relativePath, depth + 1),
+        this.createTreeNodeOfProperty(
+          mode,
+          mergedSchema,
+          schema,
+          absolutePath,
+          relativePath,
+          depth + 1
+        ),
       ];
     }
     return [];
   }
 
-  private createOneOfChildrenTreeNodes(mode: SessionMode,
-                                       {
-                                         absolutePath,
-                                         relativePath,
-                                         schema,
-                                         depth,
-                                       }: TreeNodeResolvingParameters) {
+  private createOneOfChildrenTreeNodes(
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters
+  ) {
     const userSelectionOneOf = getUserSelectionForMode(mode).getSelectedOneOfOption(absolutePath);
 
     if (userSelectionOneOf !== undefined) {
@@ -494,19 +549,23 @@ export class ConfigTreeNodeResolver {
         mode
       );
       return [
-        this.createTreeNodeOfProperty(mode, mergedSchema, schema, absolutePath, relativePath, depth + 1),
+        this.createTreeNodeOfProperty(
+          mode,
+          mergedSchema,
+          schema,
+          absolutePath,
+          relativePath,
+          depth + 1
+        ),
       ];
     }
     return [];
   }
 
-  private createAnyOfChildrenTreeNodes(mode: SessionMode,
-                                       {
-                                         absolutePath,
-                                         relativePath,
-                                         schema,
-                                         depth,
-                                       }: TreeNodeResolvingParameters) {
+  private createAnyOfChildrenTreeNodes(
+    mode: SessionMode,
+    {absolutePath, relativePath, schema, depth}: TreeNodeResolvingParameters
+  ) {
     const userSelectionAnyOf = getUserSelectionForMode(mode).getSelectedAnyOfOptions(absolutePath);
 
     if (userSelectionAnyOf !== undefined) {
@@ -521,7 +580,8 @@ export class ConfigTreeNodeResolver {
         return [];
       }
       return [
-        this.createTreeNodeOfProperty(mode,
+        this.createTreeNodeOfProperty(
+          mode,
           new JsonSchemaWrapper(mergedSchema, mode),
           schema,
           absolutePath,

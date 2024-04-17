@@ -1,5 +1,5 @@
-import type {PanelType} from "@/components/panelType";
-import type {SessionMode} from "@/store/sessionMode";
+import type {PanelType} from '@/components/panelType';
+import type {SessionMode} from '@/store/sessionMode';
 
 export interface SettingsInterfaceRoot {
   guiEditorOnRightSide: boolean;
@@ -7,7 +7,7 @@ export interface SettingsInterfaceRoot {
   codeEditor: SettingsInterfaceCodeEditor;
   guiEditor: SettingsInterfaceGuiEditor;
   metaSchema: SettingsInterfaceMetaSchema;
-    panels: SettingsInterfacePanels;
+  panels: SettingsInterfacePanels;
 }
 
 export interface SettingsInterfaceCodeEditor {
@@ -20,8 +20,8 @@ export interface SettingsInterfaceGuiEditor {
 }
 export interface SettingsInterfacePanels {
   text_editor: SettingsInterfacePanel[];
-    gui_editor: SettingsInterfacePanel[];
-    settings: SettingsInterfacePanel[];
+  gui_editor: SettingsInterfacePanel[];
+  settings: SettingsInterfacePanel[];
 }
 
 export interface SettingsInterfacePanel {

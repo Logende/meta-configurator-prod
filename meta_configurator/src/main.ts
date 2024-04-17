@@ -14,7 +14,7 @@ import VueCookies from 'vue-cookies';
 
 import cookiesHandler from '@/cookies/cookiesHandler';
 import {registerDefaultDataFormats} from '@/dataformats/defaultFormats';
-import App from "@/views/App.vue";
+import App from '@/views/App.vue';
 
 // @ts-ignore
 const app = createApp(App);

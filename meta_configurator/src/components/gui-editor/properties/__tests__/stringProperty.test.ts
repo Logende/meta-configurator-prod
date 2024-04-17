@@ -2,9 +2,9 @@ import {shallowMount} from '@vue/test-utils';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import StringProperty from '../StringProperty.vue';
 import InputText from 'primevue/inputtext';
-import {ValidationResult} from "@/schema/validationService";
-import {JsonSchemaWrapper} from "@/schema/jsonSchemaWrapper";
-import {SessionMode} from "@/store/sessionMode";
+import {ValidationResult} from '@/schema/validationService';
+import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
+import {SessionMode} from '@/store/sessionMode';
 
 // avoid constructing useDataLink store through imports, it is not required for this component
 vi.mock('@/data/useDataLink', () => ({

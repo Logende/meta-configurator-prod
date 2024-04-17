@@ -4,7 +4,7 @@ import type {
   SchemaPropertyType,
 } from '@/schema/jsonSchemaType';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
-import type {SessionMode} from "@/store/sessionMode";
+import type {SessionMode} from '@/store/sessionMode';
 
 /**
  * @returns the schema if it is not a boolean, otherwise
@@ -64,9 +64,6 @@ export function schemaFromObject(
  * type constraint with the given type, i.e.,
  * `{type: t}` for the given type `t`.
  */
-export function typeSchema(
-  type: SchemaPropertyType,
-  mode: SessionMode
-): JsonSchemaWrapper {
+export function typeSchema(type: SchemaPropertyType, mode: SessionMode): JsonSchemaWrapper {
   return new JsonSchemaWrapper({type}, mode, false);
 }

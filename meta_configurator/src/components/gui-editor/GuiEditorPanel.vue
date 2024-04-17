@@ -4,14 +4,11 @@
 
 <script setup lang="ts">
 import GuiEditorPanelJsonSchema from '@/components/gui-editor/GuiEditorPanelJsonSchema.vue';
-import type {SessionMode} from "@/store/sessionMode";
-
+import type {SessionMode} from '@/store/sessionMode';
 
 const props = defineProps<{
-    sessionMode: SessionMode;
+  sessionMode: SessionMode;
 }>();
-
-
 </script>
 
 <template>

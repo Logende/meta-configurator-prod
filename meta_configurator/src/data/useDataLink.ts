@@ -5,42 +5,42 @@ import {computed} from 'vue';
 import {SessionMode} from '@/store/sessionMode';
 import {ManagedData} from '@/data/managedData';
 import {ManagedSchema} from '@/data/managedSchema';
-import {ManagedSession} from "@/data/managedSession";
-import {ManagedValidation} from "@/data/managedValidation";
-import {ManagedUserSchemaSelection} from "@/data/managedUserSchemaSelection";
+import {ManagedSession} from '@/data/managedSession';
+import {ManagedValidation} from '@/data/managedValidation';
+import {ManagedUserSchemaSelection} from '@/data/managedUserSchemaSelection';
 
 const dataSource = useDataSource();
 const schemaSource = useSchemaSource();
 
 const dataList: ManagedData[] = [
-    new ManagedData(dataSource.userData, SessionMode.FileEditor),
-    new ManagedData(dataSource.userSchemaData, SessionMode.SchemaEditor),
-    new ManagedData(dataSource.settingsData, SessionMode.Settings),
-    ];
+  new ManagedData(dataSource.userData, SessionMode.FileEditor),
+  new ManagedData(dataSource.userSchemaData, SessionMode.SchemaEditor),
+  new ManagedData(dataSource.settingsData, SessionMode.Settings),
+];
 
 const schemaList: ManagedSchema[] = [
-    new ManagedSchema(dataSource.userSchemaData, true, SessionMode.FileEditor),
-    new ManagedSchema(schemaSource.metaSchemaData, true, SessionMode.SchemaEditor),
-    new ManagedSchema(schemaSource.settingsSchemaData, false, SessionMode.Settings),
-    ];
+  new ManagedSchema(dataSource.userSchemaData, true, SessionMode.FileEditor),
+  new ManagedSchema(schemaSource.metaSchemaData, true, SessionMode.SchemaEditor),
+  new ManagedSchema(schemaSource.settingsSchemaData, false, SessionMode.Settings),
+];
 
 const sessionList: ManagedSession[] = [
-    new ManagedSession(SessionMode.FileEditor),
-    new ManagedSession(SessionMode.SchemaEditor),
-    new ManagedSession(SessionMode.Settings),
-    ];
+  new ManagedSession(SessionMode.FileEditor),
+  new ManagedSession(SessionMode.SchemaEditor),
+  new ManagedSession(SessionMode.Settings),
+];
 
 const validationList: ManagedValidation[] = [
-    new ManagedValidation(SessionMode.FileEditor),
-    new ManagedValidation(SessionMode.SchemaEditor),
-    new ManagedValidation(SessionMode.Settings),
-    ];
+  new ManagedValidation(SessionMode.FileEditor),
+  new ManagedValidation(SessionMode.SchemaEditor),
+  new ManagedValidation(SessionMode.Settings),
+];
 
 const userSelectionList: ManagedUserSchemaSelection[] = [
-    new ManagedUserSchemaSelection(SessionMode.FileEditor),
-    new ManagedUserSchemaSelection(SessionMode.SchemaEditor),
-    new ManagedUserSchemaSelection(SessionMode.Settings),
-    ];
+  new ManagedUserSchemaSelection(SessionMode.FileEditor),
+  new ManagedUserSchemaSelection(SessionMode.SchemaEditor),
+  new ManagedUserSchemaSelection(SessionMode.Settings),
+];
 
 /**
  * Returns the data link for the given mode
@@ -57,39 +57,39 @@ export function getDataForMode(mode: SessionMode): ManagedData {
 }
 
 export function getSchemaForMode(mode: SessionMode): ManagedSchema {
-    for (const schema of schemaList) {
-        if (schema.mode === mode) {
-        return schema;
-        }
+  for (const schema of schemaList) {
+    if (schema.mode === mode) {
+      return schema;
     }
-    throw new Error(`Unknown mode ${mode}`);
+  }
+  throw new Error(`Unknown mode ${mode}`);
 }
 
 export function getSessionForMode(mode: SessionMode): ManagedSession {
-    for (const session of sessionList) {
-        if (session.mode === mode) {
-        return session;
-        }
+  for (const session of sessionList) {
+    if (session.mode === mode) {
+      return session;
     }
-    throw new Error(`Unknown mode ${mode}`);
+  }
+  throw new Error(`Unknown mode ${mode}`);
 }
 
 export function getValidationForMode(mode: SessionMode): ManagedValidation {
-    for (const validation of validationList) {
-        if (validation.mode === mode) {
-        return validation;
-        }
+  for (const validation of validationList) {
+    if (validation.mode === mode) {
+      return validation;
     }
-    throw new Error(`Unknown mode ${mode}`);
+  }
+  throw new Error(`Unknown mode ${mode}`);
 }
 
 export function getUserSelectionForMode(mode: SessionMode): ManagedUserSchemaSelection {
-    for (const userSelection of userSelectionList) {
-        if (userSelection.mode === mode) {
-        return userSelection;
-        }
+  for (const userSelection of userSelectionList) {
+    if (userSelection.mode === mode) {
+      return userSelection;
     }
-    throw new Error(`Unknown mode ${mode}`);
+  }
+  throw new Error(`Unknown mode ${mode}`);
 }
 
 const currentEditorData: ComputedRef<ManagedData> = computed(() =>

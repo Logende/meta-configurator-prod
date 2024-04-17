@@ -17,28 +17,24 @@ import {toastService} from '@/utility/toastService';
 import {useAppRouter} from '@/router/router';
 import {useDropZone, useWindowSize} from '@vueuse/core/index';
 import {readFileContentToDataLink} from '@/utility/readFileContent';
-import {getDataForMode } from '@/data/useDataLink';
+import {getDataForMode} from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
-import {useSessionStore} from "@/store/sessionStore";
-import {getComponentByPanelType} from "@/components/panelType";
-
-
-
+import {useSessionStore} from '@/store/sessionStore';
+import {getComponentByPanelType} from '@/components/panelType';
 
 const props = defineProps<{
-    sessionMode: SessionMode;
+  sessionMode: SessionMode;
 }>();
 
-
 const panels = computed(() => {
-    let panelDefinition = useSettings().panels[props.sessionMode];
-    let result = panelDefinition.map((panel) => {
-        return {
-            component: getComponentByPanelType(panel.panelType),
-            sessionMode: panel.mode}
-        ;
-    });
+  let panelDefinition = useSettings().panels[props.sessionMode];
+  let result = panelDefinition.map(panel => {
+    return {
+      component: getComponentByPanelType(panel.panelType),
+      sessionMode: panel.mode,
+    };
+  });
   return result;
 });
 
@@ -63,10 +59,10 @@ const topToolbarRef = ref();
 const mainPanel = ref();
 
 onMounted(() => {
-    if (!useSessionStore().hasShownInitialDialog) {
-        topToolbarRef.value?.showInitialSchemaDialog();
-        useSessionStore().hasShownInitialDialog = true;
-    }
+  if (!useSessionStore().hasShownInitialDialog) {
+    topToolbarRef.value?.showInitialSchemaDialog();
+    useSessionStore().hasShownInitialDialog = true;
+  }
 });
 
 const {isOverDropZone} = useDropZone(mainPanel, {
@@ -111,9 +107,7 @@ toastService.toast = useToast();
             :key="index"
             :min-size="10"
             :resizable="true">
-            <component
-                    :is="panel.component"
-            :sessionMode="panel.sessionMode"/>
+            <component :is="panel.component" :sessionMode="panel.sessionMode" />
           </SplitterPanel>
         </Splitter>
       </div>

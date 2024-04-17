@@ -4,8 +4,8 @@ import NumberProperty from '../NumberProperty.vue';
 import InputNumber from 'primevue/inputnumber';
 import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
 import {GuiConstants} from '@/constants';
-import {SessionMode} from "../../../../store/sessionMode";
-import {ValidationResult} from "../../../../schema/validationService";
+import {SessionMode} from '../../../../store/sessionMode';
+import {ValidationResult} from '../../../../schema/validationService';
 
 // avoid constructing useDataLink store through imports, it is not required for this component
 vi.mock('@/data/useDataLink', () => ({
@@ -45,7 +45,7 @@ describe('NumberProperty', () => {
           {
             type: 'integer',
           },
-            SessionMode.FileEditor,
+          SessionMode.FileEditor,
           false
         ),
       };
@@ -75,7 +75,7 @@ describe('NumberProperty', () => {
             type: 'number',
             multipleOf: 0.5,
           },
-            SessionMode.FileEditor,
+          SessionMode.FileEditor,
           false
         ),
       };
@@ -103,7 +103,7 @@ describe('NumberProperty', () => {
         {
           type: 'integer',
         },
-          SessionMode.FileEditor,
+        SessionMode.FileEditor,
         false
       ),
     });

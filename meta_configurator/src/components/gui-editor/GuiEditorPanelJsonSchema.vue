@@ -5,13 +5,11 @@ import PropertiesPanel from '@/components/gui-editor/PropertiesPanel.vue';
 import type {Path} from '@/utility/path';
 import {computed} from 'vue';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
-import {getDataForMode, getSessionForMode } from '@/data/useDataLink';
-import type {SessionMode} from "@/store/sessionMode";
-
-
+import {getDataForMode, getSessionForMode} from '@/data/useDataLink';
+import type {SessionMode} from '@/store/sessionMode';
 
 const props = defineProps<{
-    sessionMode: SessionMode;
+  sessionMode: SessionMode;
 }>();
 
 const session = getSessionForMode(props.sessionMode);
@@ -36,7 +34,7 @@ function zoomIntoPath(pathToAdd: Path) {
 }
 
 function selectPath(path: Path) {
-    session.updateCurrentSelectedElement(path);
+  session.updateCurrentSelectedElement(path);
 }
 
 const currentSchema = computed(() => {

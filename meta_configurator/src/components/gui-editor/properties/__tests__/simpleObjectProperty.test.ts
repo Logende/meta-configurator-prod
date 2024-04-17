@@ -2,7 +2,7 @@ import {mount} from '@vue/test-utils';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import SimpleObjectProperty from '../SimpleObjectProperty.vue';
 import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
-import {SessionMode} from "../../../../store/sessionMode";
+import {SessionMode} from '../../../../store/sessionMode';
 
 // avoid constructing useDataLink store through imports, it is not required for this component
 vi.mock('@/data/useDataLink', () => ({
@@ -102,7 +102,11 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: {foo: 'bar', baz: 'qux'},
-        propertySchema: new JsonSchemaWrapper({properties: {foo: {}}}, SessionMode.FileEditor, false),
+        propertySchema: new JsonSchemaWrapper(
+          {properties: {foo: {}}},
+          SessionMode.FileEditor,
+          false
+        ),
       });
 
       it('should show the correct description', () => {
@@ -118,7 +122,11 @@ describe('SimpleObjectProperty', () => {
       mountBeforeEach({
         expanded: false,
         propertyData: {foo: 'bar'},
-        propertySchema: new JsonSchemaWrapper({properties: {foo: {}, baz: {}}}, SessionMode.FileEditor, false),
+        propertySchema: new JsonSchemaWrapper(
+          {properties: {foo: {}, baz: {}}},
+          SessionMode.FileEditor,
+          false
+        ),
       });
 
       it('should show the correct description', () => {

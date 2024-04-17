@@ -28,7 +28,7 @@ import {openUploadSchemaDialog} from '@/components/toolbar/uploadFile';
 import {openClearFileEditorDialog} from '@/components/toolbar/clearFile';
 import {SessionMode} from '@/store/sessionMode';
 import {schemaCollection} from '@/packaged-schemas/schemaCollection';
-import {getSessionForMode} from "@/data/useDataLink";
+import {getSessionForMode} from '@/data/useDataLink';
 
 const props = defineProps<{
   currentMode: SessionMode;
@@ -276,8 +276,8 @@ const searchResultItems = ref<MenuItem[]>([]);
 watchDebounced(
   [searchTerm],
   () => {
-      let mode = useSessionStore().currentMode;
-      let session = getSessionForMode(mode);
+    let mode = useSessionStore().currentMode;
+    let session = getSessionForMode(mode);
 
     if (!searchTerm.value) {
       session.currentSearchResults.value = [];

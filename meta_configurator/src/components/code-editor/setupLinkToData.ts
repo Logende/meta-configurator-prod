@@ -2,7 +2,7 @@ import {Editor} from 'brace';
 // @ts-ignore
 import {useDebounceFn, watchImmediate} from '@vueuse/core/index';
 import {getDataForMode} from '@/data/useDataLink';
-import type {SessionMode} from "@/store/sessionMode";
+import type {SessionMode} from '@/store/sessionMode';
 
 let currentChangeFromOutside = false;
 let currentChangeFromInside = false;

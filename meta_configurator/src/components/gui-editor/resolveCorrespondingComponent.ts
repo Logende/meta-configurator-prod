@@ -14,14 +14,15 @@ import OneOfSelectionProperty from '@/components/gui-editor/properties/OneOfSele
 import AnyOfSelectionProperty from '@/components/gui-editor/properties/AnyOfSelectionProperty.vue';
 import {getDataForMode, getSessionForMode, getValidationForMode} from '@/data/useDataLink';
 import {typeSchema} from '@/schema/schemaUtils';
-import type {SessionMode} from "@/store/sessionMode";
+import type {SessionMode} from '@/store/sessionMode';
 
 /**
  * Resolves the corresponding component for a given node.
  * The component is determined by the schema of the node.
  */
 export function resolveCorrespondingComponent(
-  nodeData: ConfigTreeNodeData | AddItemTreeNodeData, mode: SessionMode
+  nodeData: ConfigTreeNodeData | AddItemTreeNodeData,
+  mode: SessionMode
 ): VNode {
   const propsObject = buildProperties(nodeData, mode);
 
@@ -54,9 +55,7 @@ export function resolveCorrespondingComponent(
     // @ts-ignore
     return h(OneOfSelectionProperty, {
       ...propsObject,
-      possibleSchemas: nodeData.schema.type.map(type =>
-        typeSchema(type, mode)
-      ),
+      possibleSchemas: nodeData.schema.type.map(type => typeSchema(type, mode)),
       isTypeUnion: true,
     });
   }
@@ -117,7 +116,9 @@ function buildProperties(nodeData: ConfigTreeNodeData | AddItemTreeNodeData, mod
     parentSchema: nodeData.parentSchema,
     relativePath: nodeData.relativePath,
     absolutePath: nodeData.absolutePath,
-    validationResults: getValidationForMode(mode).currentValidationResult.value.filterForPath(nodeData.absolutePath),
+    validationResults: getValidationForMode(mode).currentValidationResult.value.filterForPath(
+      nodeData.absolutePath
+    ),
     expanded: getSessionForMode(mode).isExpanded(nodeData.absolutePath),
   };
 }

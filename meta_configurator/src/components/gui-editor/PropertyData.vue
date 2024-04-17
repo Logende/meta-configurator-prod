@@ -9,7 +9,7 @@ import {resolveCorrespondingComponent} from '@/components/gui-editor/resolveCorr
 import {pathToString} from '@/utility/pathUtils';
 import Button from 'primevue/button';
 import {getDataForMode} from '@/data/useDataLink';
-import type {SessionMode} from "@/store/sessionMode";
+import type {SessionMode} from '@/store/sessionMode';
 
 const props = defineProps<{
   nodeData: ConfigTreeNodeData;
@@ -38,7 +38,10 @@ function isRequired(): boolean {
 }
 
 function shouldShowRemove(): boolean {
-  return !isRequired() && getDataForMode(props.sessionMode).dataAt(props.nodeData.absolutePath) !== undefined;
+  return (
+    !isRequired() &&
+    getDataForMode(props.sessionMode).dataAt(props.nodeData.absolutePath) !== undefined
+  );
 }
 </script>
 

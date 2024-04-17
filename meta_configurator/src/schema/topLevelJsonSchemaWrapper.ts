@@ -1,6 +1,6 @@
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import type {TopLevelSchema} from '@/schema/jsonSchemaType';
-import type {SessionMode} from "@/store/sessionMode";
+import type {SessionMode} from '@/store/sessionMode';
 
 /**
  * Like {@link JsonSchemaWrapper}, but with additional properties that are only allowed at the top level of a schema.
