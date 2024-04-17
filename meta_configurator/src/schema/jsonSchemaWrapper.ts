@@ -8,7 +8,6 @@ import type {Path, PathElement} from '@/utility/path';
 import {resolveAndTransform} from '@/schema/schemaLazyResolver';
 import _ from 'lodash';
 import {SessionMode} from "@/store/sessionMode";
-import {getSchemaForMode} from "@/data/useDataLink";
 import {assert} from "@vueuse/core";
 
 /**

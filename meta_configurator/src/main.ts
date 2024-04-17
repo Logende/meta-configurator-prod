@@ -8,7 +8,6 @@ import Tooltip from 'primevue/tooltip';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import {useAppRouter} from './router/router';
-import FileEditorView from '@/views/FileEditorView.vue';
 import ErrorService from '@/utility/errorService';
 import {registerIcons} from '@/fontawesome';
 import VueCookies from 'vue-cookies';
