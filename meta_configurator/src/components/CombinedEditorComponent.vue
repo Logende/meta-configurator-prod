@@ -17,7 +17,7 @@ import {useToast} from 'primevue/usetoast';
 import {useConfirm} from 'primevue/useconfirm';
 import {confirmationService} from '@/utility/confirmationService';
 import {toastService} from '@/utility/toastService';
-import {useAppRouter} from '@/router';
+import {useAppRouter} from '@/router/router';
 import {useDropZone, useWindowSize} from '@vueuse/core/index';
 import {readFileContentToDataLink} from '@/utility/readFileContent';
 import {getDataForMode } from '@/data/useDataLink';

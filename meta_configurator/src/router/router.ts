@@ -1,6 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import {useSessionStore} from '@/store/sessionStore';
 import {SessionMode} from '@/store/sessionMode';
+import SchemaEditorView from "@/views/SchemaEditorView.vue";
+import FileEditorView from "@/views/FileEditorView.vue";
+import SettingsEditorView from "@/views/SettingsEditorView.vue";
 
 /**
  * The router of the application.
@@ -12,7 +15,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'file',
-      component: () => import('../views/FileEditorView.vue'),
+      component: FileEditorView,
       meta: {
         title: 'FileEditor',
         sessionMode: SessionMode.FileEditor,
@@ -21,7 +24,7 @@ const router = createRouter({
     {
       path: '/schema',
       name: 'schema',
-      component: () => import('../views/SchemaEditorView.vue'),
+      component: SchemaEditorView,
       meta: {
         title: 'SchemaEditor',
         sessionMode: SessionMode.SchemaEditor,
@@ -30,7 +33,7 @@ const router = createRouter({
     {
       path: '/settings',
       name: 'settings',
-      component: () => import('../views/SettingsEditorView.vue'),
+      component: SettingsEditorView,
       meta: {
         title: 'SettingEditor',
         sessionMode: SessionMode.Settings,
