@@ -13,7 +13,7 @@ const dataSource = {
   }),
 
   // data of the settings editor
-  settingsData: shallowRef<any>(SETTINGS_DATA_DEFAULT), // TODO add settings type
+  settingsData: shallowRef<any>(structuredClone(SETTINGS_DATA_DEFAULT)), // TODO add settings type
 };
 
 // Schema source and data source are separated, because metaSchemaData accesses the settingsData, which it could not do if they were defined within the same object.
