@@ -127,7 +127,14 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
           $ref: '#/$defs/panels',
         },
         settings: {
-          $ref: '#/$defs/panels',
+          allOf: [
+            {
+              $ref: '#/$defs/panels',
+            },
+            {
+              readOnly: true,
+            }
+          ],
         },
       },
     },
