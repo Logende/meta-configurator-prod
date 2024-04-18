@@ -7,7 +7,6 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
   type: 'object',
   required: [
     'dataFormat',
-    'guiEditorOnRightSide',
     'codeEditor',
     'guiEditor',
     'metaSchema',
@@ -20,12 +19,6 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
       description: 'The data format to use for the configuration files.',
       default: 'json',
       enum: ['json', 'yaml'],
-    },
-    guiEditorOnRightSide: {
-      type: 'boolean',
-      description:
-        'If enabled, the GUI editor will be on the right side and the code editor on the left. Otherwise, it will be the opposite way.',
-      default: true,
     },
     codeEditor: {
       type: 'object',
