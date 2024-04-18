@@ -97,12 +97,11 @@ const currentEditorData: ComputedRef<ManagedData> = computed(() =>
 );
 
 const currentEditorSchema: ComputedRef<ManagedJsonSchema> = computed(() =>
-    getSchemaForMode(useSessionStore().currentMode)
+  getSchemaForMode(useSessionStore().currentMode)
 );
 
-
 const currentSession: ComputedRef<ManagedSession> = computed(() =>
-    getSessionForMode(useSessionStore().currentMode)
+  getSessionForMode(useSessionStore().currentMode)
 );
 
 /**
