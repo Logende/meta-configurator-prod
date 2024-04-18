@@ -3,8 +3,8 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import EnumProperty from '@/components/gui-editor/properties/EnumProperty.vue';
 import Dropdown from 'primevue/dropdown';
 import {ValidationResult} from '../../../../schema/validationService';
-import {JsonSchemaWrapper} from "../../../../schema/jsonSchemaWrapper";
-import {SessionMode} from "../../../../store/sessionMode";
+import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
+import {SessionMode} from '../../../../store/sessionMode';
 
 // avoid constructing useDataLink store through imports, it is not required for this component
 vi.mock('@/data/useDataLink', () => ({
@@ -45,11 +45,11 @@ describe('EnumProperty', () => {
       propertyData: 'testValue1',
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'string',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'string',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     };
     shallowMountBeforeEach(stringValuesProps);
@@ -121,11 +121,11 @@ describe('EnumProperty', () => {
       propertyData: 1,
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'string',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'string',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     };
     shallowMountBeforeEach(numberValuesProps);
@@ -176,11 +176,11 @@ describe('EnumProperty', () => {
       propertyData: false,
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'string',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'string',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     };
     shallowMountBeforeEach(booleanValuesProps);
@@ -231,11 +231,11 @@ describe('EnumProperty', () => {
       propertyData: {firstName: 'testValue1'},
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'string',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'string',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     };
     shallowMountBeforeEach(objectValuesProps);
@@ -289,11 +289,11 @@ describe('EnumProperty', () => {
       propertyData: ['testValue1'],
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'string',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'string',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     };
     shallowMountBeforeEach(arrayValuesProps);
@@ -343,11 +343,11 @@ describe('EnumProperty', () => {
       propertyData: null,
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'string',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'string',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     };
 
@@ -396,11 +396,11 @@ describe('EnumProperty', () => {
       propertyData: data,
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'string',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'string',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     };
     shallowMountBeforeEach(testProps);

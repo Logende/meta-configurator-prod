@@ -8,7 +8,7 @@ import {openGenerateDataDialog} from '@/components/toolbar/createSampleData';
 import {getDataForMode, useCurrentData, useCurrentSchema} from '@/data/useDataLink';
 import {useDataSource} from '@/data/dataSource';
 import {SessionMode} from '@/store/sessionMode';
-import {SETTINGS_DATA_DEFAULT} from "@/settings/defaultSettingsData";
+import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
 
 /**
  * Helper class that contains the menu items for the top menu bar.

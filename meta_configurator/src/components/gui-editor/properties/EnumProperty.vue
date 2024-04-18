@@ -8,13 +8,13 @@ import _ from 'lodash';
 import {dataToString} from '@/utility/dataToString';
 import type {PathElement} from '@/utility/path';
 import type {ValidationResult} from '@/schema/validationService';
-import {JsonSchemaWrapper} from "@/schema/jsonSchemaWrapper";
-import {isReadOnly} from "@/components/gui-editor/configTreeNodeReadingUtils";
+import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
+import {isReadOnly} from '@/components/gui-editor/configTreeNodeReadingUtils';
 
 const props = defineProps<{
   propertyName: PathElement;
   possibleValues: Array<any>;
-    propertySchema: JsonSchemaWrapper;
+  propertySchema: JsonSchemaWrapper;
   propertyData: any | undefined;
   validationResults: ValidationResult;
 }>();

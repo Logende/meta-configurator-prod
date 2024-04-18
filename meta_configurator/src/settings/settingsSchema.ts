@@ -5,13 +5,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
   title: 'Settings',
   description: 'MetaConfigurator settings',
   type: 'object',
-  required: [
-    'dataFormat',
-    'codeEditor',
-    'guiEditor',
-    'metaSchema',
-    'panels',
-  ],
+  required: ['dataFormat', 'codeEditor', 'guiEditor', 'metaSchema', 'panels'],
   additionalProperties: false,
   properties: {
     dataFormat: {
@@ -126,7 +120,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
             },
             {
               readOnly: true,
-            }
+            },
           ],
         },
       },

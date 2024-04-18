@@ -180,7 +180,6 @@ function clickedPropertyData(nodeData: ConfigTreeNodeData) {
   }
 }
 
-
 function removeProperty(subPath: Path) {
   const completePath = props.currentPath.concat(subPath);
   emit('remove_property', completePath);
@@ -188,9 +187,9 @@ function removeProperty(subPath: Path) {
 }
 
 function replacePropertyName(parentPath: Path, oldName: string, newName: string, oldData: any) {
-    // note: cloning the data before adjusting it, because otherwise the original data would already be changed and then the updateData call would detect a change and not trigger the ref
+  // note: cloning the data before adjusting it, because otherwise the original data would already be changed and then the updateData call would detect a change and not trigger the ref
   let dataAtParentPath = dataAt(parentPath, props.currentData) ?? {};
-    dataAtParentPath = structuredClone(dataAtParentPath);
+  dataAtParentPath = structuredClone(dataAtParentPath);
 
   if (oldData === undefined) {
     oldData = initializeNewProperty(parentPath, newName);

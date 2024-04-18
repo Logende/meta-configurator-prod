@@ -10,7 +10,7 @@ import {pathToString} from '@/utility/pathUtils';
 import Button from 'primevue/button';
 import {getDataForMode} from '@/data/useDataLink';
 import type {SessionMode} from '@/store/sessionMode';
-import {isRequiredProperty} from "@/components/gui-editor/configTreeNodeReadingUtils";
+import {isRequiredProperty} from '@/components/gui-editor/configTreeNodeReadingUtils';
 
 const props = defineProps<{
   nodeData: ConfigTreeNodeData;
@@ -33,8 +33,6 @@ function propagateUpdateTreeEvent() {
 function removeProperty() {
   emit('remove_property', props.nodeData.relativePath);
 }
-
-
 
 function shouldShowRemove(): boolean {
   return (

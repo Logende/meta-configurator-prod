@@ -3,8 +3,8 @@ import {afterEach, beforeEach, describe, expect, it, test, vi} from 'vitest';
 import BooleanProperty from '../BooleanProperty.vue';
 import SelectButton from 'primevue/selectbutton';
 import {ValidationResult} from '../../../../schema/validationService';
-import {JsonSchemaWrapper} from "../../../../schema/jsonSchemaWrapper";
-import {SessionMode} from "../../../../store/sessionMode";
+import {JsonSchemaWrapper} from '../../../../schema/jsonSchemaWrapper';
+import {SessionMode} from '../../../../store/sessionMode';
 
 // avoid constructing useDataLink store through imports, it is not required for this component
 vi.mock('@/data/useDataLink', () => ({
@@ -44,11 +44,11 @@ describe('BooleanProperty', () => {
       propertyData: data,
       validationResults: new ValidationResult([]),
       propertySchema: new JsonSchemaWrapper(
-          {
-            type: 'boolean',
-          },
-          SessionMode.FileEditor,
-          false
+        {
+          type: 'boolean',
+        },
+        SessionMode.FileEditor,
+        false
       ),
     });
 

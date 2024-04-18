@@ -18,11 +18,15 @@ import type {SessionMode} from '@/store/sessionMode';
 import {getSessionForMode, getUserSelectionForMode} from '@/data/useDataLink';
 import type {ValidationResult} from '@/schema/validationService';
 import {
-    getDisplayNameOfNode,
-    getTypeDescription,
-    isAdditionalProperty, isDeprecated, isPatternProperty, isPropertyNameEditable,
-    isRequiredProperty, isUseItalicFont
-} from "./configTreeNodeReadingUtils";
+  getDisplayNameOfNode,
+  getTypeDescription,
+  isAdditionalProperty,
+  isDeprecated,
+  isPatternProperty,
+  isPropertyNameEditable,
+  isRequiredProperty,
+  isUseItalicFont,
+} from './configTreeNodeReadingUtils';
 
 const props = defineProps<{
   node: GuiEditorTreeNode;
@@ -92,7 +96,6 @@ function zoomIntoPath() {
   }
 }
 
-
 function updatePropertyName(event) {
   const target = event.target as HTMLElement;
   let text = target.innerText;
@@ -111,7 +114,6 @@ function updatePropertyName(event) {
   event.target.contenteditable = false;
   showPencil.value = true;
 }
-
 
 function getId(): string {
   return '_label_' + props.node.key;

@@ -6,7 +6,7 @@ import {generatePlaceholderText} from '@/utility/propertyPlaceholderGenerator';
 import type {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import type {PathElement} from '@/utility/path';
 import type {ValidationResult} from '@/schema/validationService';
-import {isReadOnly} from "@/components/gui-editor/configTreeNodeReadingUtils";
+import {isReadOnly} from '@/components/gui-editor/configTreeNodeReadingUtils';
 
 const props = defineProps<{
   propertyName: PathElement;
