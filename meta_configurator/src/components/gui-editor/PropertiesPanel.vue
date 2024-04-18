@@ -180,6 +180,7 @@ function clickedPropertyData(nodeData: ConfigTreeNodeData) {
   }
 }
 
+
 function removeProperty(subPath: Path) {
   const completePath = props.currentPath.concat(subPath);
   emit('remove_property', completePath);

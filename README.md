@@ -66,11 +66,9 @@ For more information, see the LICENSE file.
 
 
 Todo: in schema editor, make $ref actually show dropdown of available refs
-and currently bug in renaming objects (data loss / actually only renaming of subfield)
+
+readOnly support
 
 
-Todo: add support for metaconfigurator metadata in meta schema
 
-Todo: statt Cookies für Settings einfach LocalStorage verwenden. Statt ref einfach useLocalStorage verwenden
-
-# https://vueuse.org/core/uselocalstorage/
+support custom widths in panels settings
