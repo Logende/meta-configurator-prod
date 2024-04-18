@@ -63,12 +63,3 @@ To launch the application, follow these steps:
 This project is licensed under the [MIT License](LICENSE).
 For more information, see the LICENSE file.
 
-
-
-Todo: in schema editor, make $ref actually show dropdown of available refs
-
-readOnly support
-
-
-
-support custom widths in panels settings
