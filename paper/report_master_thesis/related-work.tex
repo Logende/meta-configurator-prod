@@ -1,16 +1,153 @@
 \subsection{JSON and YAML}
 
+JSON is a common data-interchange format for exchanging data with web services, but also for storing documents in NoSQL databases, such as MongoDB\@\cite{marrs2017json}.
+\textit{Schema languages} are formal languages that specify the structure, constraints, and relationships of data, for example in a database or structured data formats.
+Schema languages exist for \textit{JSON}\cite{cuelang,Apache-Avro,rfc8927,Kappestein_2023}, but also for other data formats, such as \textit{XML}\cite{dtd_spec, xsd_spec, xml_schemas_1, xml_schemas_2}.
+In our initial (extended) paper about \toolname{}, we evaluated 8 different schema languages, measuring their \textit{practical usage} (\textit{popularity}, \textit{tool support}, \textit{library support}) and \textit{expressiveness}.
+We found \textit{JSON Schema}~\cite{jsonSchema, jsonschemaJSONSchema} to be the one with most \textit{practical usage} and \textit{expressiveness}, which is why we based \toolname{} on it.\footnote{\url{https://github.com/logende/meta-configurator/paper/paper_main_extended.pdf} accessed 2024/04/27}
 
-\subsection{Schema languages}
+\subsubsection{JSON Schema}
+Listing~\ref{lst:json-schema-example} shows an example of a JSON schema and listing~\ref{lst:json-example} shows an example of a JSON document that conforms to the schema.
+
+JSON schema has evolved to being the de-facto standard schema language for JSON documents~\cite{baazizi2021empirical}.
+Schemas for many popular \cfgfile{} types exist.
+\textit{JSON schema store}\cite{schemastoreJSONSchema} is a website that provides over 600 JSON schema files for various use cases.
+The supported file types include, for example, Docker compose or OpenAPI files.
+
+We remark that JSON schema and other schema languages for JSON can also be applied to YAML as JSON and YAML documents are of a similar structure (JSON is a subset of YAML).
+Some syntactical details of YAML can, however, not be expressed with JSON schema.
+
+
+\begin{lstlisting}[language=json,firstnumber=1,caption={JSON schema example},captionpos=b,label={lst:json-schema-example}]
+{
+  "$id": "https://example.com
+  /person.schema.json",
+  "$schema": "https://json-schema.org
+  /draft/2020-12/schema",
+  "title": "Person",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "description": "first name."
+    },
+    "lastName": {
+      "type": "string",
+      "description": "last name."
+    },
+    "age": {
+      "description": "Age",
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=json,firstnumber=1,caption={JSON example for the schema in listing}~\ref{lst:json-schema-example},captionpos=b,label={lst:json-example}]
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "age": 21
+}
+\end{lstlisting}
 
 
 
-\subsection{Schema-to-UI approaches} % or "form generation"?
+\subsubsection{Schema-based form generation} % or "form generation"?
+
+The idea of generating a GUI from a schema is not new.
+Early works in this area propose generating forms from XML schemas~\cite{kasarda2010generating, fenech2008semantic,
+    kuo2005generating} or entity-relationship diagrams~\cite{bajaj2009user}.
+There exist various approaches that generate web forms from the more modern format, JSON schema, e.g.,
+\textit{React JSON Schema Form}\footnote{\url{https://github.com/rjsf-team/react-jsonschema-form}, accessed 2024/01/22},
+\textit{Angular Schema Form}\footnote{\url{https://github.com/json-schema-form/angular-schema-form}, accessed 2024/01/22},
+\textit{Vue Form Generator}\footnote{\url{https://github.com/vue-generators/vue-form-generator}, accessed 2024/01/22},
+\textit{JSON Forms}\footnote{\url{https://jsonforms.io}, accessed 2024/01/22},
+\textit{JSON Editor}\footnote{\url{https://jsoneditoronline.org}, accessed 2024/01/22}, and
+\textit{JSON Form}\footnote{\url{https://github.com/jsonform}, accessed 2024/01/22}.
+
+Such forms can assist the user in a multitude of ways, such as by tooltips, auto-completion, and dropdown menus.
+By inherently adhering to the schema structure, editing data with such GUIs significantly reduces configuration mistakes caused by the user.
+The generated forms usually have a specific component for each type of data, e.g., a text field for strings.
 
 
 
-\subsection{Schema editors}
 
+\subsubsection{Schema editors}
+There exist several so-called schema editors, which are tools for creating and editing schemas that are text-based or graphical (or both).
+
+\textit{JSON Editor Online}\footnote{\url{https://jsoneditoronline.org}, accessed 2024/01/22} is a web-based editor for JSON schemas and JSON documents.
+It divides the editor into two parts, where one part can be used to edit the schema and the other part can be used to edit a JSON document,
+which is validated against the schema.
+The editor provides various features, such as syntax highlighting and highlighting of validation errors. 
+However, the features of the editor are limited.
+For example, it does not provide any assistance for the user, such as tooltips or auto-completion.
+For new documents, it does not show any properties of the schema, so the user has to know the schema beforehand
+
+There also exists a variety of schema editors that are paid software, such as \textit{Altova XMLSpy}\footnote{\url{https://www.altova.com/xmlspy-xml-editor}, accessed 2024/01/22},
+\textit{Liquid Studio}\footnote{\url{https://www.liquid-technologies.com/json-schema-editor}, accessed 2024/01/22}, \textit{XML ValidatorBuddy}\footnote{\url{https://www.xml-buddy.com/}, accessed 2024/01/22},
+\textit{JSONBuddy}\footnote{\url{https://www.json-buddy.com/}, accessed 2024/01/22}, \textit{XMLBlueprint}\footnote{\url{https://www.xmlblueprint.com}, accessed 2024/01/22},
+and \textit{Oxygen XML Editor}\footnote{\url{https://www.oxygenxml.com}, accessed 2024/01/22}.
+Those are editors for XML or JSON schema, mostly with a combination of text-based and graphical views.
+These tools are not web-based and not open-source.
+Furthermore, they do not focus on editing a JSON document based on a schema,
+but rather only on editing the schema itself.
+
+
+\subsubsection{Adamant}
+Adamant\footnote{Current version of Adamant as of writing this paper: Adamant v1.2.0} is a JSON Schema-based form generator and schema editor specifically designed for scientific data~\cite{siffa2022adamant}.
+It generates a GUI from a JSON schema, allows editing and creating JSON schema documents, and differentiates between a schema edit mode and a data edit mode.
+A noteworthy feature is that it supports the extraction of units from the description of a field, which is helpful for scientific data.
+
+Besides the frontend, Adamant also provides a backend that allows the integration into other tools as well as storing and reusing schemas.
+Adamants UI-based schema editor is intuitive and user-friendly, even for users who are not familiar with JSON schema.
+However, Adamant does not provide a text based editor as an alternative to the GUI and does not support various JSON schema keywords.
+For example, it is not possible to restrict strings to a certain regular expression and it does not support the keyword \texttt{oneOf}, which many schemas use~\cite{baazizi2021empirical}.
+
+
+\subsubsection{Schema Visualization}\label{subsubsec:schema-visualization}
+Generating a GUI from a schema is related to schema visualization, for which several techniques exist~\cite{frasincar2006adapting, silva2019visualization, deligiannidis2007rdf, north2002visualization}.
+%TODO
+
+\subsubsection{Schema-to-UML approaches}\label{subsubsec:schema-to-uml}
+%TODO
+
+\subsection{Ontologies}
+In their paper "What Is an Ontology?" Guarino et al. provide a definition for \textit{computational ontologies}, as it is applied in the knowledge engineering community.
+They distinguish from the word "ontology" used in a philosophical sense or in other communities.\cite{guarino2009ontology}
+\begin{quote}
+	"Computational ontologies are a means to formally model the structure of a system, i.e., the relevant entities and relations that emerge from its observation, and which are useful to our purposes. An example of such a system can be a company with all its employees and their interrelationships. The ontology engineer analyzes relevant entities and organizes them into concepts and relations, being represented, respectively, by unary and binary predicates. The backbone of an ontology consists of a generalization/specialization hierarchy of concepts, i.e., a taxonomy. Supposing we are interested in aspects related to human resources, then Person, Manager, and Researcher might be relevant concepts, where the first is a superconcept of the latter two. Cooperates-with can be considered a relevant relation holding between persons. A concrete person working in a company would then be an instance of its corresponding concept."\cite{guarino2009ontology}
+\end{quote}
+
+In their article "Knowledge Graphs", Aidan et al. \cite{hogan2021knowledge} give a comprehensive summary on how knowledge graphs are being used, what techniques are employed and how they relate to existing data management topics.
+They describe that representing data in a graph brings a number of benefits in settings that involve integrating, managing and extracting data from diverse sources at a large scale:
+
+\begin{quote}
+	"Graphs provide a concise and intuitive abstraction for a variety of domains, where edges capture the (potentially cyclical) relations between the entities inherent in social data, biological interactions, bibliographical citations and co-authorships, transport networks, and so forth. Graphs allow maintainers to postpone the definition of a schema, allowing the data – and its scope – to evolve in a more flexible manner than typically possible in a relational setting, particularly for capturing incomplete knowledge. Unlike (other) NoSQL models, specialised graph query languages support not only standard relational operators (joins, unions, projections, etc.), but also navigational operators for recursively finding entities connected through arbitrary-length paths . Standard knowledge representation formalisms – such as ontologies and rules – can be employed to define and reason about the semantics of the terms used to label and describe the nodes and edges in the graph. Scalable frameworks for graph analytics can be leveraged for computing centrality, clustering, summarisation, etc., in order to gain insights about the domain being described. Various representations have also been developed that support applying machine learning techniques directly over graphs."\cite{hogan2021knowledge}
+\end{quote}
+In the article\cite{hogan2021knowledge}, they outline graph data models (for example \textit{RDF}), query languages (for example \textit{SPARQL}), representations of schema (for example \textit{RDFS} and \textit{SHACL}), knowledge deduction (for example with \textit{OWL}) and much more.
+We introduce those in the following subsections.
+
+
+
+\subsubsection{Resource Description Framework (RDF)}
+
+
+
+
+\subsubsection{SPARQL Protocol and RDF Query Language (SPARQL)}
+
+
+\subsubsection{Shapes Constraint Language (SHACL)}
+
+
+\subsubsection{Web Ontology Language (OWL)}
+
+
+
+\subsubsection{JavaScript Object Notation for Linked Data (JSON-LD)}
 
 
 \subsection{MetaConfigurator}
