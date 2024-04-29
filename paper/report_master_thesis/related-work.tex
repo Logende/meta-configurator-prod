@@ -1,6 +1,6 @@
 \subsection{JSON and YAML}
 
-JSON is a common data-interchange format for exchanging data with web services, but also for storing documents in NoSQL databases, such as MongoDB\@\cite{marrs2017json}.
+\textit{JSON} is a common data-interchange format for exchanging data with web services, but also for storing documents in NoSQL databases, such as MongoDB\@\cite{marrs2017json}.
 \textit{Schema languages} are formal languages that specify the structure, constraints, and relationships of data, for example in a database or structured data formats.
 Schema languages exist for \textit{JSON}\cite{cuelang,Apache-Avro,rfc8927,Kappestein_2023}, but also for other data formats, such as \textit{XML}\cite{dtd_spec, xsd_spec, xml_schemas_1, xml_schemas_2}.
 In our initial (extended) paper about \toolname{}, we evaluated 8 different schema languages, measuring their \textit{practical usage} (\textit{popularity}, \textit{tool support}, \textit{library support}) and \textit{expressiveness}.
@@ -14,13 +14,13 @@ Schemas for many popular \cfgfile{} types exist.
 \textit{JSON schema store}\cite{schemastoreJSONSchema} is a website that provides over 600 JSON schema files for various use cases.
 The supported file types include, for example, Docker compose or OpenAPI files.
 
-We remark that JSON schema and other schema languages for JSON can also be applied to YAML as JSON and YAML documents are of a similar structure (JSON is a subset of YAML).
+We remark that JSON schema and other schema languages for JSON can also be applied to YAML, as JSON and YAML documents are of a similar structure (JSON is a subset of YAML).
 Some syntactical details of YAML can, however, not be expressed with JSON schema.
 
 
 \begin{lstlisting}[language=json,firstnumber=1,caption={JSON schema example},captionpos=b,label={lst:json-schema-example}]
 {
-  "$id": "https://example.com
+  "$id": "https://example.org
   /person.schema.json",
   "$schema": "https://json-schema.org
   /draft/2020-12/schema",
@@ -47,9 +47,9 @@ Some syntactical details of YAML can, however, not be expressed with JSON schema
 
 \begin{lstlisting}[language=json,firstnumber=1,caption={JSON example for the schema in listing}~\ref{lst:json-schema-example},captionpos=b,label={lst:json-example}]
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "age": 21
+  "firstName": "Alex",
+  "lastName": "Smith",
+  "age": 28
 }
 \end{lstlisting}
 
@@ -115,29 +115,75 @@ Generating a GUI from a schema is related to schema visualization, for which sev
 %TODO
 
 \subsection{Ontologies}
-In their paper "What Is an Ontology?" Guarino et al. provide a definition for \textit{computational ontologies}, as it is applied in the knowledge engineering community.
-They distinguish from the word "ontology" used in a philosophical sense or in other communities.\cite{guarino2009ontology}
+In their paper "What Is an Ontology?" Guarino et al.\cite{guarino2009ontology} provide a definition for \textit{computational ontologies}, as it is applied in the knowledge engineering community.
 \begin{quote}
 	"Computational ontologies are a means to formally model the structure of a system, i.e., the relevant entities and relations that emerge from its observation, and which are useful to our purposes. An example of such a system can be a company with all its employees and their interrelationships. The ontology engineer analyzes relevant entities and organizes them into concepts and relations, being represented, respectively, by unary and binary predicates. The backbone of an ontology consists of a generalization/specialization hierarchy of concepts, i.e., a taxonomy. Supposing we are interested in aspects related to human resources, then Person, Manager, and Researcher might be relevant concepts, where the first is a superconcept of the latter two. Cooperates-with can be considered a relevant relation holding between persons. A concrete person working in a company would then be an instance of its corresponding concept."\cite{guarino2009ontology}
 \end{quote}
 
 In their article "Knowledge Graphs", Aidan et al. \cite{hogan2021knowledge} give a comprehensive summary on how knowledge graphs are being used, what techniques are employed and how they relate to existing data management topics.
-They describe that representing data in a graph brings a number of benefits in settings that involve integrating, managing and extracting data from diverse sources at a large scale, compared to relational models:
-
-\begin{quote}
-	"Graphs provide a concise and intuitive abstraction for a variety of domains, where edges capture the (potentially cyclical) relations between the entities inherent in social data, biological interactions, bibliographical citations and co-authorships, transport networks, and so forth. Graphs allow maintainers to postpone the definition of a schema, allowing the data – and its scope – to evolve in a more flexible manner than typically possible in a relational setting, particularly for capturing incomplete knowledge. Unlike (other) NoSQL models, specialised graph query languages support not only standard relational operators (joins, unions, projections, etc.), but also navigational operators for recursively finding entities connected through arbitrary-length paths . Standard knowledge representation formalisms – such as ontologies and rules – can be employed to define and reason about the semantics of the terms used to label and describe the nodes and edges in the graph. Scalable frameworks for graph analytics can be leveraged for computing centrality, clustering, summarisation, etc., in order to gain insights about the domain being described. Various representations have also been developed that support applying machine learning techniques directly over graphs."\cite{hogan2021knowledge}
-\end{quote}
-In the article\cite{hogan2021knowledge}, they outline graph data models (for example \textit{RDF}), query languages (for example \textit{SPARQL}), representations of schema (for example \textit{RDFS} and \textit{SHACL}), knowledge deduction (for example with \textit{OWL}) and much more.
+They describe that representing data in a graph brings a number of benefits in settings that involve integrating, managing and extracting data from diverse sources at a large scale, compared to relational models.
+Most notably, it enables more flexibility in the data and allows postponing the schema definition, it supports navigational operators for recursively finding entities connected through arbitrary-length paths and it enables new ways of reasoning about the data, supporting machine learning techniques directly working with the graph.
+%\begin{quote}
+%	"Graphs provide a concise and intuitive abstraction for a variety of domains, where edges capture the (potentially cyclical) relations between the entities inherent in social data, biological interactions, bibliographical citations and co-authorships, transport networks, and so forth. Graphs allow maintainers to postpone the definition of a schema, allowing the data – and its scope – to evolve in a more flexible manner than typically possible in a relational setting, particularly for capturing incomplete knowledge. Unlike (other) NoSQL models, specialised graph query languages support not only standard relational operators (joins, unions, projections, etc.), but also navigational operators for recursively finding entities connected through arbitrary-length paths . Standard knowledge representation formalisms – such as ontologies and rules – can be employed to define and reason about the semantics of the terms used to label and describe the nodes and edges in the graph. Scalable frameworks for graph analytics can be leveraged for computing centrality, clustering, summarisation, etc., in order to gain insights about the domain being described. Various representations have also been developed that support applying machine learning techniques directly over graphs."\cite{hogan2021knowledge}
+%\end{quote}
+In the article, they outline graph data models (for example \textit{RDF}), query languages (for example \textit{SPARQL}), representations of schema (for example \textit{RDFS} and \textit{SHACL}), knowledge deduction (for example with \textit{OWL}) and much more.
 We introduce those in the following subsections.
 
 
 
 \subsubsection{Resource Description Framework (RDF)}
+RDF is a standard for establishing semantic interoperability on the Web. 
+It provides a data model that can be extended to address sophisticated ontology representation techniques.
+The basic building block in RDF is an \textit{object-attribute-value} triple\cite{decker2000semantic}, also referred to as a \textit{subject-predicate-object} triple \cite{hogan2021knowledge}.
+There are different notations for a triple, for example \textit{Attribute(Object,Value)} and \textit{(subject, predicate, object)}.
+See listing \ref{lst:rdf-triple-example} for example data using those notations.
+A set of RDF triples represents a labeled, directed graph, with every triple representing an edge \texttt{[s]-p->[o]}.
+The subjects and objects of the triples are the nodes in the graph.
+It is possible for a predicate IRI to also occur as a node in the same graph.\cite{w3c_rdf}
 
 
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={Different notations for an RDF triple},captionpos=b,label={lst:rdf-triple-example}]
+// A(O,V)
+example.org:firstName('example.org/person42', 'Alex'}
+
+// (s, p, o)
+('example.org/person42', example.org/firstName, 'Alex)
+\end{lstlisting}
+
+
+To unambiguously identify objects and vocabulary terms, a uniform resource identifier (URI)\cite{berners2005uniform} or internationalized resource identifier (IRI, an extension of URI)\cite{rfc3987} must be used.
+For every triple, the \textit{subject} is an IRI or a blank node.
+The \textit{predicate} is an IRI and the \textit{object} is an IRI, a literal or a blank node.
+To abbreviate IRIs to qualified names, RDF syntaxes use namespaces.\cite{w3c_rdf}
+Machine readable data formats for RDF are in XML\cite{rdf_xml_syntax}, Turtle\cite{beckett2014rdf}, JSON-LD\cite{sporny2020json} and others\cite{ntriples, nquads, trig, grlicky2005overview}.
+
+Listing \ref{lst:rdf-turtle-example} shows our example triple from listing \ref{lst:rdf-triple-example} in Turtle syntax, using namespaces.
+% Listing \ref{lst:rdf-jsonld-example} shows it in JSON-LD syntax.
+Figure \ref{fig:rdf_graph} visualizes the RDF graph.
+
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={RDF Graph in Turtle syntax},captionpos=b,label={lst:rdf-turtle-example}]
+@prefix ex: <http://example.org/> .
+
+ex:person42 ex:firstName "Alex" .
+\end{lstlisting}
+
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/rdf_graph_example}
+    \caption{Visualization of the RDF graph defined in listing \ref{lst:rdf-turtle-example}}
+    \label{fig:rdf_graph}
+\end{figure}
+
+
+
+
+\subsubsection{JavaScript Object Notation for Linked Data (JSON-LD)}
 
 
 \subsubsection{SPARQL Protocol and RDF Query Language (SPARQL)}
+
+\subsubsection{RDF Schema (RDFS)}
 
 
 \subsubsection{Shapes Constraint Language (SHACL)}
@@ -147,7 +193,6 @@ We introduce those in the following subsections.
 
 
 
-\subsubsection{JavaScript Object Notation for Linked Data (JSON-LD)}
 
 
 \subsection{MetaConfigurator}
