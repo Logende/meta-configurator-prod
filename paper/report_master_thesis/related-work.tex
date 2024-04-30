@@ -61,12 +61,12 @@ The idea of generating a GUI from a schema is not new.
 Early works in this area propose generating forms from XML schemas~\cite{kasarda2010generating, fenech2008semantic,
     kuo2005generating} or entity-relationship diagrams~\cite{bajaj2009user}.
 There exist various approaches that generate web forms from the more modern format, JSON schema, e.g.,
-\textit{React JSON Schema Form}\footnote{\url{https://github.com/rjsf-team/react-jsonschema-form}, accessed 2024/01/22},
-\textit{Angular Schema Form}\footnote{\url{https://github.com/json-schema-form/angular-schema-form}, accessed 2024/01/22},
-\textit{Vue Form Generator}\footnote{\url{https://github.com/vue-generators/vue-form-generator}, accessed 2024/01/22},
-\textit{JSON Forms}\footnote{\url{https://jsonforms.io}, accessed 2024/01/22},
-\textit{JSON Editor}\footnote{\url{https://jsoneditoronline.org}, accessed 2024/01/22}, and
-\textit{JSON Form}\footnote{\url{https://github.com/jsonform}, accessed 2024/01/22}.
+\textit{React JSON Schema Form}\footnote{\url{https://github.com/rjsf-team/react-jsonschema-form}, accessed 2024/01/22.},
+\textit{Angular Schema Form}\footnote{\url{https://github.com/json-schema-form/angular-schema-form}, accessed 2024/01/22.},
+\textit{Vue Form Generator}\footnote{\url{https://github.com/vue-generators/vue-form-generator}, accessed 2024/01/22.},
+\textit{JSON Forms}\footnote{\url{https://jsonforms.io}, accessed 2024/01/22.},
+\textit{JSON Editor Online}\footnote{\url{https://jsoneditoronline.org}, accessed 2024/01/22.}, and
+\textit{JSON Form}\footnote{\url{https://github.com/jsonform}, accessed 2024/01/22.}.
 
 Such forms can assist the user in a multitude of ways, such as by tooltips, auto-completion, and dropdown menus.
 By inherently adhering to the schema structure, editing data with such GUIs significantly reduces configuration mistakes caused by the user.
@@ -78,7 +78,7 @@ The generated forms usually have a specific component for each type of data, e.g
 \subsubsection{Schema editors}
 There exist several so-called schema editors, which are tools for creating and editing schemas that are text-based or graphical (or both).
 
-\textit{JSON Editor Online}\footnote{\url{https://jsoneditoronline.org}, accessed 2024/01/22} is a web-based editor for JSON schemas and JSON documents.
+\textit{JSON Editor Online}\footnote{\url{https://jsoneditoronline.org}, accessed 2024/01/22.} is a web-based editor for JSON schemas and JSON documents.
 It divides the editor into two parts, where one part can be used to edit the schema and the other part can be used to edit a JSON document,
 which is validated against the schema.
 The editor provides various features, such as syntax highlighting and highlighting of validation errors. 
@@ -86,10 +86,10 @@ However, the features of the editor are limited.
 For example, it does not provide any assistance for the user, such as tooltips or auto-completion.
 For new documents, it does not show any properties of the schema, so the user has to know the schema beforehand
 
-There also exists a variety of schema editors that are paid software, such as \textit{Altova XMLSpy}\footnote{\url{https://www.altova.com/xmlspy-xml-editor}, accessed 2024/01/22},
-\textit{Liquid Studio}\footnote{\url{https://www.liquid-technologies.com/json-schema-editor}, accessed 2024/01/22}, \textit{XML ValidatorBuddy}\footnote{\url{https://www.xml-buddy.com/}, accessed 2024/01/22},
-\textit{JSONBuddy}\footnote{\url{https://www.json-buddy.com/}, accessed 2024/01/22}, \textit{XMLBlueprint}\footnote{\url{https://www.xmlblueprint.com}, accessed 2024/01/22},
-and \textit{Oxygen XML Editor}\footnote{\url{https://www.oxygenxml.com}, accessed 2024/01/22}.
+There also exists a variety of schema editors that are paid software, such as \textit{Altova XMLSpy}\footnote{\url{https://www.altova.com/xmlspy-xml-editor}, accessed 2024/01/22.},
+\textit{Liquid Studio}\footnote{\url{https://www.liquid-technologies.com/json-schema-editor}, accessed 2024/01/22.}, \textit{XML ValidatorBuddy}\footnote{\url{https://www.xml-buddy.com/}, accessed 2024/01/22.},
+\textit{JSONBuddy}\footnote{\url{https://www.json-buddy.com/}, accessed 2024/01/22.}, \textit{XMLBlueprint}\footnote{\url{https://www.xmlblueprint.com}, accessed 2024/01/22.},
+and \textit{Oxygen XML Editor}\footnote{\url{https://www.oxygenxml.com}, accessed 2024/01/22.}.
 Those are editors for XML or JSON schema, mostly with a combination of text-based and graphical views.
 These tools are not web-based and not open-source.
 Furthermore, they do not focus on editing a JSON document based on a schema,
@@ -139,32 +139,35 @@ There are different notations for a triple, for example \textit{Attribute(Object
 See listing \ref{lst:rdf-triple-example} for example data using those notations.
 A set of RDF triples represents a labeled, directed graph, with every triple representing an edge \texttt{[s]-p->[o]}.
 The subjects and objects of the triples are the nodes in the graph.
-It is possible for a predicate IRI to also occur as a node in the same graph.\cite{w3c_rdf}
+%It is possible for a predicate IRI to also occur as a node in the same graph.\cite{w3c_rdf}
 
 
 \begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={Different notations for an RDF triple},captionpos=b,label={lst:rdf-triple-example}]
 // A(O,V)
 example.org:firstName('example.org/person42', 'Alex'}
+example.org:lastName('example.org/person42', 'Smith'}
 
 // (s, p, o)
 ('example.org/person42', example.org/firstName, 'Alex)
+('example.org/person42', example.org/lastName, 'Smith)
 \end{lstlisting}
 
 
-To unambiguously identify objects and vocabulary terms, a uniform resource identifier (URI)\cite{berners2005uniform} or internationalized resource identifier (IRI, an extension of URI)\cite{rfc3987} must be used.
+To unambiguously identify objects and vocabulary terms, a uniform resource identifier (URI)\cite{berners2005uniform} or internationalized resource identifier (IRI, an extension of URI)\cite{rfc3987} is used.
 For every triple, the \textit{subject} is an IRI or a blank node.
 The \textit{predicate} is an IRI and the \textit{object} is an IRI, a literal or a blank node.
+Blank nodes are nodes without an IRI, also called anonymous resources.
 To abbreviate IRIs to qualified names, RDF syntaxes use namespaces.\cite{w3c_rdf}
 Machine readable data formats for RDF are in XML\cite{rdf_xml_syntax}, Turtle\cite{beckett2014rdf}, JSON-LD\cite{sporny2020json} and others\cite{ntriples, nquads, trig, grlicky2005overview}.
-
 Listing \ref{lst:rdf-turtle-example} shows our example triple from listing \ref{lst:rdf-triple-example} in Turtle syntax, using namespaces.
 % Listing \ref{lst:rdf-jsonld-example} shows it in JSON-LD syntax.
-Figure \ref{fig:rdf_graph} visualizes the RDF graph.
+Figure \ref{fig:rdf_graph} visualizes the RDF graph\footnote{\label{footnote:graph_visualizer}The graph was visualized using \url{https://www.ldf.fi/service/rdf-grapher}, accessed 2024/04/30.}.
 
 \begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={RDF Graph in Turtle syntax},captionpos=b,label={lst:rdf-turtle-example}]
 @prefix ex: <http://example.org/> .
 
 ex:person42 ex:firstName "Alex" .
+ex:person42 ex:lastName "Smith" .
 \end{lstlisting}
 
 
@@ -175,23 +178,147 @@ ex:person42 ex:firstName "Alex" .
     \label{fig:rdf_graph}
 \end{figure}
 
+RDF uses XML Schema datatypes for literal values, as shown in listing \ref{lst:rdf-literals-datatype}.
 
 
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={Usage of XML Schema datatypes for literals in RDF},captionpos=b,label={lst:rdf-literals-datatype}]
+@prefix ex: <http://example.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-\subsubsection{JavaScript Object Notation for Linked Data (JSON-LD)}
+ex:person42 ex:birthDate "1996-05-26"^^xsd:date .
+\end{lstlisting}
+
+To define the \textit{type} (also called \textit{class} or \textit{concept}) that an object is an instance of, the \textit{type} predicate of the \textit{rdf} namespace is used, as shown in listing \ref{lst:rdf-type}.
+In the same manner, predicates and concepts from existing namespaces can be used, avoiding the need for repeating the work that others already have done and leading to shared vocabulary and interoperability.
+% TODO: Quote paper on how many ontologies exist
+
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={Type definition in RDF},captionpos=b,label={lst:rdf-type}]
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+ex:person42 rdf:type ex:Person .
+\end{lstlisting}
+
+For example, \textit{friend of a friend} (\textit{FOAF})\cite{brickley2007foaf} is an ontology for modeling social networks and already contains the predicates \textit{firstName} and \textit{lastName}, as well as the concept \textit{Person}.
+Instead of defining our own predicates and concepts in the \textit{https://example.org} namespace, we can use the ones from \textit{FOAF}.
+Also, the \texttt{rdf:type} predicate can be abbreviated with "\texttt{a}".
+Furthermore, when defining multiple predicates and objects for a subject, we can use a shortened syntax in Turtle.
+When we apply all of these points, we end up with the RDF graph definition shown in listing \ref{lst:rdf-example-final}. 
+Figure \ref{fig:rdf_graph_final} shows the visualized RDF graph\footnote{See footnote \ref{footnote:graph_visualizer}.}.
+
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={Complete RDF example},captionpos=b,label={lst:rdf-example-final}]
+@prefix ex: <http://example.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+ex:person42 a               foaf:Person ;
+            foaf:firstName  "Alex" ;
+            foaf:lastName   "Smith" ;
+            ex:birthDate    "1996-05-26"^^xsd:date .
+\end{lstlisting}
+
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/rdf_graph_example_final}
+    \caption{Visualization of the RDF graph defined in listing \ref{lst:rdf-example-final}}
+    \label{fig:rdf_graph_final}
+\end{figure}
+
 
 
 \subsubsection{SPARQL Protocol and RDF Query Language (SPARQL)}
+SPARQL\cite{sparql} is the standard language for querying RDF data\cite{perez2009semantics}.  
+Most forms of SPARQL query contain a set of triple patterns, which are like RDF triples, except that the subject, predicate and object may each be a variable.
+The syntax is SQL-like, as shown in listing \ref{lst:sparql_syntax}.
+
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={Syntax of a SPARQL query},captionpos=b,label={lst:sparql_syntax}]
+SELECT <variables>
+FROM <graphs>
+WHERE { <triple patterns> }
+\end{lstlisting}
+
+A query returns a set of variable bindings as result.
+For example, the query shown in listing \ref{lst:sparql_example_query} returns the variable bindings shown in table \ref{tab:sparql_example_result}, given the RDF graph defined in listing \ref{lst:rdf-example-final}.
+It binds every subject to the \texttt{?person} variable, for which there exists a triple with the \texttt{rdf:type} predicate and the \texttt{foaf:Person} object.
+Also, there must exist a triple with the same subject and a \texttt{foaf:firstName} predicate, as well as one with a \texttt{foaf:lastName} predicate.
+For all subjects, where this is the case, the variable bindings for \texttt{?firstName} and \texttt{?lastName} are returned.
+
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={Example SPARQL query},captionpos=b,label={lst:sparql_example_query}]
+SELECT ?firstName ?lastName
+WHERE {
+    ?person  rdf:type         foaf:Person .
+    ?person  foaf:firstName   ?firstName .
+    ?person  foaf:lastName    ?lastName .
+}
+\end{lstlisting}
+
+\begin{table}[]
+\caption{Variable bindings for the query in listing \ref{lst:sparql_example_query} on the graph defined in listing \ref{lst:rdf-example-final}}
+\label{tab:sparql_example_result}
+\centering\scriptsize
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{?firstName} & \textbf{?lastName} \\ \midrule
+"Alex"              & "Smith"           
+\end{tabular}
+\end{table}
+
+SPARQL supports advanced features, such as \textit{filters}, \textit{group graph patterns}, \textit{optional graph patterns}, \textit{union graph patterns}, \textit{ordering}, \textit{limit}, \textit{offset} and more.
+It supports other verbs besides \textit{SELECT}, such as \textit{CONSTRUCT} to dynamically construct a graph, or \textit{ASK} to check whether the query pattern has a solution.
+
 
 \subsubsection{RDF Schema (RDFS)}
+RDFS\cite{RDFS} is a simple ontology and schema language for RDF. 
+It is an RDF vocabulary and contains concepts and properties for defining concepts or properties and their characteristics.
+Listing \ref{lst:rdfs_example} provides an example, where RDFS is used to make \texttt{foaf:Person} a subclass of \texttt{ex:LivingBeing} and to define the range and domain of the \texttt{ex:birthDate} property.
+Because of being a subclass of it, every \texttt{foaf:Person} inherits the properties of \texttt{ex:LivingBeing}.
+Furthermore, because of the range and domain definition, for every tuple that has \texttt{ex:birthDate} as predicate, the subject must be a living being (domain) and the object must be a date (range).
+Although they are defined as part of the RDF namespace, the terms \texttt{rdf:type} and \texttt{rdf:Property} are part of RDFS too.
+Analogous to \texttt{rdfs:subClassOf}, the hierarchy of properties can be specified using the term \texttt{rdfs:subPropertyOf}.
 
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={RDFS example},captionpos=b,label={lst:rdfs_example}]
+@prefix ex: <http://example.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+foaf:Person   rdfs:subClassOf   ex:LivingBeing .
+ex:birthDate  rdfs:domain       ex:LivingBeing ;
+              rdfs:range        xsd:date .
+\end{lstlisting}
 
 \subsubsection{Shapes Constraint Language (SHACL)}
+SHACL\cite{SHACL} is a schema language for RDF that is more expressive than RDFS.
+It validates an RDF graph against a set of so-called \textit{shapes}.
+Each shape declares targets (which nodes need to confirm to this shape), constraints and rules (what constraints do the target nodes have and which rules do they need to confirm to).
+Listing \ref{lst:shacl_example} shows an example shape that forces every node of type \texttt{foaf:Person} to have exactly one birth date as property, being of type \texttt{xsd:date}.
+Restricting the amount of properties that a node can or must have is something that is not possible using only RDFS.
+
+\begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={SHACL example shape},captionpos=b,label={lst:shacl_example}]
+@prefix ex: <http://example.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+ex:PersonShape   rdf:type          sh:NodeShape ;
+                 sh:targetClass    foaf:Person ;
+                 sh:property [
+                     sh:path      foaf:firstName ;
+                     sh:minCount  1 ;
+                     sh:maxCount  1 ;
+                     sh:datatype  xsd:date ;
+                 ] .
+\end{lstlisting}
+
 
 
 \subsubsection{Web Ontology Language (OWL)}
 
 
+
+\subsubsection{JavaScript Object Notation for Linked Data (JSON-LD)}
 
 
 
