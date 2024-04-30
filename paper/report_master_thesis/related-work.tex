@@ -2,7 +2,7 @@
 
 \textit{JSON} is a common data-interchange format for exchanging data with web services, but also for storing documents in NoSQL databases, such as MongoDB\@\cite{marrs2017json}.
 \textit{Schema languages} are formal languages that specify the structure, constraints, and relationships of data, for example in a database or structured data formats.
-Schema languages exist for \textit{JSON}\cite{cuelang,Apache-Avro,rfc8927,Kappestein_2023}, but also for other data formats, such as \textit{XML}\cite{dtd_spec, xsd_spec, xml_schemas_1, xml_schemas_2}.
+Schema languages exist for \textit{JSON}\cite{jsonSchema, jsonschemaJSONSchema,Apache-Avro,rfc8927,Kappestein_2023}, but also for other data formats, such as \textit{XML}\cite{dtd_spec, xsd_spec, xml_schemas_1, xml_schemas_2}.
 In our initial (extended) paper about \toolname{}, we evaluated 8 different schema languages, measuring their \textit{practical usage} (\textit{popularity}, \textit{tool support}, \textit{library support}) and \textit{expressiveness}.
 We found \textit{JSON Schema}~\cite{jsonSchema, jsonschemaJSONSchema} to be the one with most \textit{practical usage} and \textit{expressiveness}, which is why we based \toolname{} on it.\footnote{\url{https://github.com/logende/meta-configurator/paper/paper_main_extended.pdf} accessed 2024/04/27}
 
@@ -11,7 +11,7 @@ Listing~\ref{lst:json-schema-example} shows an example of a JSON schema and list
 
 JSON schema has evolved to being the de-facto standard schema language for JSON documents~\cite{baazizi2021empirical}.
 Schemas for many popular \cfgfile{} types exist.
-\textit{JSON schema store}\cite{schemastoreJSONSchema} is a website that provides over 600 JSON schema files for various use cases.
+\textit{JSON schema store}\footnote{\url{https://www.schemastore.org/json/}, accessed 2024/01/22} is a website that provides over 600 JSON schema files for various use cases.
 The supported file types include, for example, Docker compose or OpenAPI files.
 
 We remark that JSON schema and other schema languages for JSON can also be applied to YAML, as JSON and YAML documents are of a similar structure (JSON is a subset of YAML).
@@ -327,7 +327,23 @@ They are introduced for the sake of completeness only.
 
 
 \subsubsection{JavaScript Object Notation for Linked Data (JSON-LD)}
-
+JSON-LD~\cite{json-ld} is a syntax to serialize graphs in JSON. 
+It is fully compatible with JSON and introduces an \textit{identifier mechanism} for JSON objects  (via IRIs), a way for \textit{disambiguating keys} shared among different JSON documents by mapping them to IRIs via a \textit{context}, a mechanism in which a \textit{value} of a JSON object \textit{may refer to a resource} and more.
+The data model described by a JSON-LD document is an RDF graph. 
+It can be combined with other RDF technology, such as SPARQL, but it can also be used without knowledge of RDF.
+JSON-LD specifies a number of keywords (the following list is incomplete):
+\begin{itemize}
+	\item \textbf{@base} - used to set the base IRI, against which to resolve relative IRIs
+	\item \textbf{@context} - used to define short-hand names, called \textit{terms}
+	\item \textbf{@container} - used to set the default container for a \textit{term}
+	\item \textbf{@graph} - used to express a graph
+	\item \textbf{@id} - used to uniquely identify node objects that are being described with IRIs or \textit{blank node identifiers}
+	\item \textbf{@type} - used to set the type of a node or the datatype of a typed value
+	\item \textbf{@value} - used to specify the data that is associated with a particular property in the graph
+	\item \textbf{@list} - used to express an ordered set of data
+	\item \textbf{@set} - used to prepare an unordered set of data
+\end{itemize}
 
 
 \subsection{MetaConfigurator}
+
