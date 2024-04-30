@@ -290,10 +290,12 @@ ex:birthDate  rdfs:domain       ex:LivingBeing ;
 
 \subsubsection{Shapes Constraint Language (SHACL)}
 SHACL\cite{SHACL} is a schema language for RDF that is more expressive than RDFS.
-It validates an RDF graph against a set of so-called \textit{shapes}.
+It validates an RDF graph against a set of so-called \textit{shapes} and allows expressing complex constraints.
 Each shape declares targets (which nodes need to confirm to this shape), constraints and rules (what constraints do the target nodes have and which rules do they need to confirm to).
 Listing \ref{lst:shacl_example} shows an example shape that forces every node of type \texttt{foaf:Person} to have exactly one birth date as property, being of type \texttt{xsd:date}.
 Restricting the amount of properties that a node can or must have is something that is not possible using only RDFS.
+
+SHACL focuses on data validation, based on the \textit{closed-world assumption} (missing information is assumed to be false) and the \textit{unique-name assumption} (distinct names refer to distinct objects).\cite{steffen_staab_lecture_slides}
 
 \begin{lstlisting}[language=json,basicstyle=\scriptsize,firstnumber=1,caption={SHACL example shape},captionpos=b,label={lst:shacl_example}]
 @prefix ex: <http://example.org/> .
@@ -315,6 +317,12 @@ ex:PersonShape   rdf:type          sh:NodeShape ;
 
 
 \subsubsection{Web Ontology Language (OWL)}
+OWL \cite{OWL} is an ontology language for authoring ontologies.
+It allows expressing complex concept descriptions.
+Contrary to SHACL, the focus is less on data validation and more on inference (of new knowledge), based on the \textit{open-world assumption} (missing information is assumed to be unknown) and \textit{no unique-names assumption} (distinct names can refer to same object).\cite{steffen_staab_lecture_slides}
+
+This work does not discuss SHACL or OWL any further and does not make use of them. 
+They are introduced for the sake of completeness only.
 
 
 
