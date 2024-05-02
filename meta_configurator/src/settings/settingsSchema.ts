@@ -84,7 +84,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         showAdditionalPropertiesButton: {
           type: 'boolean',
           description:
-            "Most schemas allow additional properties (e.g., adding properties to the data that are not defined in the schema). To support this in the schema editor, it would always provide an 'Add Property' button to allow adding properties unknown to the schema. In practice, this option is not used much, but it can confuse the user. For example, they might try adding new fields for their schema by using this button, although that does not have any effect on the schema.",
+            "Most schemas allow additional properties (e.g., adding properties to the data that are not defined in the schema). To resemble this in the editor, it would always provide an 'Add Property' button to allow adding properties unknown to the schema. In practice, this option is not used much, but it can confuse the user.",
           default: false,
         },
         objectTypesComfort: {
