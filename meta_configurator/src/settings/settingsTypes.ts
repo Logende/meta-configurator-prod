@@ -7,6 +7,7 @@ export interface SettingsInterfaceRoot {
   codeEditor: SettingsInterfaceCodeEditor;
   guiEditor: SettingsInterfaceGuiEditor;
   metaSchema: SettingsInterfaceMetaSchema;
+  hideSchemaEditor: boolean;
   panels: SettingsInterfacePanels;
 }
 

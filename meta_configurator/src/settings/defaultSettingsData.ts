@@ -17,6 +17,7 @@ export const SETTINGS_DATA_DEFAULT = {
     showAdditionalPropertiesButton: false,
     objectTypesComfort: false,
   },
+  hideSchemaEditor: false,
   panels: {
     data_editor: [
       {
@@ -50,7 +51,7 @@ export const SETTINGS_DATA_DEFAULT = {
       },
       {
         panelType: 'gui_editor',
-        mode: 'schema_editor',
+        mode: 'settings',
         size: 50,
       },
     ],

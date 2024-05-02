@@ -66,49 +66,58 @@ function getPageName(): string {
 /**
  * Menu items of the page selection menu.
  */
-const pageSelectionMenuItems: MenuItem[] = [
-  {
-    label: 'Data Editor',
-    icon: 'fa-regular fa-file',
-    class: () => {
-      if (props.currentMode !== SessionMode.DataEditor) {
-        return 'font-normal text-lg';
-      }
-      return 'font-bold text-lg';
-    },
-    command: () => {
-      emit('mode-selected', SessionMode.DataEditor);
-    },
-  },
-  {
-    label: 'Schema Editor',
-    icon: 'fa-regular fa-file-code',
-    class: () => {
-      if (props.currentMode !== SessionMode.SchemaEditor) {
-        return 'font-normal text-lg';
-      }
-      return 'font-bold text-lg';
-    },
-    command: () => {
-      emit('mode-selected', SessionMode.SchemaEditor);
-    },
-  },
-  {
-    label: 'Settings',
-    icon: 'fa-solid fa-cog',
-    class: () => {
-      if (props.currentMode !== SessionMode.Settings) {
-        return 'font-normal text-lg';
-      }
-      return 'font-bold text-lg';
-    },
-    command: () => {
-      emit('mode-selected', SessionMode.Settings);
-    },
-  },
-];
+function getPageSelectionMenuItems(settings: SettingsInterfaceRoot): MenuItem[] {
+    const dataEditorItem: MenuItem = {
+        label: 'Data Editor',
+        icon: 'fa-regular fa-file',
+        class: () => {
+            if (props.currentMode !== SessionMode.DataEditor) {
+                return 'font-normal text-lg';
+            }
+            return 'font-bold text-lg';
+        },
+        command: () => {
+            emit('mode-selected', SessionMode.DataEditor);
+        },
+    };
+    const schemaEditorItem: MenuItem = {
+        label: 'Schema Editor',
+        icon: 'fa-regular fa-file-code',
+        class: () => {
+            if (props.currentMode !== SessionMode.SchemaEditor) {
+                return 'font-normal text-lg';
+            }
+            return 'font-bold text-lg';
+        },
+        command: () => {
+            emit('mode-selected', SessionMode.SchemaEditor);
+        },
+    };
+    const settingsItem: MenuItem = {
+        label: 'Settings',
+        icon: 'fa-solid fa-cog',
+        class: () => {
+            if (props.currentMode !== SessionMode.Settings) {
+                return 'font-normal text-lg';
+            }
+            return 'font-bold text-lg';
+        },
+        command: () => {
+            emit('mode-selected', SessionMode.Settings);
+        },
+    };
 
-const items = ref(pageSelectionMenuItems);
+    if (settings.hideSchemaEditor) {
+        return [dataEditorItem, settingsItem];
+    } else {
+        return [dataEditorItem, schemaEditorItem, settingsItem];
+    }
+
+}
+
+
+const items = computed(() => getPageSelectionMenuItems(useSettings()));
+
 
 function handleUserSelection(option: 'Example' | 'JsonStore' | 'File' | 'URL') {
   switch (option) {

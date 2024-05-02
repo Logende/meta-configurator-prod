@@ -100,6 +100,12 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         },
       },
     },
+    hideSchemaEditor: {
+      type: 'boolean',
+      description:
+          'If set to true, the complete schema editor view will be hidden.',
+      default: false,
+    },
     panels: {
       required: ['data_editor', 'schema_editor', 'settings'],
       title: 'Panels',
@@ -149,7 +155,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
             type: 'string',
             title: 'Mode',
             description: 'The mode determines which kind of data and schema the panel uses.',
-            enum: ['schema_editor', 'file_editor', 'settings'],
+            enum: ['schema_editor', 'data_editor', 'settings'],
           },
           size: {
             type: 'number',
