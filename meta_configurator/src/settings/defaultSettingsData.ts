@@ -18,15 +18,15 @@ export const SETTINGS_DATA_DEFAULT = {
     objectTypesComfort: false,
   },
   panels: {
-    file_editor: [
+    data_editor: [
       {
         panelType: 'text_editor',
-        mode: 'file_editor',
+        mode: 'data_editor',
         size: 50,
       },
       {
         panelType: 'gui_editor',
-        mode: 'file_editor',
+        mode: 'data_editor',
         size: 50,
       },
     ],
@@ -50,7 +50,7 @@ export const SETTINGS_DATA_DEFAULT = {
       },
       {
         panelType: 'gui_editor',
-        mode: 'settings',
+        mode: 'schema_editor',
         size: 50,
       },
     ],

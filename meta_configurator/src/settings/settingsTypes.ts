@@ -19,7 +19,7 @@ export interface SettingsInterfaceGuiEditor {
   propertySorting: PropertySorting;
 }
 export interface SettingsInterfacePanels {
-  file_editor: SettingsInterfacePanel[];
+  data_editor: SettingsInterfacePanel[];
   schema_editor: SettingsInterfacePanel[];
   settings: SettingsInterfacePanel[];
 }

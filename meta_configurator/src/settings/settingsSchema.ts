@@ -101,14 +101,14 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
       },
     },
     panels: {
-      required: ['file_editor', 'schema_editor', 'settings'],
+      required: ['data_editor', 'schema_editor', 'settings'],
       title: 'Panels',
       type: 'object',
       additionalProperties: false,
       description:
         'In this setting the view can be customized: which panels to show in the different modes.',
       properties: {
-        file_editor: {
+        data_editor: {
           $ref: '#/$defs/panels',
         },
         schema_editor: {

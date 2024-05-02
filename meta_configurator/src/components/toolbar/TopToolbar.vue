@@ -25,7 +25,7 @@ import {GuiConstants} from '@/constants';
 import type {SchemaOption} from '@/packaged-schemas/schemaOption';
 
 import {openUploadSchemaDialog} from '@/components/toolbar/uploadFile';
-import {openClearFileEditorDialog} from '@/components/toolbar/clearFile';
+import {openClearDataEditorDialog} from '@/components/toolbar/clearFile';
 import {SessionMode} from '@/store/sessionMode';
 import {schemaCollection} from '@/packaged-schemas/schemaCollection';
 import {getSessionForMode} from '@/data/useDataLink';
@@ -52,8 +52,8 @@ const topMenuBar = new MenuItems(handleFromWebClick, handleFromOurExampleClick, 
 
 function getPageName(): string {
   switch (props.currentMode) {
-    case SessionMode.FileEditor:
-      return 'File Editor';
+    case SessionMode.DataEditor:
+      return 'Data Editor';
     case SessionMode.SchemaEditor:
       return 'Schema Editor';
     case SessionMode.Settings:
@@ -68,16 +68,16 @@ function getPageName(): string {
  */
 const pageSelectionMenuItems: MenuItem[] = [
   {
-    label: 'File Editor',
+    label: 'Data Editor',
     icon: 'fa-regular fa-file',
     class: () => {
-      if (props.currentMode !== SessionMode.FileEditor) {
+      if (props.currentMode !== SessionMode.DataEditor) {
         return 'font-normal text-lg';
       }
       return 'font-bold text-lg';
     },
     command: () => {
-      emit('mode-selected', SessionMode.FileEditor);
+      emit('mode-selected', SessionMode.DataEditor);
     },
   },
   {
@@ -152,7 +152,7 @@ watch(selectedSchema, async newSelectedSchema => {
       await fetchSchemaFromUrl(newSelectedSchema.url);
       showFetchedSchemas.value = true;
       topMenuBar.showDialog.value = false;
-      openClearFileEditorDialog();
+      openClearDataEditorDialog();
     } catch (error) {
       errorService.onError(error);
     }
@@ -161,7 +161,7 @@ watch(selectedSchema, async newSelectedSchema => {
       loadExampleSchema(newSelectedSchema.key);
       showFetchedSchemas.value = true;
       topMenuBar.showDialog.value = false;
-      openClearFileEditorDialog();
+      openClearDataEditorDialog();
     } catch (error) {
       errorService.onError(error);
     }
@@ -181,8 +181,8 @@ async function fetchSchemaFromSelectedUrl() {
 
 function getMenuItems(settings: SettingsInterfaceRoot): MenuItem[] {
   switch (props.currentMode) {
-    case SessionMode.FileEditor:
-      return topMenuBar.getFileEditorMenuItems(settings);
+    case SessionMode.DataEditor:
+      return topMenuBar.getDataEditorMenuItems(settings);
     case SessionMode.SchemaEditor:
       return topMenuBar.getSchemaEditorMenuItems(settings);
     case SessionMode.Settings:
