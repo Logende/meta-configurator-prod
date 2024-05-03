@@ -123,7 +123,10 @@ toastService.toast = useToast();
             :min-size="10"
             :size="panel.size"
             :resizable="true">
-            <component :is="panel.component" :sessionMode="panel.sessionMode" :color="panel.color" />
+            <component
+              :is="panel.component"
+              :sessionMode="panel.sessionMode"
+              :color="panel.color" />
           </SplitterPanel>
         </Splitter>
       </div>
