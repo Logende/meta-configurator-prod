@@ -15,28 +15,46 @@ import {useConfirm} from 'primevue/useconfirm';
 import {confirmationService} from '@/utility/confirmationService';
 import {toastService} from '@/utility/toastService';
 import {useAppRouter} from '@/router/router';
-import {useDropZone, useWindowSize} from '@vueuse/core/index';
+import {useDropZone, useWindowSize, watchImmediate} from '@vueuse/core/index';
 import {readFileContentToDataLink} from '@/utility/readFileContent';
 import {getDataForMode} from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
 import {useSessionStore} from '@/store/sessionStore';
 import {getComponentByPanelType} from '@/components/panelType';
+import type {SettingsInterfaceRoot} from "@/settings/settingsTypes";
 
 const props = defineProps<{
   sessionMode: SessionMode;
 }>();
 
+
+
+
+let panelsDefinition: any = useSettings().panels;
+
+// update panelsDefinition only when underlying data changes. Otherwise, all panels will be rebuilt every time
+// any setting is changed, which is not necessary and leads to Ace Editor becoming blank if settings were modified via
+// Ace Editor
+watchImmediate(
+    () => useSettings(),
+    (settings: SettingsInterfaceRoot) => {
+        let panels = settings.panels;
+        if (JSON.stringify(panels) !== JSON.stringify(panelsDefinition)) {
+            panelsDefinition = panels;
+        }
+    }
+);
+
+
 const panels = computed(() => {
-  let panelDefinition = useSettings().panels[props.sessionMode];
-  let result = panelDefinition.map(panel => {
+  return panelsDefinition[props.sessionMode].map(panel => {
     return {
       component: getComponentByPanelType(panel.panelType),
       sessionMode: panel.mode,
       size: panel.size,
     };
   });
-  return result;
 });
 
 let {width} = useWindowSize();
