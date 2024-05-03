@@ -22,14 +22,11 @@ import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
 import {useSessionStore} from '@/store/sessionStore';
 import {getComponentByPanelType} from '@/components/panelType';
-import type {SettingsInterfaceRoot} from "@/settings/settingsTypes";
+import type {SettingsInterfaceRoot} from '@/settings/settingsTypes';
 
 const props = defineProps<{
   sessionMode: SessionMode;
 }>();
-
-
-
 
 let panelsDefinition: any = useSettings().panels;
 
@@ -37,15 +34,14 @@ let panelsDefinition: any = useSettings().panels;
 // any setting is changed, which is not necessary and leads to Ace Editor becoming blank if settings were modified via
 // Ace Editor
 watchImmediate(
-    () => useSettings(),
-    (settings: SettingsInterfaceRoot) => {
-        let panels = settings.panels;
-        if (JSON.stringify(panels) !== JSON.stringify(panelsDefinition)) {
-            panelsDefinition = panels;
-        }
+  () => useSettings(),
+  (settings: SettingsInterfaceRoot) => {
+    let panels = settings.panels;
+    if (JSON.stringify(panels) !== JSON.stringify(panelsDefinition)) {
+      panelsDefinition = panels;
     }
+  }
 );
-
 
 const panels = computed(() => {
   return panelsDefinition[props.sessionMode].map(panel => {
