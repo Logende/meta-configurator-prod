@@ -22,13 +22,13 @@ import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
 import {useSessionStore} from '@/store/sessionStore';
 import {getComponentByPanelType} from '@/components/panelType';
-import type {SettingsInterfaceRoot} from '@/settings/settingsTypes';
+import type {SettingsInterfacePanels, SettingsInterfaceRoot} from '@/settings/settingsTypes';
 
 const props = defineProps<{
   sessionMode: SessionMode;
 }>();
 
-let panelsDefinition: any = useSettings().panels;
+let panelsDefinition: SettingsInterfacePanels = useSettings().panels;
 
 // update panelsDefinition only when underlying data changes. Otherwise, all panels will be rebuilt every time
 // any setting is changed, which is not necessary and leads to Ace Editor becoming blank if settings were modified via
@@ -123,7 +123,7 @@ toastService.toast = useToast();
             :min-size="10"
             :size="panel.size"
             :resizable="true">
-            <component :is="panel.component" :sessionMode="panel.sessionMode" />
+            <component :is="panel.component" :sessionMode="panel.sessionMode" :color="panel.color" />
           </SplitterPanel>
         </Splitter>
       </div>
