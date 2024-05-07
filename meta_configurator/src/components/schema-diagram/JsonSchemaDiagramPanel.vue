@@ -10,7 +10,7 @@ import '@vue-flow/core/dist/style.css';
 
 /* this contains the default theme, these are optional styles */
 import '@vue-flow/core/dist/theme-default.css';
-import VueFlowPanel from "@/components/schema-diagram/VueFlowPanel.vue";
+import VueFlowPanel from '@/components/schema-diagram/VueFlowPanel.vue';
 
 const props = defineProps<{
   sessionMode: SessionMode;
@@ -20,11 +20,11 @@ const session = getSessionForMode(props.sessionMode);
 const data = getDataForMode(props.sessionMode);
 
 const currentSchema = computed(() => {
-    const schema = session.effectiveSchemaAtCurrentPath?.value.schema;
-    if (!schema) {
-        return new JsonSchemaWrapper({}, props.sessionMode, false);
-    }
-    return schema;
+  const schema = session.effectiveSchemaAtCurrentPath?.value.schema;
+  if (!schema) {
+    return new JsonSchemaWrapper({}, props.sessionMode, false);
+  }
+  return schema;
 });
 
 function zoomIntoPath(pathToAdd: Path) {
@@ -35,7 +35,6 @@ function zoomIntoPath(pathToAdd: Path) {
 function selectPath(path: Path) {
   session.updateCurrentSelectedElement(path);
 }
-
 </script>
 
 <template>
@@ -45,7 +44,7 @@ function selectPath(path: Path) {
         :currentPath="session.currentPath.value"
         :sessionMode="props.sessionMode"
         @zoom_into_path="pathToAdd => zoomIntoPath(pathToAdd)"
-        @select_path="selectedPath => selectPath(selectedPath)"/>
+        @select_path="selectedPath => selectPath(selectedPath)" />
     </div>
   </div>
 </template>
