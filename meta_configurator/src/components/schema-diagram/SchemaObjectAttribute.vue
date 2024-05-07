@@ -1,26 +1,31 @@
 <script setup lang="ts">
-import {Position} from '@vue-flow/core';
-import {
-  SchemaObjectAttributeData,
-  SchemaObjectNodeData,
-} from '@/components/schema-diagram/schemaDiagramTypes';
+import {SchemaObjectAttributeData} from "@/components/schema-diagram/schemaDiagramTypes";
 
-// props were passed from the slot using `v-bind="customNodeProps"`
+
 const props = defineProps({
-  data: SchemaObjectAttributeData,
-});
+    data: SchemaObjectAttributeData
+
+})
+
 </script>
 
 <template>
   <div class="vue-flow__node-schemaattribute">
-    <li>{{ props.data.name }}: {{ props.data.type }}</li>
+      <li>
+          <span
+                  :class="{'line-through': props.data?.deprecated }"
+          >{{ props.data.name }}</span>
+          <span class="text-red-600">{{ props.data.required ? '*' : '' }}</span>
+          <span>: {{ props.data.type}}</span>
+      </li>
   </div>
 </template>
 
 <style>
 .vue-flow__node-schemaattribute {
-  background: lightgray;
-  color: #000000;
-  padding: 0px;
+    background: lightgray;
+    color: #000000;
+    padding: 0px;
 }
+
 </style>
