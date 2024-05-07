@@ -6,8 +6,21 @@ import { VueFlow, useVueFlow } from '@vue-flow/core'
 import SchemaObjectNode from "@/components/schema-diagram/SchemaObjectNode.vue";
 import {getSchemaForMode, useCurrentSession} from "@/data/useDataLink";
 import {constructSchemaGraph} from "@/components/schema-diagram/schemaGraphConstructor";
-import {JsonSchemaWrapper} from "@/schema/jsonSchemaWrapper";
 import {SessionMode} from "@/store/sessionMode";
+import {JsonSchemaWrapper} from "@/schema/jsonSchemaWrapper";
+import {Path} from "@/utility/path";
+
+
+
+const props = defineProps<{
+    sessionMode: SessionMode;
+    currentPath: Path;
+}>();
+
+const emit = defineEmits<{
+    (e: 'zoom_into_path', path_to_add: Path): void;
+    (e: 'select_path', path: Path): void;
+}>();
 
 
 const currentGraph = computed(() => {
@@ -16,14 +29,7 @@ const currentGraph = computed(() => {
     return constructSchemaGraph(schema.schemaPreprocessed.value)
 });
 
-const initialNodes = ref([
-    {
-        id: '1',
-        type: 'type',
-        position: { x: 50, y: 50 },
-        label: 'Node 1',
-    }
-])
+
 const { addNodes } = useVueFlow()
 
 function generateRandomNode() {
@@ -36,28 +42,18 @@ function generateRandomNode() {
     }
 }
 
-function onAddNode() {
-    // add a single node to the graph
-    addNodes(generateRandomNode())
-}
-
-function onAddNodes() {
-    // add multiple nodes to the graph
-    addNodes(Array.from({ length: 10 }, generateRandomNode))
-}
 
 </script>
 
 <template>
-    <VueFlow :nodes="currentGraph.toVueFlowNodes()">
-        <template #node-type="props">
+    <VueFlow :nodes="currentGraph.toVueFlowNodes()"
+    :edges="currentGraph.toVueFlowEdges()">
+        <template #node-schemaobject="props">
             <SchemaObjectNode v-bind="props" />
         </template>
 
     </VueFlow>
 
-    <button type="button" @click="onAddNode">Add a node</button>
-    <button type="button" @click="onAddNodes">Add multiple nodes</button>
 </template>
 
 <style>

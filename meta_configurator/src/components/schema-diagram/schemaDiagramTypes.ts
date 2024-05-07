@@ -1,6 +1,7 @@
 import type {JsonSchemaWrapper} from "@/schema/jsonSchemaWrapper";
 import type {Path, PathElement} from "@/utility/path";
 import {useCurrentSession} from "@/data/useDataLink";
+import {pathToString} from "@/utility/pathUtils";
 
 
 export class SchemaGraph {
@@ -13,7 +14,7 @@ export class SchemaGraph {
         return this.nodes.map(data =>
             {
                 return {
-                    id: Math.random().toString(),
+                    id: pathToNodeId(data.absolutePath),
                     position: { x: Math.random() * 500, y: Math.random() * 500 },
                     label: data.name,
                     type: 'schemaobject',
@@ -23,8 +24,36 @@ export class SchemaGraph {
         )
     }
 
+    public toVueFlowEdges() {
+        return this.edges.map(data =>
+            {
+                return {
+                    id: pathsToEdgeId(data.start, data.end),
+                    source: pathToNodeId(data.start),
+                    target: pathToNodeId(data.end),
+                    type: 'edge',
+                    data: data,
+                    animated: false
+                }
+            }
+        )
+
+    }
+
 }
 
+
+export function pathsToEdgeId(start: Path, end: Path): string {
+    return "- "+ pathToNodeId(start) + " - " + pathToNodeId(end) + " ->"
+}
+
+export function pathToNodeId(path: Path): string {
+    if (path.length == 0) {
+        return "root";
+    } else {
+        return pathToString(path);
+    }
+}
 
 export class SchemaObjectNodeData {
 
@@ -55,5 +84,6 @@ export class EdgeData {
 
 
 export enum EdgeType {
-    ATTRIBUTE = 0
+    ATTRIBUTE = 0,
+    ATTRIBUTE_REF = 0
 }

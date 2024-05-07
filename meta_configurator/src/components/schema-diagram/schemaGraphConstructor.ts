@@ -5,6 +5,7 @@ import type {
 import {EdgeType, SchemaGraph, SchemaObjectNodeData} from "@/components/schema-diagram/schemaDiagramTypes";
 import {EdgeData, SchemaObjectAttributeData} from "@/components/schema-diagram/schemaDiagramTypes";
 import type {Path} from "@/utility/path";
+import {jsonPointerToPath} from "@/utility/pathUtils";
 
 
 export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
@@ -35,14 +36,12 @@ export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
         }
     }
 
-    if(rootSchema.type == 'object') {
         constructObjectNode(
             [],
             "root",
             rootSchema,
             schemaGraph
         )
-    }
 
     console.log("result is ", schemaGraph)
     return  schemaGraph;
@@ -57,16 +56,12 @@ function constructObjectNode(absolutePath: Path, name: string, schema: JsonSchem
         for (const [key, value] of Object.entries(schema.properties)) {
             // TODO: robustness check if type really is object?
             const attributeData = constructObjectAttribute(
+                absolutePath,
                 [...absolutePath, "properties", key],
                 key,
                 value as JsonSchemaObjectType,
                 graph)
             attributes.push(attributeData);
-            graph.edges.push(new EdgeData(
-                absolutePath,
-                attributeData.absolutePath,
-                EdgeType.ATTRIBUTE
-            ))
         }
     }
     const nodeData = new SchemaObjectNodeData(
@@ -79,10 +74,8 @@ function constructObjectNode(absolutePath: Path, name: string, schema: JsonSchem
 }
 
 
-function constructObjectAttribute(absolutePath: Path, name: string, schema: JsonSchemaObjectType, graph: SchemaGraph): SchemaObjectAttributeData {
-    if (schema.$ref) {
-        // TODO
-    }
+function constructObjectAttribute(nodePath: Path, absolutePath: Path, name: string, schema: JsonSchemaObjectType, graph: SchemaGraph): SchemaObjectAttributeData {
+
 
     const attributeData = new SchemaObjectAttributeData(
         name,
@@ -93,11 +86,25 @@ function constructObjectAttribute(absolutePath: Path, name: string, schema: Json
     )
 
     if (schema.type == 'object') {
-        constructObjectNode([...absolutePath],
+        constructObjectNode(absolutePath,
             name,
             schema,
             graph)
+        graph.edges.push(new EdgeData(
+            nodePath,
+            absolutePath,
+            EdgeType.ATTRIBUTE
+        ))
+    } else if (schema.type == 'array') {
+        // TODO
+    } else if (schema.$ref) {
+        graph.edges.push(new EdgeData(
+            nodePath,
+            jsonPointerToPath(schema.$ref.replace("\#", "")),
+            EdgeType.ATTRIBUTE_REF
+        ))
     }
+
 
     return attributeData
 }

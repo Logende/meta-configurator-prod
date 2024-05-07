@@ -42,9 +42,7 @@ function selectPath(path: Path) {
   <div class="p-5 space-y-3 flex flex-col">
     <div class="flex-grow overflow-y-auto">
       <VueFlowPanel
-        :currentSchema="currentSchema"
         :currentPath="session.currentPath.value"
-        :currentData="session.dataAtCurrentPath.value"
         :sessionMode="props.sessionMode"
         @zoom_into_path="pathToAdd => zoomIntoPath(pathToAdd)"
         @select_path="selectedPath => selectPath(selectedPath)"/>

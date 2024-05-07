@@ -18,20 +18,18 @@ const props = defineProps({
 
 <template>
   <div class="vue-flow__node-schemaobject">
-    <Handle type="target" :position="Position.Top" />
-      <div>{{ props.data.absolutePath }}</div>
-      <div>{{ props.data.name }}</div>
-      <SchemaObjectAttribute v-for="[key, value] of Object.entries(props.data?.schema.properties)"
-                             :data="new SchemaObjectNodeData(key, value, ['unknown'])"></SchemaObjectAttribute>
-    <Handle type="source" :position="Position.Bottom" />
+      <!--small><i>{{ props.data.absolutePath }}</i></small-->
+      <b>{{ props.data.name }}</b>
+      <SchemaObjectAttribute v-for="attribute in props.data!.attributes"
+                             :data="attribute!"></SchemaObjectAttribute>
   </div>
 </template>
 
 <style>
 .vue-flow__node-schemaobject {
-    background: #c8d6e1;
-    color: #000000;
-    padding: 10px;
+    background: lightsteelblue;
+    color: black;
+    padding: 2px;
 }
 
 </style>
