@@ -1,6 +1,7 @@
 import type {Path, PathElement} from '@/utility/path';
 import {pathToString} from '@/utility/pathUtils';
 import {useLayout} from '@/components/schema-diagram/useLayout';
+import {MarkerType} from "@vue-flow/core";
 
 export class SchemaGraph {
   public constructor(public nodes: SchemaObjectNodeData[], public edges: EdgeData[]) {}
@@ -18,14 +19,64 @@ export class SchemaGraph {
   }
 
   private toVueFlowEdges(): Edge[] {
+
+
     return this.edges.map(data => {
+
+      let type = 'normal-edge';
+      let label = "no label";
+      let color = "black";
+      const markerEnd = MarkerType.Arrow;
+
+      switch (data.edgeType) {
+        case EdgeType.ATTRIBUTE:
+            label = "contains";
+            break;
+        case EdgeType.ARRAY_ATTRIBUTE:
+            label = "contains 0..n";
+            break;
+        case EdgeType.ALL_OF:
+            label = "allOf";
+          //  type = "smoothstep";
+            color = 'seagreen';
+            break;
+        case EdgeType.ANY_OF:
+            label = "anyOf";
+          //type = "smoothstep";
+          color = 'seagreen';
+            break;
+        case EdgeType.ONE_OF:
+            label = "oneOf";
+         // type = "smoothstep";
+          color = 'seagreen';
+            break;
+        case EdgeType.IF:
+          label = "if";
+          type = "straight";
+          color = 'indianred';
+          break;
+        case EdgeType.THEN:
+          label = "then";
+          type = "straight";
+          color = 'indianred';
+          break;
+        case EdgeType.ELSE:
+          label = "else";
+          type = "straight";
+          color = 'indianred';
+            break;
+      }
+
       return {
         id: pathsToEdgeId(data.start, data.end),
         source: pathToNodeId(data.start),
         target: pathToNodeId(data.end),
-        type: 'default', // todo: different edges for different types
+        type: type,
+        label: label,
         data: data,
+        markerEnd: markerEnd,
         animated: false,
+        style: {stroke: color, 'stroke-width': 1.5},
       };
     });
   }
@@ -102,4 +153,7 @@ export enum EdgeType {
   ALL_OF,
   ANY_OF,
   ONE_OF,
+  IF,
+  THEN,
+  ELSE,
 }
