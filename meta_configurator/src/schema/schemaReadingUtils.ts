@@ -1,5 +1,5 @@
-import type {JsonSchemaObjectType} from "@/schema/jsonSchemaType";
-import {NUMBER_OF_PROPERTY_TYPES} from "@/schema/jsonSchemaType";
+import type {JsonSchemaObjectType} from '@/schema/jsonSchemaType';
+import {NUMBER_OF_PROPERTY_TYPES} from '@/schema/jsonSchemaType';
 
 /**
  * Returns a string representation of the type of the property.
@@ -17,7 +17,7 @@ export function getTypeDescription(schema: JsonSchemaObjectType): string {
     return 'anyOf';
   }
 
-  const type = schema.type || "undefined";
+  const type = schema.type || 'undefined';
   if (Array.isArray(type)) {
     if (type.length === NUMBER_OF_PROPERTY_TYPES) {
       return 'any';

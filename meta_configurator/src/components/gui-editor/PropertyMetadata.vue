@@ -22,7 +22,7 @@ import {
   isRequiredProperty,
   isUseItalicFont,
 } from './configTreeNodeReadingUtils';
-import {getTypeDescription} from "../../schema/schemaReadingUtils";
+import {getTypeDescription} from '../../schema/schemaReadingUtils';
 
 const props = defineProps<{
   node: GuiEditorTreeNode;
