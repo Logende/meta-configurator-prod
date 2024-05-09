@@ -1,12 +1,15 @@
 import type {Path, PathElement} from '@/utility/path';
 import {pathToString} from '@/utility/pathUtils';
 import {useLayout} from '@/components/schema-diagram/useLayout';
-import {MarkerType} from "@vue-flow/core";
-import type {JsonSchemaObjectType, JsonSchemaType, SchemaPropertyTypes} from "@/schema/jsonSchemaType";
+import {MarkerType} from '@vue-flow/core';
+import type {
+  JsonSchemaObjectType,
+  JsonSchemaType,
+  SchemaPropertyTypes,
+} from '@/schema/jsonSchemaType';
 
 export class SchemaGraph {
   public constructor(public nodes: SchemaObjectNodeData[], public edges: EdgeData[]) {}
-
 
   public findNode(path: Path): SchemaObjectNodeData | undefined {
     return this.nodes.find(node => pathToString(node.absolutePath) === pathToString(path));
@@ -25,52 +28,49 @@ export class SchemaGraph {
   }
 
   private toVueFlowEdges(): Edge[] {
-
-
     return this.edges.map(data => {
-
       let type = 'default';
-      let label = "no label";
-      let color = "black";
+      let label = 'no label';
+      let color = 'black';
       const markerEnd = MarkerType.Arrow;
 
       switch (data.edgeType) {
         case EdgeType.ATTRIBUTE:
-            label = "contains";
-            break;
+          label = 'contains';
+          break;
         case EdgeType.ARRAY_ATTRIBUTE:
-            label = "contains 0..n";
-            break;
+          label = 'contains 0..n';
+          break;
         case EdgeType.ALL_OF:
-            label = "allOf";
+          label = 'allOf';
           //  type = "smoothstep";
-            color = 'seagreen';
-            break;
+          color = 'seagreen';
+          break;
         case EdgeType.ANY_OF:
-            label = "anyOf";
+          label = 'anyOf';
           //type = "smoothstep";
           color = 'seagreen';
-            break;
+          break;
         case EdgeType.ONE_OF:
-            label = "oneOf";
-         // type = "smoothstep";
+          label = 'oneOf';
+          // type = "smoothstep";
           color = 'seagreen';
-            break;
+          break;
         case EdgeType.IF:
-          label = "if";
-          type = "straight";
+          label = 'if';
+          type = 'straight';
           color = 'indianred';
           break;
         case EdgeType.THEN:
-          label = "then";
-          type = "straight";
+          label = 'then';
+          type = 'straight';
           color = 'indianred';
           break;
         case EdgeType.ELSE:
-          label = "else";
-          type = "straight";
+          label = 'else';
+          type = 'straight';
           color = 'indianred';
-            break;
+          break;
       }
 
       return {
@@ -153,7 +153,11 @@ export class SchemaObjectAttributeData {
 }
 
 export class EdgeData {
-  public constructor(public start: SchemaObjectNodeData, public end: SchemaObjectNodeData, public edgeType: EdgeType) {}
+  public constructor(
+    public start: SchemaObjectNodeData,
+    public end: SchemaObjectNodeData,
+    public edgeType: EdgeType
+  ) {}
 }
 
 export enum EdgeType {

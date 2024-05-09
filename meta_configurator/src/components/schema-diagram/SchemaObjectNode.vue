@@ -13,11 +13,11 @@ const props = defineProps({
   <div class="vue-flow__node-schemaobject">
     <!--small><i>{{ props.data.absolutePath }}</i></small-->
     <b>{{ props.data.name }}</b>
-      <hr>
+    <hr />
     <SchemaObjectAttribute
       v-for="attribute in props.data!.attributes"
       :data="attribute!"></SchemaObjectAttribute>
-      <hr>
+    <hr />
   </div>
 </template>
 

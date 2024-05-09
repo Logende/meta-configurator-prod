@@ -9,7 +9,7 @@ import {SessionMode} from '@/store/sessionMode';
 import {Path} from '@/utility/path';
 import {useLayout} from './useLayout';
 import type {Edge, Node} from '@/components/schema-diagram/schemaDiagramTypes';
-import {constructSchemaGraph2} from "@/components/schema-diagram/schemaGraphConstructor2";
+import {constructSchemaGraph2} from '@/components/schema-diagram/schemaGraphConstructor2';
 
 const props = defineProps<{
   sessionMode: SessionMode;
@@ -27,15 +27,14 @@ const currentEdges = ref<Edge[]>([]);
 watch(getSchemaForMode(props.sessionMode).schemaPreprocessed, () => {
   updateGraph();
 
-    nextTick(() => {
-        layoutGraph('TB')
-    })
+  nextTick(() => {
+    layoutGraph('TB');
+  });
 });
 
 onMounted(() => {
-   updateGraph();
+  updateGraph();
 });
-
 
 function updateGraph() {
   const schema = getSchemaForMode(SessionMode.DataEditor);

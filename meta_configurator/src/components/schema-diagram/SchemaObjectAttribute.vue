@@ -8,9 +8,9 @@ const props = defineProps({
 
 <template>
   <div class="vue-flow__node-schemaattribute">
-      <span :class="{'line-through': props.data?.deprecated}">{{ props.data.name }}</span>
-      <span class="text-red-600">{{ props.data.required ? '*' : '' }}</span>
-      <span>: {{ props.data.type }}</span>
+    <span :class="{'line-through': props.data?.deprecated}">{{ props.data.name }}</span>
+    <span class="text-red-600">{{ props.data.required ? '*' : '' }}</span>
+    <span>: {{ props.data.type }}</span>
   </div>
 </template>
 
