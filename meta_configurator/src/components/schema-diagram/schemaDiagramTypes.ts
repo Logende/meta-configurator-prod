@@ -169,4 +169,5 @@ export enum EdgeType {
   IF,
   THEN,
   ELSE,
+  ADDITIONAL_PROPERTIES,
 }
