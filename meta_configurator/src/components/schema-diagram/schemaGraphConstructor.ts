@@ -8,7 +8,7 @@ import {
 } from '@/components/schema-diagram/schemaDiagramTypes';
 import type {Path} from '@/utility/path';
 import {jsonPointerToPath} from '@/utility/pathUtils';
-import {getTypeDescription} from '@/schema/schemaReadingUtils';
+import {getTypeDescription} from "@/schema/schemaReadingUtils";
 
 export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
   const schemaGraph = new SchemaGraph([], []);
@@ -21,16 +21,17 @@ export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
 
   if (rootSchema.definitions) {
     for (const [key, value] of Object.entries(rootSchema.definitions)) {
-      constructObjectOrBooleanNode(
-        ['definitions', key],
-        key,
-        value as JsonSchemaObjectType,
-        schemaGraph
-      );
+      constructObjectOrBooleanNode(['definitions', key], key, value as JsonSchemaObjectType, schemaGraph);
     }
   }
 
   constructObjectOrBooleanNode([], 'root', rootSchema, schemaGraph);
+
+
+  // resolve references
+  for (const node of schemaGraph.nodes) {
+
+  }
 
   return schemaGraph;
 }
@@ -41,6 +42,7 @@ function constructObjectOrBooleanNode(
   schema: JsonSchemaType,
   graph: SchemaGraph
 ) {
+
   if (schema === true || schema === false) {
     const nodeData = new SchemaObjectNodeData(schema.toString(), absolutePath, []);
     graph.nodes.push(nodeData);
@@ -73,7 +75,7 @@ function constructObjectOrBooleanNode(
       schema.allOf,
       graph,
       EdgeType.ALL_OF,
-      true
+        true
     );
   }
   if (schema.anyOf) {
@@ -83,52 +85,54 @@ function constructObjectOrBooleanNode(
       schema.anyOf,
       graph,
       EdgeType.ANY_OF,
-      true
+        true
     );
   }
   if (schema.oneOf) {
     constructObjectSubSchemasContent(
-      absolutePath,
-      [...absolutePath, 'oneOf'],
-      schema.oneOf,
-      graph,
-      EdgeType.ONE_OF,
-      true
+        absolutePath,
+        [...absolutePath, 'oneOf'],
+        schema.oneOf,
+        graph,
+        EdgeType.ONE_OF,
+        true
     );
   }
 
   // TODO: put if,else,then as subcomponent within the ObjectNode
   if (schema.if) {
     constructObjectSubSchemaContent(
-      absolutePath,
-      [...absolutePath, 'if'],
-      schema.if,
-      graph,
-      EdgeType.IF,
-      false
+        absolutePath,
+        [...absolutePath, 'if'],
+        schema.if,
+        graph,
+        EdgeType.IF,
+        false
     );
   }
   if (schema.then) {
     constructObjectSubSchemaContent(
-      absolutePath,
-      [...absolutePath, 'then'],
-      schema.then,
-      graph,
-      EdgeType.THEN,
-      false
+        absolutePath,
+        [...absolutePath, 'then'],
+        schema.then,
+        graph,
+        EdgeType.THEN,
+        false
     );
   }
 
-  if (schema.else) {
-    constructObjectSubSchemaContent(
-      absolutePath,
-      [...absolutePath, 'else'],
-      schema.else,
-      graph,
-      EdgeType.ELSE,
-      false
-    );
+    if (schema.else) {
+      constructObjectSubSchemaContent(
+          absolutePath,
+          [...absolutePath, 'else'],
+          schema.else,
+          graph,
+          EdgeType.ELSE,
+          false
+      );
   }
+
+
 
   const nodeData = new SchemaObjectNodeData(name, absolutePath, attributes);
 
@@ -144,14 +148,7 @@ function constructObjectSubSchemasContent(
   isHierarchicalParent: boolean
 ) {
   for (const [index, value] of subSchemas.entries()) {
-    constructObjectSubSchemaContent(
-      nodePath,
-      [...absolutePath, index],
-      value,
-      graph,
-      edgeType,
-      isHierarchicalParent
-    );
+    constructObjectSubSchemaContent(nodePath, [...absolutePath, index], value, graph, edgeType, isHierarchicalParent);
   }
 }
 
@@ -164,9 +161,9 @@ function constructObjectSubSchemaContent(
   isHierarchicalParent: boolean
 ) {
   if (typeof subSchema === 'object' && subSchema.$ref) {
-    graph.edges.push(
-      new EdgeData(nodePath, jsonPointerToPath(subSchema.$ref.replace('#', '')), edgeType)
-    );
+      graph.edges.push(
+        new EdgeData(nodePath, jsonPointerToPath(subSchema.$ref.replace('#', '')), edgeType)
+      );
   } else {
     const subObjectNodeId = absolutePath.slice(absolutePath.length - 2).join('/');
     constructObjectOrBooleanNode(absolutePath, subObjectNodeId, subSchema, graph);
@@ -186,6 +183,7 @@ function constructObjectAttribute(
   required: boolean,
   graph: SchemaGraph
 ): SchemaObjectAttributeData {
+
   let typeDescription = getTypeDescription(schema);
 
   if (schema.type == 'object') {
@@ -198,7 +196,7 @@ function constructObjectAttribute(
       schema.items as JsonSchemaType,
       graph,
       EdgeType.ARRAY_ATTRIBUTE,
-      false
+        false
     );
   } else if (schema.$ref) {
     typeDescription = 'ref';
@@ -206,12 +204,11 @@ function constructObjectAttribute(
       new EdgeData(nodePath, jsonPointerToPath(schema.$ref.replace('#', '')), EdgeType.ATTRIBUTE)
     );
   }
-
   return new SchemaObjectAttributeData(
-    name,
-    typeDescription,
-    absolutePath,
-    schema.deprecated ? schema.deprecated : false,
-    required
+      name,
+      typeDescription,
+      absolutePath,
+      schema.deprecated ? schema.deprecated : false,
+      required
   );
 }

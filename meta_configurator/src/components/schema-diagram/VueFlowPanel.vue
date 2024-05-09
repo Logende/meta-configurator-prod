@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {nextTick, ref, watch} from 'vue';
+import {nextTick, onMounted, ref, watch} from 'vue';
 
 import {VueFlow, useVueFlow} from '@vue-flow/core';
 import SchemaObjectNode from '@/components/schema-diagram/SchemaObjectNode.vue';
@@ -9,6 +9,7 @@ import {SessionMode} from '@/store/sessionMode';
 import {Path} from '@/utility/path';
 import {useLayout} from './useLayout';
 import type {Edge, Node} from '@/components/schema-diagram/schemaDiagramTypes';
+import {constructSchemaGraph2} from "@/components/schema-diagram/schemaGraphConstructor2";
 
 const props = defineProps<{
   sessionMode: SessionMode;
@@ -23,14 +24,22 @@ const emit = defineEmits<{
 const currentNodes = ref<Node[]>([]);
 const currentEdges = ref<Edge[]>([]);
 
-watch(getSchemaForMode(props.sessionMode).schemaWrapper, () => {
+watch(getSchemaForMode(props.sessionMode).schemaPreprocessed, () => {
   updateGraph();
+
+    nextTick(() => {
+        layoutGraph('TB')
+    })
 });
+
+onMounted(() => {
+   updateGraph();
+});
+
 
 function updateGraph() {
   const schema = getSchemaForMode(SessionMode.DataEditor);
-  console.log('generate current graph');
-  const graph = constructSchemaGraph(schema.schemaPreprocessed.value);
+  const graph = constructSchemaGraph2(schema.schemaPreprocessed.value);
   const vueFlowGraph = graph.toVueFlowGraph();
   currentNodes.value = vueFlowGraph.nodes;
   currentEdges.value = vueFlowGraph.edges;
@@ -40,9 +49,7 @@ const {layout} = useLayout();
 const {fitView} = useVueFlow();
 
 async function layoutGraph(direction) {
-  //nodes.value = layout(nodes.value, edges.value, direction)
   currentNodes.value = layout(currentNodes.value, currentEdges.value, direction);
-
   nextTick(() => {
     fitView();
   });

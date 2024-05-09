@@ -13,16 +13,18 @@ const props = defineProps({
   <div class="vue-flow__node-schemaobject">
     <!--small><i>{{ props.data.absolutePath }}</i></small-->
     <b>{{ props.data.name }}</b>
+      <hr>
     <SchemaObjectAttribute
       v-for="attribute in props.data!.attributes"
       :data="attribute!"></SchemaObjectAttribute>
+      <hr>
   </div>
 </template>
 
 <style>
 .vue-flow__node-schemaobject {
-  background: lightsteelblue;
-  color: black;
+  background: var(--primary-color);
+  color: var(--primary-color-text);
   padding: 2px;
 }
 </style>
