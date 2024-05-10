@@ -9,7 +9,6 @@ import {SessionMode} from '@/store/sessionMode';
 import {Path} from '@/utility/path';
 import {useLayout} from './useLayout';
 import type {Edge, Node} from '@/components/schema-diagram/schemaDiagramTypes';
-import {constructSchemaGraph2} from '@/components/schema-diagram/schemaGraphConstructor2';
 
 const props = defineProps<{
   sessionMode: SessionMode;
@@ -38,7 +37,7 @@ onMounted(() => {
 
 function updateGraph() {
   const schema = getSchemaForMode(SessionMode.DataEditor);
-  const graph = constructSchemaGraph2(schema.schemaPreprocessed.value);
+  const graph = constructSchemaGraph(schema.schemaPreprocessed.value);
   const vueFlowGraph = graph.toVueFlowGraph();
   currentNodes.value = vueFlowGraph.nodes;
   currentEdges.value = vueFlowGraph.edges;

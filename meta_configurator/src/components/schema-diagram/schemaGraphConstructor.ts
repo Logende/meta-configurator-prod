@@ -1,220 +1,347 @@
-import type {JsonSchemaObjectType, JsonSchemaType, TopLevelSchema} from '@/schema/jsonSchemaType';
+import type {JsonSchemaObjectType, JsonSchemaType, SchemaPropertyTypes, TopLevelSchema} from "@/schema/jsonSchemaType";
 import {
-  EdgeData,
-  EdgeType,
-  SchemaGraph,
-  SchemaObjectAttributeData,
-  SchemaObjectNodeData,
-} from '@/components/schema-diagram/schemaDiagramTypes';
-import type {Path} from '@/utility/path';
-import {jsonPointerToPath} from '@/utility/pathUtils';
-import {getTypeDescription} from '@/schema/schemaReadingUtils';
+    EdgeData,
+    EdgeType,
+    SchemaGraph,
+    SchemaObjectAttributeData,
+    SchemaObjectNodeData
+} from "@/components/schema-diagram/schemaDiagramTypes";
+import type {Path} from "@/utility/path";
+import {getTypeDescription} from "@/schema/schemaReadingUtils";
+import {jsonPointerToPath, pathToString} from "@/utility/pathUtils";
+import {mergeAllOfs} from "@/schema/mergeAllOfs";
 
 export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
-  const schemaGraph = new SchemaGraph([], []);
+    // copy schema to avoid modifying the original
+    //rootSchema = JSON.parse(JSON.stringify(rootSchema));
+    rootSchema = mergeAllOfs(rootSchema);
 
-  if (rootSchema.$defs) {
-    for (const [key, value] of Object.entries(rootSchema.$defs)) {
-      constructObjectOrBooleanNode(['$defs', key], key, value as JsonSchemaObjectType, schemaGraph);
+    const objectDefs = new Map<string, SchemaObjectNodeData>();
+    identifyObjects([], rootSchema, objectDefs);
+
+    if (rootSchema.$defs) {
+        for (const [key, value] of Object.entries(rootSchema.$defs)) {
+            identifyObjects(['$defs', key], value, objectDefs);
+        }
     }
-  }
-
-  if (rootSchema.definitions) {
-    for (const [key, value] of Object.entries(rootSchema.definitions)) {
-      constructObjectOrBooleanNode(
-        ['definitions', key],
-        key,
-        value as JsonSchemaObjectType,
-        schemaGraph
-      );
+    if (rootSchema.definitions) {
+        for (const [key, value] of Object.entries(rootSchema.definitions)) {
+            identifyObjects(['definitions', key], value, objectDefs);
+        }
     }
-  }
 
-  constructObjectOrBooleanNode([], 'root', rootSchema, schemaGraph);
+    const schemaGraph = new SchemaGraph([], []);
+    for (const [path, node] of objectDefs.entries()) {
 
-  // resolve references
-  for (const node of schemaGraph.nodes) {
-  }
+        schemaGraph.nodes.push(node);
 
-  return schemaGraph;
+        if (node.schema.type == 'object') {
+            node.attributes = generateObjectAttributes(node.absolutePath, node.schema, objectDefs);
+            generateAttributeEdges(node, objectDefs, schemaGraph);
+            generateObjectSpecialPropertyEdges(node, objectDefs, schemaGraph);
+        }
+    }
+
+    // remove all edges, where the receiver node is not an object
+    schemaGraph.edges = schemaGraph.edges.filter(edge => {
+        return isNodeRelevantToDisplay(edge.end, schemaGraph);
+    });
+
+    // remove all nodes that are not objects
+    schemaGraph.nodes = schemaGraph.nodes.filter(node => {
+        return isNodeRelevantToDisplay(node, schemaGraph);
+    });
+
+    return schemaGraph;
 }
 
-function constructObjectOrBooleanNode(
-  absolutePath: Path,
-  name: string,
-  schema: JsonSchemaType,
-  graph: SchemaGraph
-) {
-  if (schema === true || schema === false) {
-    const nodeData = new SchemaObjectNodeData(schema.toString(), absolutePath, []);
-    graph.nodes.push(nodeData);
-    return;
-  }
+function isNodeRelevantToDisplay(node: SchemaObjectNodeData, graph: SchemaGraph): boolean {
+    return node.schema.type == 'object' || true //||
+        //graph.edges.find(edge => (edge.start == node || edge.end == node) && edge.edgeType in [EdgeType.IF, EdgeType.ELSE, EdgeType.THEN]) !== undefined;
+}
 
-  const attributes: SchemaObjectAttributeData[] = [];
 
-  if (schema.properties) {
-    for (const [key, value] of Object.entries(schema.properties)) {
-      if (typeof schema === 'object') {
-        const required = schema.required ? schema.required.includes(key) : false;
-        const attributeData = constructObjectAttribute(
-          absolutePath,
-          [...absolutePath, 'properties', key],
-          key,
-          value as JsonSchemaObjectType,
-          required,
-          graph
-        );
-        attributes.push(attributeData);
-      }
+
+export function identifyObjects(currentPath: Path, schema: JsonSchemaType, defs: Map<string, SchemaObjectNodeData>) {
+    if (schema === true || schema === false) {
+        return;
     }
-  }
 
-  if (schema.allOf) {
-    constructObjectSubSchemasContent(
-      absolutePath,
-      [...absolutePath, 'allOf'],
-      schema.allOf,
-      graph,
-      EdgeType.ALL_OF,
-      true
-    );
-  }
-  if (schema.anyOf) {
-    constructObjectSubSchemasContent(
-      absolutePath,
-      [...absolutePath, 'anyOf'],
-      schema.anyOf,
-      graph,
-      EdgeType.ANY_OF,
-      true
-    );
-  }
-  if (schema.oneOf) {
-    constructObjectSubSchemasContent(
-      absolutePath,
-      [...absolutePath, 'oneOf'],
-      schema.oneOf,
-      graph,
-      EdgeType.ONE_OF,
-      true
-    );
-  }
+    // It can be that simple types, such as strings with enum constraint, have their own definition.
+    // We allow generating a node for this, so it can be referred to by other objects.
+    // But we do not visualize those nodes for simple types.
+    //if (schema.type == 'object' || schema.title) {
+        defs.set(pathToString(currentPath), generateInitialNode(currentPath, schema));
+    //}
 
-  // TODO: put if,else,then as subcomponent within the ObjectNode
-  if (schema.if) {
-    constructObjectSubSchemaContent(
-      absolutePath,
-      [...absolutePath, 'if'],
-      schema.if,
-      graph,
-      EdgeType.IF,
-      false
-    );
-  }
-  if (schema.then) {
-    constructObjectSubSchemaContent(
-      absolutePath,
-      [...absolutePath, 'then'],
-      schema.then,
-      graph,
-      EdgeType.THEN,
-      false
-    );
-  }
+    if (schema.properties) {
+        for (const [key, value] of Object.entries(schema.properties)) {
+            if (typeof value === 'object') {
+                    const childPath = [...currentPath, 'properties', key];
+                    identifyObjects(childPath, value, defs)
+                }
+        }
+    }
+    if (schema.patternProperties) {
+        for (const [key, value] of Object.entries(schema.patternProperties)) {
+            if (typeof value === 'object') {
+                    const childPath = [...currentPath, 'patternProperties', key];
+                    identifyObjects(childPath, value, defs)
+            }
+        }
+    }
+    if (schema.items) {
+        if (typeof schema.items === 'object') {
+                const childPath = [...currentPath, 'items'];
+                identifyObjects(childPath, schema.items, defs)
+        }
+    }
 
-  if (schema.else) {
-    constructObjectSubSchemaContent(
-      absolutePath,
-      [...absolutePath, 'else'],
-      schema.else,
-      graph,
-      EdgeType.ELSE,
-      false
-    );
-  }
-
-  const nodeData = new SchemaObjectNodeData(name, absolutePath, attributes);
-
-  graph.nodes.push(nodeData);
+    if (schema.oneOf) {
+        for (const [index, value] of schema.oneOf.entries()) {
+            if (typeof value === 'object') {
+                const childPath = [...currentPath, 'oneOf', index.toString()];
+                identifyObjects(childPath, value, defs)
+            }
+        }
+    }
+    if (schema.anyOf) {
+        for (const [index, value] of schema.anyOf.entries()) {
+            if (typeof value === 'object') {
+                const childPath = [...currentPath, 'anyOf', index.toString()];
+                identifyObjects(childPath, value, defs)
+            }
+        }
+    }
+    if (schema.allOf) {
+        for (const [index, value] of schema.allOf.entries()) {
+            if (typeof value === 'object') {
+                const childPath = [...currentPath, 'allOf', index.toString()];
+                identifyObjects(childPath, value, defs)
+            }
+        }
+    }
+    if (schema.if) {
+        if (typeof schema.if === 'object') {
+            identifyObjects([...currentPath, 'if'], schema.if, defs)
+        }
+    }
+    if (schema.then) {
+        if (typeof schema.then === 'object') {
+            identifyObjects([...currentPath, 'then'], schema.then, defs)
+        }
+    }
+    if (schema.else) {
+        if (typeof schema.else === 'object') {
+            identifyObjects([...currentPath, 'else'], schema.else, defs)
+        }
+    }
+    if (schema.additionalProperties) {
+        if (typeof schema.additionalProperties === 'object') {
+            identifyObjects([...currentPath, 'additionalProperties'], schema.additionalProperties, defs)
+        }
+    }
 }
 
-function constructObjectSubSchemasContent(
-  nodePath: Path,
-  absolutePath: Path,
-  subSchemas: JsonSchemaType[],
-  graph: SchemaGraph,
-  edgeType: EdgeType,
-  isHierarchicalParent: boolean
-) {
-  for (const [index, value] of subSchemas.entries()) {
-    constructObjectSubSchemaContent(
-      nodePath,
-      [...absolutePath, index],
-      value,
-      graph,
-      edgeType,
-      isHierarchicalParent
+function generateInitialNode(path: Path, schema: JsonSchemaObjectType): SchemaObjectNodeData {
+    return new SchemaObjectNodeData(
+        generateObjectTitle(path, schema),
+        path,
+        schema,
+        []
     );
-  }
 }
 
-function constructObjectSubSchemaContent(
-  nodePath: Path,
-  absolutePath: Path,
-  subSchema: JsonSchemaType,
-  graph: SchemaGraph,
-  edgeType: EdgeType,
-  isHierarchicalParent: boolean
-) {
-  if (typeof subSchema === 'object' && subSchema.$ref) {
-    graph.edges.push(
-      new EdgeData(nodePath, jsonPointerToPath(subSchema.$ref.replace('#', '')), edgeType)
-    );
-  } else {
-    const subObjectNodeId = absolutePath.slice(absolutePath.length - 2).join('/');
-    constructObjectOrBooleanNode(absolutePath, subObjectNodeId, subSchema, graph);
-    if (isHierarchicalParent) {
-      graph.edges.push(new EdgeData(absolutePath, nodePath, edgeType));
+export function generateObjectTitle(path: Path, schema?: JsonSchemaObjectType): string {
+    if (schema && schema.title) {
+        return schema.title;
+    }
+    if (path.length == 0) {
+        return "root"
+    }
+    const lastElement = path[path.length - 1];
+    if (typeof lastElement === 'string') {
+        return lastElement;
+    }
+    if (path.length >= 2) {
+        const titleOfParent = generateObjectTitle(path.slice(0, path.length - 1));
+        return titleOfParent + '[' + lastElement + ']';
     } else {
-      graph.edges.push(new EdgeData(nodePath, absolutePath, edgeType));
+        return 'element[' + lastElement + ']';
     }
-  }
 }
 
-function constructObjectAttribute(
-  nodePath: Path,
-  absolutePath: Path,
-  name: string,
-  schema: JsonSchemaObjectType,
-  required: boolean,
-  graph: SchemaGraph
-): SchemaObjectAttributeData {
-  let typeDescription = getTypeDescription(schema);
+export function generateObjectAttributes(path: Path, schema: JsonSchemaObjectType, objectDefs: Map<string, SchemaObjectNodeData>): SchemaObjectAttributeData[] {
+    const attributes: SchemaObjectAttributeData[] = [];
+    for (const [attributeName, attributeSchema] of Object.entries(schema.properties || {})) {
+        if (typeof attributeSchema === 'object') {
+            const required = schema.required ? schema.required.includes(attributeName) : false;
+            let typeDescription = generateAttributeTypeDescription([...path, 'properties', attributeName], attributeSchema, objectDefs);
+            const attributeData = new SchemaObjectAttributeData(
+                attributeName,
+                typeDescription,
+                [...path, 'properties', attributeName],
+                attributeSchema.deprecated ? attributeSchema.deprecated : false,
+                required,
+                attributeSchema
+            );
+            attributes.push(attributeData);
+        }
+    }
+    return attributes;
+}
 
-  if (schema.type == 'object') {
-    constructObjectOrBooleanNode(absolutePath, name, schema, graph);
-    graph.edges.push(new EdgeData(nodePath, absolutePath, EdgeType.ATTRIBUTE));
-  } else if (schema.type == 'array') {
-    constructObjectSubSchemaContent(
-      nodePath,
-      [...absolutePath, 'items'],
-      schema.items as JsonSchemaType,
-      graph,
-      EdgeType.ARRAY_ATTRIBUTE,
-      false
-    );
-  } else if (schema.$ref) {
-    typeDescription = 'ref';
-    graph.edges.push(
-      new EdgeData(nodePath, jsonPointerToPath(schema.$ref.replace('#', '')), EdgeType.ATTRIBUTE)
-    );
-  }
-  return new SchemaObjectAttributeData(
-    name,
-    typeDescription,
-    absolutePath,
-    schema.deprecated ? schema.deprecated : false,
-    required
-  );
+
+export function generateAttributeTypeDescription(path: Path, schema: JsonSchemaObjectType, objectDefs: Map<string, SchemaObjectNodeData>): string {
+    // use regular type description, which is good for simple types
+    let typeDescription = getTypeDescription(schema);
+
+    // if data type has a reference, overwrite with the object behind the reference
+    const referenceObject = resolveReferenceNode(schema, objectDefs);
+    if (referenceObject) {
+        typeDescription = referenceObject.name;
+    }
+
+    // if data type is an array, overwrite with the type of the array items
+    if (schema.type == 'array' && schema.items) {
+        const arrayItemObject = resolveArrayItemNode(path, schema, objectDefs);
+        if (arrayItemObject) {
+            if (arrayItemObject.schema.title) {
+                typeDescription = arrayItemObject.name + "[]";
+            } else {
+                typeDescription = getTypeDescription(arrayItemObject.schema) + "[]";
+            }
+        } else {
+            if (typeof schema.items === 'object') {
+                typeDescription = getTypeDescription(schema.items) + "[]";
+            }
+        }
+    }
+
+    // if data type is an object, overwrite with actual name of the object definition
+    if (schema.type == 'object') {
+        const attributeNode = resolveObjectAttributeNode(path, schema, objectDefs);
+        if (attributeNode) {
+            typeDescription = attributeNode.name;
+        }
+    }
+
+    return typeDescription;
+}
+
+export function generateAttributeEdges(node: SchemaObjectNodeData, objectDefs: Map<string, SchemaObjectNodeData>, graph: SchemaGraph) {
+    for (const attribute of node.attributes) {
+        let attrSchema = attribute.schema;
+        let attributeNode: SchemaObjectNodeData | undefined = undefined;
+
+        if (attrSchema.$ref) {
+            const referenceObject = resolveReferenceNode(attrSchema, objectDefs);
+            if (referenceObject) {
+                attrSchema = referenceObject.schema;
+                attributeNode = referenceObject;
+            } else {
+                console.warn("Unable to find reference node for attribute " + attribute.name + " with path " + pathToString(attribute.absolutePath));
+            }
+        }
+
+        if (attrSchema.type == 'object') {
+            if (!attributeNode) {
+                attributeNode = resolveObjectAttributeNode(attribute.absolutePath, attrSchema, objectDefs);
+            }
+            if (attributeNode) {
+                graph.edges.push(new EdgeData(node, attributeNode, EdgeType.ATTRIBUTE, attribute.name));
+            }
+        } else if (attrSchema.type == 'array') {
+            if (!attributeNode) {
+                attributeNode = resolveArrayItemNode(attribute.absolutePath, attrSchema, objectDefs);
+            }
+            if (attributeNode && attributeNode.schema.type == 'object') {
+                graph.edges.push(new EdgeData(node, attributeNode, EdgeType.ARRAY_ATTRIBUTE, attribute.name));
+            }
+        }
+
+    }
+}
+
+function resolveReferenceNode(schema: JsonSchemaType, objectDefs: Map<string, SchemaObjectNodeData>): SchemaObjectNodeData | undefined {
+    if (schema == false || schema == true) {
+        return undefined
+    }
+    if (schema.$ref) {
+        const refPath = jsonPointerToPath(schema.$ref.replace('#', ''));
+        const refPathString = pathToString(refPath);
+        if (objectDefs.has(refPathString)) {
+            return objectDefs.get(refPathString);
+        }
+    }
+    return undefined;
+}
+
+function resolveArrayItemNode(path: Path, schema: JsonSchemaObjectType, objectDefs: Map<string, SchemaObjectNodeData>): SchemaObjectNodeData | undefined {
+    if (schema.type == 'array' && schema.items) {
+        if (typeof schema.items == 'object') {
+            let itemObjectPath = [...path, 'items'];
+            const referenceObject = resolveReferenceNode(schema.items, objectDefs);
+            if (referenceObject) {
+                itemObjectPath = referenceObject.absolutePath;
+            }
+            return objectDefs.get(pathToString(itemObjectPath));
+        }
+    }
+    return undefined;
+}
+
+function resolveObjectAttributeNode(path: Path, schema: JsonSchemaObjectType, objectDefs: Map<string, SchemaObjectNodeData>): SchemaObjectNodeData | undefined {
+    if (schema.type == 'object') {
+        return objectDefs.get(pathToString(path));
+    }
+    return undefined;
+}
+
+
+export function generateObjectSpecialPropertyEdges(node: SchemaObjectNodeData, objectDefs: Map<string, SchemaObjectNodeData>, graph: SchemaGraph) {
+    const schema = node.schema;
+    if (schema.oneOf) {
+        generateObjectSubSchemasEdge(node, schema.oneOf, node.absolutePath, EdgeType.ONE_OF, objectDefs, graph);
+    }
+    if (schema.anyOf) {
+        generateObjectSubSchemasEdge(node, schema.anyOf, node.absolutePath, EdgeType.ANY_OF, objectDefs, graph);
+    }
+    if (schema.allOf) {
+        generateObjectSubSchemasEdge(node, schema.allOf, node.absolutePath, EdgeType.ALL_OF, objectDefs, graph);
+    }
+    if (schema.if) {
+        generateObjectSubSchemaEdge(node, schema.if, [...node.absolutePath, 'if'], EdgeType.IF, objectDefs, graph);
+    }
+    if (schema.then) {
+        generateObjectSubSchemaEdge(node, schema.then, [...node.absolutePath, 'then'], EdgeType.THEN, objectDefs, graph);
+    }
+    if (schema.else) {
+        generateObjectSubSchemaEdge(node, schema.else, [...node.absolutePath, 'else'], EdgeType.ELSE, objectDefs, graph);
+    }
+    if (schema.additionalProperties) {
+        generateObjectSubSchemaEdge(node, schema.additionalProperties, [...node.absolutePath, 'additionalProperties'], EdgeType.ADDITIONAL_PROPERTIES, objectDefs, graph);
+    }
+}
+
+function generateObjectSubSchemasEdge(node: SchemaObjectNodeData, subSchemas: JsonSchemaType[], subSchemasPath: Path, edgeType: EdgeType, objectDefs: Map<string, SchemaObjectNodeData>, graph: SchemaGraph) {
+    for (const [index, subSchema] of subSchemas.entries()) {
+        const subSchemaPath = [...subSchemasPath, index];
+        if (typeof subSchema === 'object') {
+            generateObjectSubSchemaEdge(node, subSchema, subSchemaPath, edgeType, objectDefs, graph);
+        }
+    }
+}
+
+function generateObjectSubSchemaEdge(node: SchemaObjectNodeData, subSchema: JsonSchemaType, subSchemaPath: Path, edgeType: EdgeType, objectDefs: Map<string, SchemaObjectNodeData>, graph: SchemaGraph) {
+    const referenceNode = resolveReferenceNode(subSchema, objectDefs);
+    if (referenceNode) {
+        graph.edges.push(new EdgeData(node, referenceNode, edgeType));
+    } else {
+        const subSchemaNode = objectDefs.get(pathToString(subSchemaPath));
+        if (subSchemaNode) {
+            graph.edges.push(new EdgeData(node, subSchemaNode, edgeType));
+        }
+    }
+
 }

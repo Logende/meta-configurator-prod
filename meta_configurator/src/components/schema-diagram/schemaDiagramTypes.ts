@@ -137,14 +137,13 @@ export class SchemaObjectNodeData {
     public absolutePath: Path,
     public schema: JsonSchemaObjectType,
     public attributes: SchemaObjectAttributeData[],
-    public type?: SchemaPropertyTypes
   ) {}
 }
 
 export class SchemaObjectAttributeData {
   public constructor(
     public name: string,
-    public type: string,
+    public typeDescription: string,
     public absolutePath: Path,
     public deprecated: boolean,
     public required: boolean,
@@ -156,7 +155,8 @@ export class EdgeData {
   public constructor(
     public start: SchemaObjectNodeData,
     public end: SchemaObjectNodeData,
-    public edgeType: EdgeType
+    public edgeType: EdgeType,
+    public label: string
   ) {}
 }
 
