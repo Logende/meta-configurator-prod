@@ -1,13 +1,13 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
-import type {Path} from "../../../utility/path";
-import type { TopLevelSchema} from "../../../schema/jsonSchemaType";
-import {EdgeType, SchemaGraph, SchemaObjectNodeData} from "../schemaDiagramTypes";
+import type {Path} from '../../../utility/path';
+import type {TopLevelSchema} from '../../../schema/jsonSchemaType';
+import {EdgeType, SchemaGraph, SchemaObjectNodeData} from '../schemaDiagramTypes';
 import {
   generateAttributeEdges,
   generateObjectAttributes,
   generateObjectTitle,
-  identifyObjects
-} from "../schemaGraphConstructor";
+  identifyObjects,
+} from '../schemaGraphConstructor';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
   useDataConverter: () => ({
@@ -19,76 +19,74 @@ vi.mock('@/dataformats/formatRegistry', () => ({
 describe('test schema graph constructor with objects and attributes, without advanced keywords such as oneOf', () => {
   let currentPath: Path;
   let schema: TopLevelSchema = {
+    type: 'object',
+    required: ['propertyObject'],
+    $defs: {
+      person: {
         type: 'object',
-        required: ['propertyObject'],
-        $defs: {
-          person: {
-            type: 'object',
-            properties: {
-              address: {
-                type: 'object',
-                properties: {
-                  city: {type: 'string'},
-                },
-              },
-            }
-          }
-        },
         properties: {
-          propertySimple: {type: 'string',
-            deprecated: true},
-          propertyObject: {
+          address: {
             type: 'object',
             properties: {
-              someNumber: {type: 'number'},
+              city: {type: 'string'},
             },
           },
-          propertyObjectWithTitle: {
-            type: 'object',
-            title: 'MyPropertyObjectWithTitle',
-            properties: {
-              someString: {type: 'string'},
-            },
-          },
-          propertyRefToSimple: {
-            $ref: '#/properties/propertySimple'
-          },
-          propertyRefToComplex: {
-            $ref: '#/properties/propertyObject'
-          },
-          propertyArrayToSimple2: {
-            type: 'array',
-            items: {
-              type: 'boolean',
-            }
-          },
-          propertyArrayToComplex2: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                someNumber: {type: 'number'},
-              },
-            }
-          },
-          propertyArrayToRefSimple: {
-            type: 'array',
-            items: {
-              $ref: '#/properties/propertySimple'
-            }
-          },
-          propertyArrayToRefComplexWithTitle: {
-            type: 'array',
-            items: {
-              $ref: '#/properties/propertyObjectWithTitle'
-            }
-          },
-          propertyRefToNestedObject: {
-            $ref: '#/$defs/person'
-          }
         },
-      };
-
+      },
+    },
+    properties: {
+      propertySimple: {type: 'string', deprecated: true},
+      propertyObject: {
+        type: 'object',
+        properties: {
+          someNumber: {type: 'number'},
+        },
+      },
+      propertyObjectWithTitle: {
+        type: 'object',
+        title: 'MyPropertyObjectWithTitle',
+        properties: {
+          someString: {type: 'string'},
+        },
+      },
+      propertyRefToSimple: {
+        $ref: '#/properties/propertySimple',
+      },
+      propertyRefToComplex: {
+        $ref: '#/properties/propertyObject',
+      },
+      propertyArrayToSimple2: {
+        type: 'array',
+        items: {
+          type: 'boolean',
+        },
+      },
+      propertyArrayToComplex2: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            someNumber: {type: 'number'},
+          },
+        },
+      },
+      propertyArrayToRefSimple: {
+        type: 'array',
+        items: {
+          $ref: '#/properties/propertySimple',
+        },
+      },
+      propertyArrayToRefComplexWithTitle: {
+        type: 'array',
+        items: {
+          $ref: '#/properties/propertyObjectWithTitle',
+        },
+      },
+      propertyRefToNestedObject: {
+        $ref: '#/$defs/person',
+      },
+    },
+  };
 
   let defs: Map<string, SchemaObjectNodeData>;
 
@@ -98,9 +96,8 @@ describe('test schema graph constructor with objects and attributes, without adv
 
     identifyObjects(currentPath, schema, defs);
     // @ts-ignore
-    identifyObjects(['$defs', "person"], schema.$defs.person,  defs);
+    identifyObjects(['$defs', 'person'], schema.$defs.person, defs);
   });
-
 
   it('identify objects', () => {
     expect(defs.size).toEqual(21);
@@ -126,7 +123,6 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(defs.has('$defs.person.properties.address')).toBeTruthy();
     expect(defs.has('$defs.person.properties.address.properties.city')).toBeTruthy();
   });
-
 
   it('generate object attributes', () => {
     const rootNode = defs.get('')!;
@@ -174,17 +170,21 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(rootNode.attributes[7].required).toBeFalsy();
 
     expect(rootNode.attributes[8].name).toEqual('propertyArrayToRefComplexWithTitle');
-    expect(rootNode.attributes[8].absolutePath).toEqual(['properties', 'propertyArrayToRefComplexWithTitle']);
+    expect(rootNode.attributes[8].absolutePath).toEqual([
+      'properties',
+      'propertyArrayToRefComplexWithTitle',
+    ]);
     expect(rootNode.attributes[8].deprecated).toBeFalsy();
     expect(rootNode.attributes[8].required).toBeFalsy();
 
     expect(rootNode.attributes[9].name).toEqual('propertyRefToNestedObject');
-    expect(rootNode.attributes[9].absolutePath).toEqual(['properties', 'propertyRefToNestedObject']);
+    expect(rootNode.attributes[9].absolutePath).toEqual([
+      'properties',
+      'propertyRefToNestedObject',
+    ]);
     expect(rootNode.attributes[9].deprecated).toBeFalsy();
     expect(rootNode.attributes[9].required).toBeFalsy();
   });
-
-
 
   it('generate attribute type description', () => {
     const rootNode = defs.get('')!;
@@ -230,10 +230,11 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(attrPropRefNestedObject.typeDescription).toEqual('person');
   });
 
-
   it('generate object title', () => {
     // filter defs for nodes that have schema.type 'object'
-    const objectNodeCount = Array.from(defs.values()).filter(node => node.schema.type === 'object').length;
+    const objectNodeCount = Array.from(defs.values()).filter(
+      node => node.schema.type === 'object'
+    ).length;
     expect(objectNodeCount).toEqual(6);
 
     // We care about titles of nodes that define objects only
@@ -241,24 +242,32 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(generateObjectTitle(rootNode.absolutePath, rootNode.schema)).toEqual('root');
 
     const propComplex = defs.get('properties.propertyObject')!;
-    expect(generateObjectTitle(propComplex.absolutePath, propComplex.schema)).toEqual('propertyObject');
+    expect(generateObjectTitle(propComplex.absolutePath, propComplex.schema)).toEqual(
+      'propertyObject'
+    );
 
     const propComplexWithTitle = defs.get('properties.propertyObjectWithTitle')!;
-    expect(generateObjectTitle(propComplexWithTitle.absolutePath, propComplexWithTitle.schema)).toEqual('MyPropertyObjectWithTitle');
+    expect(
+      generateObjectTitle(propComplexWithTitle.absolutePath, propComplexWithTitle.schema)
+    ).toEqual('MyPropertyObjectWithTitle');
 
     const propArrayComplexItem = defs.get('properties.propertyArrayToComplex2.items')!;
-    expect(generateObjectTitle(propArrayComplexItem.absolutePath, propArrayComplexItem.schema)).toEqual('items');
+    expect(
+      generateObjectTitle(propArrayComplexItem.absolutePath, propArrayComplexItem.schema)
+    ).toEqual('items');
 
     const person = defs.get('$defs.person')!;
     expect(generateObjectTitle(person.absolutePath, person.schema)).toEqual('person');
 
     const personAddress = defs.get('$defs.person.properties.address')!;
-    expect(generateObjectTitle(personAddress.absolutePath, personAddress.schema)).toEqual('address');
+    expect(generateObjectTitle(personAddress.absolutePath, personAddress.schema)).toEqual(
+      'address'
+    );
   });
 
   it('generate attribute edges', () => {
     for (const node of defs.values()) {
-        node.attributes = generateObjectAttributes(node.absolutePath, node.schema, defs);
+      node.attributes = generateObjectAttributes(node.absolutePath, node.schema, defs);
     }
 
     const graph = new SchemaGraph([], []);
@@ -268,7 +277,7 @@ describe('test schema graph constructor with objects and attributes, without adv
     generateAttributeEdges(rootNode, defs, graph);
     expect(graph.edges.length).toEqual(6);
     for (const edge of graph.edges) {
-        expect(edge.start.absolutePath).toEqual([]);
+      expect(edge.start.absolutePath).toEqual([]);
     }
     expect(graph.edges[0].end.absolutePath).toEqual(['properties', 'propertyObject']);
     expect(graph.edges[0].edgeType).toEqual(EdgeType.ATTRIBUTE);
@@ -285,7 +294,11 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(graph.edges[2].label).toEqual('propertyRefToComplex');
 
     // for this array, because the object is inlined, the edge is to the inlined object
-    expect(graph.edges[3].end.absolutePath).toEqual(['properties', 'propertyArrayToComplex2', "items"]);
+    expect(graph.edges[3].end.absolutePath).toEqual([
+      'properties',
+      'propertyArrayToComplex2',
+      'items',
+    ]);
     expect(graph.edges[3].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
     expect(graph.edges[3].label).toEqual('propertyArrayToComplex2');
 
@@ -326,7 +339,5 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(graph.edges[0].end.absolutePath).toEqual(['$defs', 'person', 'properties', 'address']);
     expect(graph.edges[0].edgeType).toEqual(EdgeType.ATTRIBUTE);
     expect(graph.edges[0].label).toEqual('address');
-
   });
-
 });

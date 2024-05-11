@@ -176,7 +176,6 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
               const: 'data_editor',
             },
           },
-
         },
       },
     },

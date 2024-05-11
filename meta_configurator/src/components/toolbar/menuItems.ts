@@ -167,24 +167,57 @@ export class MenuItems {
       },
     ];
 
-
     // toggle between showing and hiding the text editor
-    result.push(this.generateTogglePanelButton(SessionMode.SchemaEditor, PanelType.TextEditor, SessionMode.SchemaEditor, 'fa-solid fa-text-slash', 'fa-solid fa-text-slash', 'schema text editor'));
+    result.push(
+      this.generateTogglePanelButton(
+        SessionMode.SchemaEditor,
+        PanelType.TextEditor,
+        SessionMode.SchemaEditor,
+        'fa-solid fa-text-slash',
+        'fa-solid fa-text-slash',
+        'schema text editor'
+      )
+    );
 
     // toggle between showing and hiding the GUI editor
-    result.push(this.generateTogglePanelButton(SessionMode.SchemaEditor, PanelType.GuiEditor, SessionMode.SchemaEditor, 'fa-solid fa-wrench', 'fa-solid fa-wrench', 'schema GUI editor'));
+    result.push(
+      this.generateTogglePanelButton(
+        SessionMode.SchemaEditor,
+        PanelType.GuiEditor,
+        SessionMode.SchemaEditor,
+        'fa-solid fa-wrench',
+        'fa-solid fa-wrench',
+        'schema GUI editor'
+      )
+    );
 
     // toggle between showing and hiding the GUI preview
-    result.push(this.generateTogglePanelButton(SessionMode.SchemaEditor, PanelType.GuiEditor, SessionMode.DataEditor, 'fa-regular fa-eye', 'fa-solid fa-eye', 'preview of resulting GUI'));
+    result.push(
+      this.generateTogglePanelButton(
+        SessionMode.SchemaEditor,
+        PanelType.GuiEditor,
+        SessionMode.DataEditor,
+        'fa-regular fa-eye',
+        'fa-solid fa-eye',
+        'preview of resulting GUI'
+      )
+    );
 
     // toggle between showing and hiding the schema diagram
-    result.push(this.generateTogglePanelButton(SessionMode.SchemaEditor, PanelType.SchemaDiagram, SessionMode.DataEditor, 'fa-solid fa-diagram-project', 'fa-solid fa-diagram-project', 'schema diagram'));
-
-
     result.push(
-        {
-          separator: true,
-        },)
+      this.generateTogglePanelButton(
+        SessionMode.SchemaEditor,
+        PanelType.SchemaDiagram,
+        SessionMode.DataEditor,
+        'fa-solid fa-diagram-project',
+        'fa-solid fa-diagram-project',
+        'schema diagram'
+      )
+    );
+
+    result.push({
+      separator: true,
+    });
 
     // toggle between advanced and simple schema options
     if (
@@ -222,9 +255,14 @@ export class MenuItems {
     return result;
   }
 
-
-  private generateTogglePanelButton(buttonMode: SessionMode, panelType: PanelType, panelMode: SessionMode, iconNameEnabled: string,
-                                    iconNameDisabled: string, description: string) {
+  private generateTogglePanelButton(
+    buttonMode: SessionMode,
+    panelType: PanelType,
+    panelMode: SessionMode,
+    iconNameEnabled: string,
+    iconNameDisabled: string,
+    description: string
+  ) {
     if (
       useSettings().panels[buttonMode].find(
         panel => panel.panelType === panelType && panel.mode === panelMode
@@ -236,8 +274,7 @@ export class MenuItems {
         command: () => {
           const panels = useSettings().panels;
           panels[buttonMode] = panels[buttonMode].filter(
-            panel =>
-              !(panel.panelType === panelType && panel.mode === panelMode)
+            panel => !(panel.panelType === panelType && panel.mode === panelMode)
           );
         },
       };

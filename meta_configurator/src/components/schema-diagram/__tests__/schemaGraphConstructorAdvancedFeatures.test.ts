@@ -1,12 +1,13 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
-import type {Path} from "../../../utility/path";
-import type { TopLevelSchema} from "../../../schema/jsonSchemaType";
-import {EdgeType, SchemaGraph, SchemaObjectNodeData} from "../schemaDiagramTypes";
+import type {Path} from '../../../utility/path';
+import type {TopLevelSchema} from '../../../schema/jsonSchemaType';
+import {EdgeType, SchemaGraph, SchemaObjectNodeData} from '../schemaDiagramTypes';
 import {
-  generateObjectAttributes, generateObjectSpecialPropertyEdges,
+  generateObjectAttributes,
+  generateObjectSpecialPropertyEdges,
   generateObjectTitle,
-  identifyObjects
-} from "../schemaGraphConstructor";
+  identifyObjects,
+} from '../schemaGraphConstructor';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
   useDataConverter: () => ({
@@ -18,102 +19,101 @@ vi.mock('@/dataformats/formatRegistry', () => ({
 describe('test schema graph constructor with objects and attributes with advanced keywords such as oneOf', () => {
   let currentPath: Path;
   let schema: TopLevelSchema = {
+    type: 'object',
+    required: ['propertyObject'],
+    $defs: {
+      person: {
         type: 'object',
-        required: ['propertyObject'],
-        $defs: {
-          person: {
-            type: 'object',
-            required: ['name'],
-            properties: {
-              name: {type: 'string'},
-            }
-          },
-          animal: {
-            type: 'object',
-            required: ['species'],
-            properties: {
-              species: {type: 'string'},
-            },
-          },
-          researcher: {
-            required: ['researchField'],
-            type: 'object',
-            properties: {
-              researchField: {type: 'string'},
-            },
-          },
-          livingBeing: {
-            type: 'object',
-            required: ['age'],
-            properties: {
-              age: {type: 'number'},
-            },
-          },
-      },
-      properties: {
-        propertySimple: {
-          type: 'string',
-        },
-        propertyObject: {
-          type: 'object',
-          properties: {
-            someNumber: { type: 'number' },
-          },
+        required: ['name'],
+        properties: {
+          name: {type: 'string'},
         },
       },
-      allOf: [
-        {
-          $ref: '#/$defs/livingBeing',
+      animal: {
+        type: 'object',
+        required: ['species'],
+        properties: {
+          species: {type: 'string'},
         },
-        {
-          type: 'object',
-          properties: {
-            address: {
-              type: 'string'
-            }
-          }
-        }
-      ],
-        oneOf: [
-            {
-            $ref: '#/$defs/researcher',
-            },
-          {
-            title: 'Farmer',
-            type: 'object',
-            properties: {
-              farmSize: {type: 'number'},
-            },
+      },
+      researcher: {
+        required: ['researchField'],
+        type: 'object',
+        properties: {
+          researchField: {type: 'string'},
+        },
+      },
+      livingBeing: {
+        type: 'object',
+        required: ['age'],
+        properties: {
+          age: {type: 'number'},
+        },
+      },
+    },
+    properties: {
+      propertySimple: {
+        type: 'string',
+      },
+      propertyObject: {
+        type: 'object',
+        properties: {
+          someNumber: {type: 'number'},
+        },
+      },
+    },
+    allOf: [
+      {
+        $ref: '#/$defs/livingBeing',
+      },
+      {
+        type: 'object',
+        properties: {
+          address: {
+            type: 'string',
           },
-          true,
-        ],
+        },
+      },
+    ],
+    oneOf: [
+      {
+        $ref: '#/$defs/researcher',
+      },
+      {
+        title: 'Farmer',
+        type: 'object',
+        properties: {
+          farmSize: {type: 'number'},
+        },
+      },
+      true,
+    ],
     anyOf: [
-        {
-            $ref: '#/$defs/person',
-        },
-        {
-            $ref: '#/$defs/animal',
-        },
-        ],
+      {
+        $ref: '#/$defs/person',
+      },
+      {
+        $ref: '#/$defs/animal',
+      },
+    ],
     if: {
       $ref: '#/$defs/researcher',
     },
     then: {
       // note that the 'then' is not explicitly marked as type object, but the functions can still resolve it properly
-        properties: {
-          propertyObject: {
-            properties: {
-              someNumber: {
-                type: 'number',
-              multipleOf: 42},
+      properties: {
+        propertyObject: {
+          properties: {
+            someNumber: {
+              type: 'number',
+              multipleOf: 42,
             },
-          }
+          },
         },
-        else: true,
-    }
-
-
-      };
+      },
+      else: true,
+    },
+  };
 
   let defs: Map<string, SchemaObjectNodeData>;
 
@@ -124,10 +124,9 @@ describe('test schema graph constructor with objects and attributes with advance
     identifyObjects(currentPath, schema, defs);
     // @ts-ignore
     for (const [key, value] of Object.entries(schema.$defs)) {
-      identifyObjects(['$defs', key], value,  defs);
+      identifyObjects(['$defs', key], value, defs);
     }
   });
-
 
   it('identify objects', () => {
     expect(defs.size).toEqual(24);
@@ -154,11 +153,10 @@ describe('test schema graph constructor with objects and attributes with advance
     expect(defs.has('anyOf[1]')).toBeTruthy();
     expect(defs.has('if')).toBeTruthy();
     expect(defs.has('then')).toBeTruthy();
-  expect(defs.has('then.properties.propertyObject')).toBeTruthy();
-  expect(defs.has('then.properties.propertyObject.properties.someNumber')).toBeTruthy();
-  expect(defs.has('else')).toBeFalsy();
+    expect(defs.has('then.properties.propertyObject')).toBeTruthy();
+    expect(defs.has('then.properties.propertyObject.properties.someNumber')).toBeTruthy();
+    expect(defs.has('else')).toBeFalsy();
   });
-
 
   it('generate object attributes', () => {
     const rootNode = defs.get('')!;
@@ -171,9 +169,7 @@ describe('test schema graph constructor with objects and attributes with advance
 
     expect(rootNode.attributes[1].name).toEqual('propertyObject');
     expect(rootNode.attributes[1].absolutePath).toEqual(['properties', 'propertyObject']);
-
   });
-
 
   it('deal with "then" that only implicitly has object type', () => {
     const thenNode = defs.get('then')!;
@@ -187,10 +183,11 @@ describe('test schema graph constructor with objects and attributes with advance
     expect(thenNode.attributes[0].absolutePath).toEqual(['then', 'properties', 'propertyObject']);
   });
 
-
   it('generate object title', () => {
     // filter defs for nodes that have schema.type 'object'
-    const objectNodeCount = Array.from(defs.values()).filter(node => node.schema.type === 'object').length;
+    const objectNodeCount = Array.from(defs.values()).filter(
+      node => node.schema.type === 'object'
+    ).length;
     expect(objectNodeCount).toEqual(10);
 
     // We care about titles of nodes that define objects only
@@ -198,7 +195,9 @@ describe('test schema graph constructor with objects and attributes with advance
     expect(generateObjectTitle(rootNode.absolutePath, rootNode.schema)).toEqual('root');
 
     const propComplex = defs.get('properties.propertyObject')!;
-    expect(generateObjectTitle(propComplex.absolutePath, propComplex.schema)).toEqual('propertyObject');
+    expect(generateObjectTitle(propComplex.absolutePath, propComplex.schema)).toEqual(
+      'propertyObject'
+    );
 
     const person = defs.get('$defs.person')!;
     expect(generateObjectTitle(person.absolutePath, person.schema)).toEqual('person');
@@ -210,7 +209,9 @@ describe('test schema graph constructor with objects and attributes with advance
     expect(generateObjectTitle(researcher.absolutePath, researcher.schema)).toEqual('researcher');
 
     const livingBeing = defs.get('$defs.livingBeing')!;
-    expect(generateObjectTitle(livingBeing.absolutePath, livingBeing.schema)).toEqual('livingBeing');
+    expect(generateObjectTitle(livingBeing.absolutePath, livingBeing.schema)).toEqual(
+      'livingBeing'
+    );
 
     const allOf1 = defs.get('allOf[1]')!;
     // allOf element at index 1 has no title, so we use the index as title
@@ -224,12 +225,14 @@ describe('test schema graph constructor with objects and attributes with advance
     expect(generateObjectTitle(thenNode.absolutePath, thenNode.schema)).toEqual('then');
 
     const thenNodeObject = defs.get('then.properties.propertyObject')!;
-    expect(generateObjectTitle(thenNodeObject.absolutePath, thenNodeObject.schema)).toEqual('propertyObject');
+    expect(generateObjectTitle(thenNodeObject.absolutePath, thenNodeObject.schema)).toEqual(
+      'propertyObject'
+    );
   });
 
   it('generate attribute edges', () => {
     for (const node of defs.values()) {
-        node.attributes = generateObjectAttributes(node.absolutePath, node.schema, defs);
+      node.attributes = generateObjectAttributes(node.absolutePath, node.schema, defs);
     }
 
     const graph = new SchemaGraph([], []);
@@ -274,7 +277,5 @@ describe('test schema graph constructor with objects and attributes with advance
     expect(graph.edges[7].end.absolutePath).toEqual(['then']);
     expect(graph.edges[7].edgeType).toEqual(EdgeType.THEN);
     expect(graph.edges[7].label).toEqual(EdgeType.THEN);
-
   });
-
 });

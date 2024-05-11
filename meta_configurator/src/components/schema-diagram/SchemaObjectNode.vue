@@ -25,9 +25,9 @@ const props = defineProps({
   background: lightblue;
   color: black;
 
-    border: 1px solid lightblue;
-    border-radius: 4px;
-    box-shadow: 0 0 0 3px lightblue;
-    padding: 0px;
+  border: 1px solid lightblue;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px lightblue;
+  padding: 0px;
 }
 </style>

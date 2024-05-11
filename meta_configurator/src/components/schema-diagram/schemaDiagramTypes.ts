@@ -136,7 +136,7 @@ export class SchemaObjectNodeData {
     public name: string,
     public absolutePath: Path,
     public schema: JsonSchemaObjectType,
-    public attributes: SchemaObjectAttributeData[],
+    public attributes: SchemaObjectAttributeData[]
   ) {}
 }
 
@@ -161,13 +161,13 @@ export class EdgeData {
 }
 
 export enum EdgeType {
-  ATTRIBUTE = "attribute",
-  ARRAY_ATTRIBUTE = "array_attribute",
-  ALL_OF = "allOf",
-  ANY_OF = "anyOf",
-  ONE_OF = "oneOf",
-  IF = "if",
-  THEN = "then",
-  ELSE = "else",
-  ADDITIONAL_PROPERTIES = "additionalProperties",
+  ATTRIBUTE = 'attribute',
+  ARRAY_ATTRIBUTE = 'array_attribute',
+  ALL_OF = 'allOf',
+  ANY_OF = 'anyOf',
+  ONE_OF = 'oneOf',
+  IF = 'if',
+  THEN = 'then',
+  ELSE = 'else',
+  ADDITIONAL_PROPERTIES = 'additionalProperties',
 }

@@ -23,7 +23,9 @@ import {
   faTrashArrowUp,
   faEye,
   faDiagramProject,
-  faGear, faTextSlash, faWrench,
+  faGear,
+  faTextSlash,
+  faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFile,
