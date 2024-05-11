@@ -3,7 +3,6 @@ import type {Path} from "../../../utility/path";
 import type { TopLevelSchema} from "../../../schema/jsonSchemaType";
 import {EdgeType, SchemaGraph, SchemaObjectNodeData} from "../schemaDiagramTypes";
 import {
-  generateAttributeEdges,
   generateObjectAttributes, generateObjectSpecialPropertyEdges,
   generateObjectTitle,
   identifyObjects
@@ -64,7 +63,7 @@ describe('test schema graph constructor with objects and attributes with advance
       },
       allOf: [
         {
-          $ref: '#/definitions/liveBeing',
+          $ref: '#/$defs/livingBeing',
         },
         {
           type: 'object',
@@ -77,7 +76,7 @@ describe('test schema graph constructor with objects and attributes with advance
       ],
         oneOf: [
             {
-            $ref: '#/definitions/researcher',
+            $ref: '#/$defs/researcher',
             },
           {
             title: 'Farmer',
@@ -90,17 +89,17 @@ describe('test schema graph constructor with objects and attributes with advance
         ],
     anyOf: [
         {
-            $ref: '#/definitions/person',
+            $ref: '#/$defs/person',
         },
         {
-            $ref: '#/definitions/animal',
+            $ref: '#/$defs/animal',
         },
         ],
     if: {
-      $ref: '#/definitions/researcher',
+      $ref: '#/$defs/researcher',
     },
     then: {
-      type: "object",
+      // note that the 'then' is not explicitly marked as type object, but the functions can still resolve it properly
         properties: {
           propertyObject: {
             properties: {
@@ -144,15 +143,15 @@ describe('test schema graph constructor with objects and attributes with advance
     expect(defs.has('properties.propertySimple')).toBeTruthy();
     expect(defs.has('properties.propertyObject')).toBeTruthy();
     expect(defs.has('properties.propertyObject.properties.someNumber')).toBeTruthy();
-    expect(defs.has('allOf.0')).toBeTruthy();
-    expect(defs.has('allOf.1')).toBeTruthy();
-    expect(defs.has('allOf.1.properties.address')).toBeTruthy();
-    expect(defs.has('oneOf.0')).toBeTruthy();
-    expect(defs.has('oneOf.1')).toBeTruthy();
-    expect(defs.has('oneOf.2')).toBeFalsy();
-    expect(defs.has('oneOf.1.properties.farmSize')).toBeTruthy();
-    expect(defs.has('anyOf.0')).toBeTruthy();
-    expect(defs.has('anyOf.1')).toBeTruthy();
+    expect(defs.has('allOf[0]')).toBeTruthy();
+    expect(defs.has('allOf[1]')).toBeTruthy();
+    expect(defs.has('allOf[1].properties.address')).toBeTruthy();
+    expect(defs.has('oneOf[0]')).toBeTruthy();
+    expect(defs.has('oneOf[1]')).toBeTruthy();
+    expect(defs.has('oneOf[2]')).toBeFalsy();
+    expect(defs.has('oneOf[1].properties.farmSize')).toBeTruthy();
+    expect(defs.has('anyOf[0]')).toBeTruthy();
+    expect(defs.has('anyOf[1]')).toBeTruthy();
     expect(defs.has('if')).toBeTruthy();
     expect(defs.has('then')).toBeTruthy();
   expect(defs.has('then.properties.propertyObject')).toBeTruthy();
@@ -176,10 +175,23 @@ describe('test schema graph constructor with objects and attributes with advance
   });
 
 
+  it('deal with "then" that only implicitly has object type', () => {
+    const thenNode = defs.get('then')!;
+    expect(thenNode).toBeDefined();
+    // this is not explicitly marked in the schema, but should be injected by the functions
+    expect(thenNode.schema.type).toEqual('object');
+    thenNode.attributes = generateObjectAttributes(thenNode.absolutePath, thenNode.schema, defs);
+
+    expect(thenNode.attributes.length).toEqual(1);
+    expect(thenNode.attributes[0].name).toEqual('propertyObject');
+    expect(thenNode.attributes[0].absolutePath).toEqual(['then', 'properties', 'propertyObject']);
+  });
+
+
   it('generate object title', () => {
     // filter defs for nodes that have schema.type 'object'
     const objectNodeCount = Array.from(defs.values()).filter(node => node.schema.type === 'object').length;
-    expect(objectNodeCount).toEqual(9);
+    expect(objectNodeCount).toEqual(10);
 
     // We care about titles of nodes that define objects only
     const rootNode = defs.get('')!;
@@ -200,16 +212,19 @@ describe('test schema graph constructor with objects and attributes with advance
     const livingBeing = defs.get('$defs.livingBeing')!;
     expect(generateObjectTitle(livingBeing.absolutePath, livingBeing.schema)).toEqual('livingBeing');
 
-    const allOf1 = defs.get('allOf.1')!;
-    // allOf element at index 1 has no title, so we use the index as title // TODO: Better title!
-    expect(generateObjectTitle(allOf1.absolutePath, allOf1.schema)).toEqual('1');
+    const allOf1 = defs.get('allOf[1]')!;
+    // allOf element at index 1 has no title, so we use the index as title
+    expect(generateObjectTitle(allOf1.absolutePath, allOf1.schema)).toEqual('allOf[1]');
 
-    const oneOf1 = defs.get('oneOf.1')!;
+    const oneOf1 = defs.get('oneOf[1]')!;
     // oneOf element at index 1 has a title, so we use it
     expect(generateObjectTitle(oneOf1.absolutePath, oneOf1.schema)).toEqual('Farmer');
 
     const thenNode = defs.get('then')!;
     expect(generateObjectTitle(thenNode.absolutePath, thenNode.schema)).toEqual('then');
+
+    const thenNodeObject = defs.get('then.properties.propertyObject')!;
+    expect(generateObjectTitle(thenNodeObject.absolutePath, thenNodeObject.schema)).toEqual('propertyObject');
   });
 
   it('generate attribute edges', () => {
@@ -222,15 +237,43 @@ describe('test schema graph constructor with objects and attributes with advance
     // We care about titles of nodes that define objects only
     const rootNode = defs.get('')!;
     generateObjectSpecialPropertyEdges(rootNode, defs, graph);
-    expect(graph.edges.length).toEqual(2);
+    expect(graph.edges.length).toEqual(8);
     for (const edge of graph.edges) {
       expect(edge.start.absolutePath).toEqual([]);
     }
-    //TODO: Maybe I do not have to deal with allOf because all allOfs are merged in beginning?
-    expect(graph.edges[0].end.absolutePath).toEqual(['definitions', 'livingBeing']);
-    expect(graph.edges[0].edgeType).toEqual(EdgeType.ALL_OF);
-    expect(graph.edges[0].label).toEqual('livingBeing');
 
+    // note that the order of the edges as in the same order as in the generation function: oneOf, anyOf, allOf, if, then, else
+    expect(graph.edges[0].end.absolutePath).toEqual(['$defs', 'researcher']);
+    expect(graph.edges[0].edgeType).toEqual(EdgeType.ONE_OF);
+    expect(graph.edges[0].label).toEqual(EdgeType.ONE_OF);
+
+    expect(graph.edges[1].end.absolutePath).toEqual(['oneOf', 1]);
+    expect(graph.edges[1].edgeType).toEqual(EdgeType.ONE_OF);
+    expect(graph.edges[1].label).toEqual(EdgeType.ONE_OF);
+
+    expect(graph.edges[2].end.absolutePath).toEqual(['$defs', 'person']);
+    expect(graph.edges[2].edgeType).toEqual(EdgeType.ANY_OF);
+    expect(graph.edges[2].label).toEqual(EdgeType.ANY_OF);
+
+    expect(graph.edges[3].end.absolutePath).toEqual(['$defs', 'animal']);
+    expect(graph.edges[3].edgeType).toEqual(EdgeType.ANY_OF);
+    expect(graph.edges[3].label).toEqual(EdgeType.ANY_OF);
+
+    expect(graph.edges[4].end.absolutePath).toEqual(['$defs', 'livingBeing']);
+    expect(graph.edges[4].edgeType).toEqual(EdgeType.ALL_OF);
+    expect(graph.edges[4].label).toEqual(EdgeType.ALL_OF);
+
+    expect(graph.edges[5].end.absolutePath).toEqual(['allOf', 1]);
+    expect(graph.edges[5].edgeType).toEqual(EdgeType.ALL_OF);
+    expect(graph.edges[5].label).toEqual(EdgeType.ALL_OF);
+
+    expect(graph.edges[6].end.absolutePath).toEqual(['$defs', 'researcher']);
+    expect(graph.edges[6].edgeType).toEqual(EdgeType.IF);
+    expect(graph.edges[6].label).toEqual(EdgeType.IF);
+
+    expect(graph.edges[7].end.absolutePath).toEqual(['then']);
+    expect(graph.edges[7].edgeType).toEqual(EdgeType.THEN);
+    expect(graph.edges[7].label).toEqual(EdgeType.THEN);
 
   });
 

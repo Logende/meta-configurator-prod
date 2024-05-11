@@ -17,14 +17,17 @@ const props = defineProps({
     <SchemaObjectAttribute
       v-for="attribute in props.data!.attributes"
       :data="attribute!"></SchemaObjectAttribute>
-    <hr />
   </div>
 </template>
 
 <style>
 .vue-flow__node-schemaobject {
-  background: var(--primary-color);
-  color: var(--primary-color-text);
-  padding: 2px;
+  background: lightblue;
+  color: black;
+
+    border: 1px solid lightblue;
+    border-radius: 4px;
+    box-shadow: 0 0 0 3px lightblue;
+    padding: 0px;
 }
 </style>

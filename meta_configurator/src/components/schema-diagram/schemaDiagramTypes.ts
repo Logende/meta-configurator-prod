@@ -78,7 +78,7 @@ export class SchemaGraph {
         source: pathToNodeId(data.start.absolutePath),
         target: pathToNodeId(data.end.absolutePath),
         type: type,
-        label: label,
+        label: data.label,
         data: data,
         markerEnd: markerEnd,
         animated: false,
@@ -161,13 +161,13 @@ export class EdgeData {
 }
 
 export enum EdgeType {
-  ATTRIBUTE,
-  ARRAY_ATTRIBUTE,
-  ALL_OF,
-  ANY_OF,
-  ONE_OF,
-  IF,
-  THEN,
-  ELSE,
-  ADDITIONAL_PROPERTIES,
+  ATTRIBUTE = "attribute",
+  ARRAY_ATTRIBUTE = "array_attribute",
+  ALL_OF = "allOf",
+  ANY_OF = "anyOf",
+  ONE_OF = "oneOf",
+  IF = "if",
+  THEN = "then",
+  ELSE = "else",
+  ADDITIONAL_PROPERTIES = "additionalProperties",
 }

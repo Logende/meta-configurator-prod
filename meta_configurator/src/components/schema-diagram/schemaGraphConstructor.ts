@@ -1,4 +1,4 @@
-import type {JsonSchemaObjectType, JsonSchemaType, SchemaPropertyTypes, TopLevelSchema} from "@/schema/jsonSchemaType";
+import type {JsonSchemaObjectType, JsonSchemaType, TopLevelSchema} from "@/schema/jsonSchemaType";
 import {
     EdgeData,
     EdgeType,
@@ -13,7 +13,8 @@ import {mergeAllOfs} from "@/schema/mergeAllOfs";
 
 export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
     // copy schema to avoid modifying the original
-    //rootSchema = JSON.parse(JSON.stringify(rootSchema));
+    rootSchema = JSON.parse(JSON.stringify(rootSchema));
+
     rootSchema = mergeAllOfs(rootSchema);
 
     const objectDefs = new Map<string, SchemaObjectNodeData>();
@@ -42,24 +43,10 @@ export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
         }
     }
 
-    // remove all edges, where the receiver node is not an object
-    schemaGraph.edges = schemaGraph.edges.filter(edge => {
-        return isNodeRelevantToDisplay(edge.end, schemaGraph);
-    });
-
-    // remove all nodes that are not objects
-    schemaGraph.nodes = schemaGraph.nodes.filter(node => {
-        return isNodeRelevantToDisplay(node, schemaGraph);
-    });
+    trimGraph(schemaGraph);
 
     return schemaGraph;
 }
-
-function isNodeRelevantToDisplay(node: SchemaObjectNodeData, graph: SchemaGraph): boolean {
-    return node.schema.type == 'object' || true //||
-        //graph.edges.find(edge => (edge.start == node || edge.end == node) && edge.edgeType in [EdgeType.IF, EdgeType.ELSE, EdgeType.THEN]) !== undefined;
-}
-
 
 
 export function identifyObjects(currentPath: Path, schema: JsonSchemaType, defs: Map<string, SchemaObjectNodeData>) {
@@ -100,7 +87,7 @@ export function identifyObjects(currentPath: Path, schema: JsonSchemaType, defs:
     if (schema.oneOf) {
         for (const [index, value] of schema.oneOf.entries()) {
             if (typeof value === 'object') {
-                const childPath = [...currentPath, 'oneOf', index.toString()];
+                const childPath = [...currentPath, 'oneOf', index];
                 identifyObjects(childPath, value, defs)
             }
         }
@@ -108,7 +95,7 @@ export function identifyObjects(currentPath: Path, schema: JsonSchemaType, defs:
     if (schema.anyOf) {
         for (const [index, value] of schema.anyOf.entries()) {
             if (typeof value === 'object') {
-                const childPath = [...currentPath, 'anyOf', index.toString()];
+                const childPath = [...currentPath, 'anyOf', index];
                 identifyObjects(childPath, value, defs)
             }
         }
@@ -116,22 +103,34 @@ export function identifyObjects(currentPath: Path, schema: JsonSchemaType, defs:
     if (schema.allOf) {
         for (const [index, value] of schema.allOf.entries()) {
             if (typeof value === 'object') {
-                const childPath = [...currentPath, 'allOf', index.toString()];
+                const childPath = [...currentPath, 'allOf', index];
                 identifyObjects(childPath, value, defs)
             }
         }
     }
     if (schema.if) {
         if (typeof schema.if === 'object') {
+            // if we have an object with an if condition, the if itself sometimes does not explicitly state
+            // that it is of type object, but it is implicitly an object. For the graph generation to deal with it
+            // properly, we inject the type object into the schema.
+            injectTypeObjectIntoSchema(schema.if);
             identifyObjects([...currentPath, 'if'], schema.if, defs)
         }
     }
     if (schema.then) {
         if (typeof schema.then === 'object') {
+            // if we have an object with an if condition, the if itself sometimes does not explicitly state
+            // that it is of type object, but it is implicitly an object. For the graph generation to deal with it
+            // properly, we inject the type object into the schema.
+            injectTypeObjectIntoSchema(schema.then);
             identifyObjects([...currentPath, 'then'], schema.then, defs)
         }
     }
     if (schema.else) {
+        // if we have an object with an if condition, the if itself sometimes does not explicitly state
+        // that it is of type object, but it is implicitly an object. For the graph generation to deal with it
+        // properly, we inject the type object into the schema.
+        injectTypeObjectIntoSchema(schema.else);
         if (typeof schema.else === 'object') {
             identifyObjects([...currentPath, 'else'], schema.else, defs)
         }
@@ -141,6 +140,13 @@ export function identifyObjects(currentPath: Path, schema: JsonSchemaType, defs:
             identifyObjects([...currentPath, 'additionalProperties'], schema.additionalProperties, defs)
         }
     }
+}
+
+function injectTypeObjectIntoSchema(schema: JsonSchemaType) {
+    if (schema === true || schema === false) {
+        return;
+    }
+    schema.type = 'object';
 }
 
 function generateInitialNode(path: Path, schema: JsonSchemaObjectType): SchemaObjectNodeData {
@@ -302,13 +308,13 @@ function resolveObjectAttributeNode(path: Path, schema: JsonSchemaObjectType, ob
 export function generateObjectSpecialPropertyEdges(node: SchemaObjectNodeData, objectDefs: Map<string, SchemaObjectNodeData>, graph: SchemaGraph) {
     const schema = node.schema;
     if (schema.oneOf) {
-        generateObjectSubSchemasEdge(node, schema.oneOf, node.absolutePath, EdgeType.ONE_OF, objectDefs, graph);
+        generateObjectSubSchemasEdge(node, schema.oneOf, [...node.absolutePath, 'oneOf'], EdgeType.ONE_OF, objectDefs, graph);
     }
     if (schema.anyOf) {
-        generateObjectSubSchemasEdge(node, schema.anyOf, node.absolutePath, EdgeType.ANY_OF, objectDefs, graph);
+        generateObjectSubSchemasEdge(node, schema.anyOf, [...node.absolutePath, 'anyOf'], EdgeType.ANY_OF, objectDefs, graph);
     }
     if (schema.allOf) {
-        generateObjectSubSchemasEdge(node, schema.allOf, node.absolutePath, EdgeType.ALL_OF, objectDefs, graph);
+        generateObjectSubSchemasEdge(node, schema.allOf, [...node.absolutePath, 'allOf'], EdgeType.ALL_OF, objectDefs, graph);
     }
     if (schema.if) {
         generateObjectSubSchemaEdge(node, schema.if, [...node.absolutePath, 'if'], EdgeType.IF, objectDefs, graph);
@@ -336,12 +342,27 @@ function generateObjectSubSchemasEdge(node: SchemaObjectNodeData, subSchemas: Js
 function generateObjectSubSchemaEdge(node: SchemaObjectNodeData, subSchema: JsonSchemaType, subSchemaPath: Path, edgeType: EdgeType, objectDefs: Map<string, SchemaObjectNodeData>, graph: SchemaGraph) {
     const referenceNode = resolveReferenceNode(subSchema, objectDefs);
     if (referenceNode) {
-        graph.edges.push(new EdgeData(node, referenceNode, edgeType));
+        graph.edges.push(new EdgeData(node, referenceNode, edgeType, edgeType));
     } else {
-        const subSchemaNode = objectDefs.get(pathToString(subSchemaPath));
+        const subSchemaPathString = pathToString(subSchemaPath);
+        const subSchemaNode = objectDefs.get(subSchemaPathString);
         if (subSchemaNode) {
-            graph.edges.push(new EdgeData(node, subSchemaNode, edgeType));
+            graph.edges.push(new EdgeData(node, subSchemaNode, edgeType, edgeType));
         }
     }
 
+}
+
+export function trimGraph(graph: SchemaGraph) {
+    //graph.edges = graph.edges.filter(edge => {
+    //    return isNodeRelevantToDisplay(edge.start, graph) && isNodeRelevantToDisplay(edge.end, graph);
+    //});
+
+    graph.nodes = graph.nodes.filter(node => {
+        return isNodeConnectedByEdge(node, graph);
+    });
+
+}
+function isNodeConnectedByEdge(node: SchemaObjectNodeData, graph: SchemaGraph): boolean {
+    return graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined;
 }
