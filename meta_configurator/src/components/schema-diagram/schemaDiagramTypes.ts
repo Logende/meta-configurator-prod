@@ -2,9 +2,7 @@ import type {Path} from '@/utility/path';
 import {pathToString} from '@/utility/pathUtils';
 import {useLayout} from '@/components/schema-diagram/useLayout';
 import {MarkerType} from '@vue-flow/core';
-import type {
-  JsonSchemaObjectType,
-} from '@/schema/jsonSchemaType';
+import type {JsonSchemaObjectType} from '@/schema/jsonSchemaType';
 
 export class SchemaGraph {
   public constructor(public nodes: SchemaObjectNodeData[], public edges: EdgeData[]) {}
@@ -143,18 +141,17 @@ export class SchemaObjectNodeData {
 }
 
 export class SchemaEnumNodeData extends SchemaObjectNodeData {
-    public constructor(
-        public name: string,
-        public absolutePath: Path,
-        public schema: JsonSchemaObjectType,
-        public values: string[]
-    ) {
-      super(name, absolutePath, schema, []);
-    }
+  public constructor(
+    public name: string,
+    public absolutePath: Path,
+    public schema: JsonSchemaObjectType,
+    public values: string[]
+  ) {
+    super(name, absolutePath, schema, []);
+  }
   public getNodeType() {
     return 'schemaenum';
   }
-
 }
 
 export class SchemaObjectAttributeData {

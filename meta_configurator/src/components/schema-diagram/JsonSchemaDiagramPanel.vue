@@ -3,7 +3,7 @@ import type {Path} from '@/utility/path';
 import {computed} from 'vue';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {getSessionForMode} from '@/data/useDataLink';
-import {SessionMode} from "@/store/sessionMode";
+import {SessionMode} from '@/store/sessionMode';
 
 /* these are necessary styles for vue flow */
 import '@vue-flow/core/dist/style.css';
@@ -12,8 +12,7 @@ import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import VueFlowPanel from '@/components/schema-diagram/VueFlowPanel.vue';
 
-const props = defineProps<{
-}>();
+const props = defineProps<{}>();
 
 const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
 const dataSession = getSessionForMode(SessionMode.DataEditor);
@@ -28,11 +27,11 @@ const currentSchema = computed(() => {
 
 function zoomIntoPath(pathToAdd: Path) {
   schemaSession.updateCurrentPath(schemaSession.currentPath.value.concat(pathToAdd));
-    schemaSession.updateCurrentSelectedElement(schemaSession.currentPath.value);
+  schemaSession.updateCurrentSelectedElement(schemaSession.currentPath.value);
 }
 
 function selectPath(path: Path) {
-    schemaSession.updateCurrentSelectedElement(path);
+  schemaSession.updateCurrentSelectedElement(path);
 }
 </script>
 

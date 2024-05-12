@@ -9,7 +9,7 @@ import {SessionMode} from '@/store/sessionMode';
 import {Path} from '@/utility/path';
 import {useLayout} from './useLayout';
 import type {Edge, Node} from '@/components/schema-diagram/schemaDiagramTypes';
-import SchemaEnumNode from "@/components/schema-diagram/SchemaEnumNode.vue";
+import SchemaEnumNode from '@/components/schema-diagram/SchemaEnumNode.vue';
 
 const props = defineProps<{
   currentPath: Path;
@@ -55,26 +55,27 @@ async function layoutGraph(direction) {
   });
 }
 
-
 function clickedNodeOrAttribute(path: Path) {
-    if (schemaData.dataAt(path) != undefined) {
-        emit('select_path', path);
-    }
+  if (schemaData.dataAt(path) != undefined) {
+    emit('select_path', path);
+  }
 }
-
 </script>
 
 <template>
   <div class="layout-flow">
-    <VueFlow :nodes="currentNodes" :edges="currentEdges" @nodes-initialized="layoutGraph('TB')"
-             :max-zoom="4" :min-zoom="0.1"
-    >
-        <template #node-schemaobject="props">
-            <SchemaObjectNode :data="props.data" @select_element="clickedNodeOrAttribute" />
-        </template>
-        <template #node-schemaenum="props">
-            <SchemaEnumNode :data="props.data" @select_element="clickedNodeOrAttribute" />
-        </template>
+    <VueFlow
+      :nodes="currentNodes"
+      :edges="currentEdges"
+      @nodes-initialized="layoutGraph('TB')"
+      :max-zoom="4"
+      :min-zoom="0.1">
+      <template #node-schemaobject="props">
+        <SchemaObjectNode :data="props.data" @select_element="clickedNodeOrAttribute" />
+      </template>
+      <template #node-schemaenum="props">
+        <SchemaEnumNode :data="props.data" @select_element="clickedNodeOrAttribute" />
+      </template>
     </VueFlow>
   </div>
 </template>
