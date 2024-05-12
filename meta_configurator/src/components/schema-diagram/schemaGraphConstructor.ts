@@ -1,7 +1,8 @@
 import type {JsonSchemaObjectType, JsonSchemaType, TopLevelSchema} from '@/schema/jsonSchemaType';
 import {
   EdgeData,
-  EdgeType, SchemaEnumNodeData,
+  EdgeType,
+  SchemaEnumNodeData,
   SchemaGraph,
   SchemaObjectAttributeData,
   SchemaObjectNodeData,
@@ -155,7 +156,12 @@ function generateInitialNode(path: Path, schema: JsonSchemaObjectType): SchemaOb
   if (!isEnumSchema(schema)) {
     return new SchemaObjectNodeData(generateObjectTitle(path, schema), path, schema, []);
   } else {
-    return new SchemaEnumNodeData(generateObjectTitle(path, schema), path, schema, generateEnumValues(schema));
+    return new SchemaEnumNodeData(
+      generateObjectTitle(path, schema),
+      path,
+      schema,
+      generateEnumValues(schema)
+    );
   }
 }
 
@@ -440,15 +446,15 @@ function isObjectSchema(schema: JsonSchemaType): boolean {
     return true;
   }
   // check if schema.type itself is a list of types, that contains the 'object' string
-    if (Array.isArray(schema.type)) {
-        return schema.type.includes('object');
-    }
+  if (Array.isArray(schema.type)) {
+    return schema.type.includes('object');
+  }
 
-    if (schema.type === undefined) {
-      return schema.properties !== undefined;
-    }
+  if (schema.type === undefined) {
+    return schema.properties !== undefined;
+  }
 
-    return false;
+  return false;
 }
 
 function isEnumSchema(schema: JsonSchemaType): boolean {
@@ -507,5 +513,8 @@ export function trimGraph(graph: SchemaGraph) {
   });
 }
 function isNodeConnectedByEdge(node: SchemaObjectNodeData, graph: SchemaGraph): boolean {
-  return graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined || node.schema.type == 'object';
+  return (
+    graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined ||
+    node.schema.type == 'object'
+  );
 }
