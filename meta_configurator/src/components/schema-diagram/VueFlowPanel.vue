@@ -76,6 +76,9 @@ function clickedNodeOrAttribute(path: Path) {
       <template #node-schemaenum="props">
         <SchemaEnumNode :data="props.data" @select_element="clickedNodeOrAttribute" />
       </template>
+      <template #node-schemaenum="props">
+        <SchemaEnumNode :data="props.data" />
+      </template>
     </VueFlow>
   </div>
 </template>
