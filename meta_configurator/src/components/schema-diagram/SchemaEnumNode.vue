@@ -9,12 +9,11 @@ const props = defineProps({
 
 <template>
   <div class="vue-flow__node-schemaobject">
-      <p>&lt;enumeration&gt;</p>
+    <p>&lt;enumeration&gt;</p>
     <!--small><i>{{ props.data.absolutePath }}</i></small-->
     <b>{{ props.data.name }}</b>
     <hr />
-    <p
-      v-for="value in props.data!.values"> {{value}}</p>
+    <p v-for="value in props.data!.values">{{ value }}</p>
   </div>
 </template>
 

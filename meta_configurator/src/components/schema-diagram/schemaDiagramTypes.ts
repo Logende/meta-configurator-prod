@@ -145,18 +145,17 @@ export class SchemaObjectNodeData {
 }
 
 export class SchemaEnumNodeData extends SchemaObjectNodeData {
-    public constructor(
-        public name: string,
-        public absolutePath: Path,
-        public schema: JsonSchemaObjectType,
-        public values: string[]
-    ) {
-      super(name, absolutePath, schema, []);
-    }
+  public constructor(
+    public name: string,
+    public absolutePath: Path,
+    public schema: JsonSchemaObjectType,
+    public values: string[]
+  ) {
+    super(name, absolutePath, schema, []);
+  }
   public getNodeType() {
     return 'schemaenum';
   }
-
 }
 
 export class SchemaObjectAttributeData {
