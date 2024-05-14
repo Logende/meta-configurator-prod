@@ -3,7 +3,7 @@ import {
   EdgeData,
   EdgeType,
   SchemaEnumNodeData,
-  SchemaGraph,
+  SchemaGraph, SchemaElementData,
   SchemaObjectAttributeData,
   SchemaObjectNodeData,
 } from '@/components/schema-diagram/schemaDiagramTypes';
@@ -53,7 +53,7 @@ export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
 export function identifyObjects(
   currentPath: Path,
   schema: JsonSchemaType,
-  defs: Map<string, SchemaObjectNodeData>
+  defs: Map<string, SchemaElementData>
 ) {
   if (schema === true || schema === false) {
     return;
@@ -154,7 +154,7 @@ function injectTypeObjectIntoSchema(schema: JsonSchemaType) {
   schema.type = 'object';
 }
 
-function generateInitialNode(path: Path, schema: JsonSchemaObjectType): SchemaObjectNodeData {
+function generateInitialNode(path: Path, schema: JsonSchemaObjectType): SchemaElementData {
   if (!isEnumSchema(schema)) {
     return new SchemaObjectNodeData(generateObjectTitle(path, schema), path, schema, []);
   } else {
@@ -530,7 +530,7 @@ function trimChildren(graph: SchemaGraph) {
   }
 }
 
-function isNodeConnectedByEdge(node: SchemaObjectNodeData, graph: SchemaGraph): boolean {
+function isNodeConnectedByEdge(node: SchemaElementData, graph: SchemaGraph): boolean {
   return (
     graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined ||
     node.schema.type == 'object'

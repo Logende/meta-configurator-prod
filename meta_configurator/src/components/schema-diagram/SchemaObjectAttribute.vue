@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import {SchemaObjectAttributeData} from '@/components/schema-diagram/schemaDiagramTypes';
+import {SchemaElementData, SchemaObjectAttributeData} from '@/components/schema-diagram/schemaDiagramTypes';
 import {getSessionForMode} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
 import {Path} from '@/utility/path';
-import {pathToString} from '@/utility/pathUtils';
 
 const props = defineProps<{
   data: SchemaObjectAttributeData;
+    selectedData?: SchemaElementData;
 }>();
 
 const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
@@ -20,11 +20,10 @@ function clickedAttribute() {
 }
 
 function isHighlighted() {
-  return (
-    pathToString(schemaSession.currentSelectedElement.value) ===
-    pathToString(props.data.absolutePath)
-  );
+    return props.selectedData && props.selectedData == props.data;
 }
+
+
 </script>
 
 <template>

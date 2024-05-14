@@ -17,6 +17,9 @@ export const SETTINGS_DATA_DEFAULT = {
         showEnumValues: true,
         maxAttributesToShow: 8,
         maxEnumValuesToShow: 5,
+      moveViewToSelectedElement: true,
+      automaticZoomMaxValue: 1,
+        automaticZoomMinValue: 0.5,
     },
   metaSchema: {
     allowBooleanSchema: false,

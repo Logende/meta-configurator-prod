@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, nextTick, onMounted, ref, watch} from 'vue';
+import {computed, nextTick, onMounted, Ref, ref, watch} from 'vue';
 
 import {useVueFlow, VueFlow} from '@vue-flow/core';
 import SchemaObjectNode from '@/components/schema-diagram/SchemaObjectNode.vue';
@@ -10,8 +10,9 @@ import {Path} from '@/utility/path';
 import {useLayout} from './useLayout';
 import type {Edge, Node} from '@/components/schema-diagram/schemaDiagramTypes';
 import SchemaEnumNode from '@/components/schema-diagram/SchemaEnumNode.vue';
-import {pathToString} from "@/utility/pathUtils";
 import {useSettings} from "@/settings/useSettings";
+import {identifyBestMatchingData, identifyBestMatchingNode} from "@/components/schema-diagram/schemaDiagramHelper";
+import {SchemaElementData} from "@/components/schema-diagram/schemaDiagramTypes";
 
 const props = defineProps<{
   currentPath: Path;
@@ -25,14 +26,18 @@ const emit = defineEmits<{
 const schemaData = getDataForMode(SessionMode.SchemaEditor);
 const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
 
-const currentNodes = ref<Node[]>([]);
-const currentEdges = ref<Edge[]>([]);
+const currentNodes: Ref<Node[]> = ref<Node[]>([]);
+const currentEdges: Ref<Edge[]> = ref<Edge[]>([]);
 
 const graphDirection = computed(() => {
     // note that having edges from left ro right will usually lead to a more vertical graph, because usually it is
     // not very deeply nested, but there exist many nodes on the same levels
   return useSettings().schemaDiagram.vertical ? "LR" : "TB";
 });
+
+const selectedNode: Ref<Node|undefined> = ref(undefined);
+const selectedData: Ref<SchemaElementData|undefined> = ref(undefined);
+
 
 watch(getSchemaForMode(SessionMode.DataEditor).schemaPreprocessed, () => {
     // TODO: compare new and old nodes and then if no nodes are added, only update the data and if needed remove some node
@@ -53,18 +58,18 @@ watch(
     schemaSession.currentSelectedElement,
     () => {
         const absolutePath = schemaSession.currentSelectedElement.value;
-        const node = currentNodes.value.find((node) => pathToString(absolutePath).startsWith(node.id));
-        // TODO: function to find most suitable node for an ID
-        console.log("updatd current selected element with path and node ", absolutePath, node)
-        if (node) {
-            console.log("node found", node.id)
+        const bestMatchingNode = identifyBestMatchingNode(currentNodes.value, absolutePath);
+        selectedNode.value = bestMatchingNode;
+        selectedData.value = identifyBestMatchingData(bestMatchingNode, absolutePath)
+        if (bestMatchingNode && useSettings().schemaDiagram.moveViewToSelectedElement) {
             nextTick(() => {
-                console.log("fitting view")
                 fitView(
                     {
-                        nodes: [node.id],
-                        duration: 1000, // use this if you want a smooth transition to the node
-                        padding: 1 // use this for some padding around the node
+                        nodes: [bestMatchingNode.id],
+                        duration: 1000,
+                        padding: 1,
+                        maxZoom: useSettings().schemaDiagram.automaticZoomMaxValue,
+                        minZoom: useSettings().schemaDiagram.automaticZoomMinValue
                     }
                 )
             });
@@ -107,10 +112,10 @@ function clickedNodeOrAttribute(path: Path) {
       :max-zoom="4"
       :min-zoom="0.1">
       <template #node-schemaobject="props">
-        <SchemaObjectNode :data="props.data" @select_element="clickedNodeOrAttribute" :source-position="props.sourcePosition" :target-position="props.targetPosition"/>
+        <SchemaObjectNode :data="props.data" @select_element="clickedNodeOrAttribute" :source-position="props.sourcePosition" :target-position="props.targetPosition" :selected-data="selectedData"/>
       </template>
       <template #node-schemaenum="props">
-        <SchemaEnumNode :data="props.data" @select_element="clickedNodeOrAttribute" :source-position="props.sourcePosition" :target-position="props.targetPosition"/>
+        <SchemaEnumNode :data="props.data" @select_element="clickedNodeOrAttribute" :source-position="props.sourcePosition" :target-position="props.targetPosition" :selected-data="selectedData"/>
       </template>
     </VueFlow>
   </div>

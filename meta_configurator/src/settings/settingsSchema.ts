@@ -59,7 +59,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
     },
     schemaDiagram: {
         type: 'object',
-        required: ['vertical', 'showAttributes', 'showEnumValues', 'maxAttributesToShow', 'maxEnumValuesToShow'],
+        required: ['vertical', 'showAttributes', 'showEnumValues', 'maxAttributesToShow', 'maxEnumValuesToShow', 'moveViewToSelectedElement', 'automaticZoomMaxValue', 'automaticZoomMinValue'],
         additionalProperties: false,
         description: 'Settings of the schema diagram.',
         properties: {
@@ -92,6 +92,24 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
             default: 5,
             minimum: 1,
             },
+            moveViewToSelectedElement: {
+            type: 'boolean',
+            description:
+                'If set to true, the view will be moved to the selected element in the schema diagram.',
+            default: true,
+            },
+            automaticZoomMaxValue: {
+            type: 'number',
+            description:
+                'The maximum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
+            default: 1,
+            },
+            automaticZoomMinValue: {
+            type: 'number',
+            description:
+                'The minimum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
+            default: 0.5,
+            }
         },
     },
     metaSchema: {

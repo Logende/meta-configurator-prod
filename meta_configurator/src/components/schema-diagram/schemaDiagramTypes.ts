@@ -5,9 +5,9 @@ import {MarkerType} from '@vue-flow/core';
 import type {JsonSchemaObjectType} from '@/schema/jsonSchemaType';
 
 export class SchemaGraph {
-  public constructor(public nodes: SchemaObjectNodeData[], public edges: EdgeData[]) {}
+  public constructor(public nodes: SchemaElementData[], public edges: EdgeData[]) {}
 
-  public findNode(path: Path): SchemaObjectNodeData | undefined {
+  public findNode(path: Path): SchemaElementData | undefined {
     return this.nodes.find(node => pathToString(node.absolutePath) === pathToString(path));
   }
 
@@ -91,7 +91,7 @@ export interface Node {
   position: {x: number; y: number};
   label: string;
   type: string;
-  data: any;
+  data: SchemaElementData;
 }
 
 export interface Edge {
@@ -99,7 +99,7 @@ export interface Edge {
   source: string;
   target: string;
   type: string;
-  data: any;
+  data: EdgeData;
   animated: boolean;
 }
 
@@ -115,42 +115,62 @@ export function pathToNodeId(path: Path): string {
   }
 }
 
-export class SchemaObjectNodeData {
+
+export class SchemaElementData {
+
   public constructor(
-    public name: string,
-    public absolutePath: Path,
-    public schema: JsonSchemaObjectType,
+      public name: string,
+      public absolutePath: Path,
+      public schema: JsonSchemaObjectType,
+  ) {
+
+  }
+
+  public getNodeType() {
+    return 'undefined';
+  }
+}
+
+export class SchemaObjectNodeData extends SchemaElementData {
+  public constructor(
+    name: string,
+     absolutePath: Path,
+     schema: JsonSchemaObjectType,
     public attributes: SchemaObjectAttributeData[]
-  ) {}
+  ) {
+    super(name, absolutePath, schema);
+  }
 
   public getNodeType() {
     return 'schemaobject';
   }
 }
 
-export class SchemaEnumNodeData extends SchemaObjectNodeData {
+export class SchemaEnumNodeData extends SchemaElementData {
   public constructor(
     public name: string,
     public absolutePath: Path,
     public schema: JsonSchemaObjectType,
     public values: string[]
   ) {
-    super(name, absolutePath, schema, []);
+    super(name, absolutePath, schema);
   }
   public getNodeType() {
     return 'schemaenum';
   }
 }
 
-export class SchemaObjectAttributeData {
+export class SchemaObjectAttributeData extends SchemaElementData {
   public constructor(
-    public name: string,
+     name: string,
     public typeDescription: string,
-    public absolutePath: Path,
+     absolutePath: Path,
     public deprecated: boolean,
     public required: boolean,
-    public schema: JsonSchemaObjectType
-  ) {}
+     schema: JsonSchemaObjectType
+  ) {
+    super(name, absolutePath, schema);
+  }
 }
 
 export class EdgeData {

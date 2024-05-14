@@ -27,6 +27,9 @@ export interface SettingsInterfaceSchemaDiagram {
   showEnumValues: boolean,
   maxAttributesToShow: number,
   maxEnumValuesToShow: number,
+    moveViewToSelectedElement: boolean,
+    automaticZoomMaxValue: number,
+    automaticZoomMinValue: number,
 }
 
 export interface SettingsInterfacePanels {
