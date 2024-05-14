@@ -1,12 +1,12 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
-import type {Path} from '../../../utility/path';
-import type {TopLevelSchema} from '../../../schema/jsonSchemaType';
+import type {Path} from '@/utility/path';
+import type {TopLevelSchema} from '@/schema/jsonSchemaType';
 import {EdgeType, SchemaGraph, SchemaObjectNodeData} from '../schemaDiagramTypes';
 import {
   generateAttributeEdges,
   generateObjectAttributes,
   generateObjectTitle,
-  identifyObjects,
+  identifyObjects, isSchemaThatDeservesANode,
 } from '../schemaGraphConstructor';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
@@ -231,9 +231,8 @@ describe('test schema graph constructor with objects and attributes, without adv
   });
 
   it('generate object title', () => {
-    // filter defs for nodes that have schema.type 'object'
     const objectNodeCount = Array.from(defs.values()).filter(
-      node => node.schema.type === 'object'
+      node => isSchemaThatDeservesANode(node.schema)
     ).length;
     expect(objectNodeCount).toEqual(6);
 
@@ -272,7 +271,6 @@ describe('test schema graph constructor with objects and attributes, without adv
 
     const graph = new SchemaGraph([], []);
 
-    // We care about titles of nodes that define objects only
     const rootNode = defs.get('')!;
     generateAttributeEdges(rootNode, defs, graph);
     expect(graph.edges.length).toEqual(6);
@@ -282,16 +280,19 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(graph.edges[0].end.absolutePath).toEqual(['properties', 'propertyObject']);
     expect(graph.edges[0].edgeType).toEqual(EdgeType.ATTRIBUTE);
     expect(graph.edges[0].label).toEqual('propertyObject');
+    expect(graph.edges[0].end.getNodeType() == 'schemaobject').toBeTruthy();
 
     expect(graph.edges[1].end.absolutePath).toEqual(['properties', 'propertyObjectWithTitle']);
     expect(graph.edges[1].edgeType).toEqual(EdgeType.ATTRIBUTE);
     expect(graph.edges[1].label).toEqual('propertyObjectWithTitle');
+    expect(graph.edges[1].end.getNodeType() == 'schemaobject').toBeTruthy();
 
     // the edge is not to the ref definition but to the resolved object
     expect(graph.edges[2].end.absolutePath).toEqual(['properties', 'propertyObject']);
     expect(graph.edges[2].edgeType).toEqual(EdgeType.ATTRIBUTE);
     // the label of the edge is the actual attribute name, not the resolved data type
     expect(graph.edges[2].label).toEqual('propertyRefToComplex');
+    expect(graph.edges[2].end.getNodeType() == 'schemaobject').toBeTruthy();
 
     // for this array, because the object is inlined, the edge is to the inlined object
     expect(graph.edges[3].end.absolutePath).toEqual([
@@ -301,16 +302,19 @@ describe('test schema graph constructor with objects and attributes, without adv
     ]);
     expect(graph.edges[3].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
     expect(graph.edges[3].label).toEqual('propertyArrayToComplex2');
+    expect(graph.edges[3].end.getNodeType() == 'schemaobject').toBeTruthy();
 
     // for this array, because the object is not inlined, the edge is to the object node
     expect(graph.edges[4].end.absolutePath).toEqual(['properties', 'propertyObjectWithTitle']);
     expect(graph.edges[4].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
     expect(graph.edges[4].label).toEqual('propertyArrayToRefComplexWithTitle');
+    expect(graph.edges[4].end.getNodeType() == 'schemaobject').toBeTruthy();
 
     // this edge is not to the ref definition but to the resolved object
     expect(graph.edges[5].end.absolutePath).toEqual(['$defs', 'person']);
     expect(graph.edges[5].edgeType).toEqual(EdgeType.ATTRIBUTE);
     expect(graph.edges[5].label).toEqual('propertyRefToNestedObject');
+    expect(graph.edges[5].end.getNodeType() == 'schemaobject').toBeTruthy();
 
     graph.edges = [];
     const propComplex = defs.get('properties.propertyObject')!;
@@ -339,5 +343,6 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(graph.edges[0].end.absolutePath).toEqual(['$defs', 'person', 'properties', 'address']);
     expect(graph.edges[0].edgeType).toEqual(EdgeType.ATTRIBUTE);
     expect(graph.edges[0].label).toEqual('address');
+    expect(graph.edges[0].end.getNodeType() == 'schemaobject').toBeTruthy();
   });
 });

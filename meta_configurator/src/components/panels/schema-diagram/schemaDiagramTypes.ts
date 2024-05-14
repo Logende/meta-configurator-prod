@@ -127,7 +127,13 @@ export class SchemaElementData {
   }
 }
 
-export class SchemaObjectNodeData extends SchemaElementData {
+export class SchemaNodeData extends SchemaElementData {
+  public constructor(name: string, absolutePath: Path, schema: JsonSchemaObjectType) {
+    super(name, absolutePath, schema);
+  }
+}
+
+export class SchemaObjectNodeData extends SchemaNodeData {
   public constructor(
     name: string,
     absolutePath: Path,
@@ -142,7 +148,7 @@ export class SchemaObjectNodeData extends SchemaElementData {
   }
 }
 
-export class SchemaEnumNodeData extends SchemaElementData {
+export class SchemaEnumNodeData extends SchemaNodeData {
   public constructor(
     public name: string,
     public absolutePath: Path,
@@ -171,8 +177,8 @@ export class SchemaObjectAttributeData extends SchemaElementData {
 
 export class EdgeData {
   public constructor(
-    public start: SchemaObjectNodeData,
-    public end: SchemaObjectNodeData,
+    public start: SchemaNodeData,
+    public end: SchemaNodeData,
     public edgeType: EdgeType,
     public label: string
   ) {}
@@ -188,4 +194,5 @@ export enum EdgeType {
   THEN = 'then',
   ELSE = 'else',
   ADDITIONAL_PROPERTIES = 'additionalProperties',
+  PATTERN_PROPERTIES = 'patternProperties',
 }
