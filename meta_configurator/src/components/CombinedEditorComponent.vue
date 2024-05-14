@@ -24,7 +24,7 @@ import {useSessionStore} from '@/store/sessionStore';
 import {getComponentByPanelType} from '@/components/panelType';
 import type {SettingsInterfacePanels, SettingsInterfaceRoot} from '@/settings/settingsTypes';
 import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
-import {addDefaultsForSettings} from "@/utility/settingsUpdater";
+import {addDefaultsForSettings} from '@/utility/settingsUpdater';
 
 const props = defineProps<{
   sessionMode: SessionMode;
@@ -86,8 +86,8 @@ onMounted(() => {
     topToolbarRef.value?.showInitialSchemaDialog();
     useSessionStore().hasShownInitialDialog = true;
 
-      // update user settings by adding default value for missing fields
-      addDefaultsForSettings();
+    // update user settings by adding default value for missing fields
+    addDefaultsForSettings();
   }
 });
 

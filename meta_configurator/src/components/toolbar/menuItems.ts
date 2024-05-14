@@ -12,7 +12,7 @@ import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
 import {useSettings} from '@/settings/useSettings';
 import {PanelType} from '@/components/panelType';
 import type {SettingsInterfaceRoot} from '@/settings/settingsTypes';
-import type {MenuItem} from "primevue/menuitem";
+import type {MenuItem} from 'primevue/menuitem';
 
 /**
  * Helper class that contains the menu items for the top menu bar.
@@ -35,7 +35,7 @@ export class MenuItems {
     this.handleFromURLClick = onFromURLClick;
   }
 
-  public getDataEditorMenuItems(settings: SettingsInterfaceRoot) : MenuItem[] {
+  public getDataEditorMenuItems(settings: SettingsInterfaceRoot): MenuItem[] {
     return [
       {
         label: 'New Data...',
@@ -88,7 +88,7 @@ export class MenuItems {
     ];
   }
 
-  public getSchemaEditorMenuItems(settings: SettingsInterfaceRoot): MenuItem[]{
+  public getSchemaEditorMenuItems(settings: SettingsInterfaceRoot): MenuItem[] {
     let result: MenuItem[] = [
       {
         label: 'New empty Schema',
@@ -267,7 +267,7 @@ export class MenuItems {
       return {
         label: `Hide ${description}`,
         icon: iconNameDisabled,
-        style: { color: 'red', 'background': 'green'},
+        style: {color: 'red', background: 'green'},
         command: () => {
           const panels = useSettings().panels;
           panels[buttonMode] = panels[buttonMode].filter(
@@ -291,7 +291,7 @@ export class MenuItems {
     }
   }
 
-  public getSettingsMenuItems(settings: SettingsInterfaceRoot): MenuItem[]{
+  public getSettingsMenuItems(settings: SettingsInterfaceRoot): MenuItem[] {
     return [
       {
         label: 'Open settings file',

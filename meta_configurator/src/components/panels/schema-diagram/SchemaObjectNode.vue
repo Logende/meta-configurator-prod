@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import {Node, SchemaElementData, SchemaObjectNodeData} from '@/components/panels/schema-diagram/schemaDiagramTypes';
+import {
+  Node,
+  SchemaElementData,
+  SchemaObjectNodeData,
+} from '@/components/panels/schema-diagram/schemaDiagramTypes';
 import SchemaObjectAttribute from '@/components/panels/schema-diagram/SchemaObjectAttribute.vue';
 import type {Path} from '@/utility/path';
-import {Position, Handle} from "@vue-flow/core";
-import {useSettings} from "@/settings/useSettings";
-
+import {Position, Handle} from '@vue-flow/core';
+import {useSettings} from '@/settings/useSettings';
 
 const props = defineProps<{
   data: SchemaObjectNodeData;
@@ -12,7 +15,6 @@ const props = defineProps<{
   sourcePosition?: Position;
   selectedData?: SchemaElementData;
 }>();
-
 
 const emit = defineEmits<{
   (e: 'select_element', path: Path): void;
@@ -27,26 +29,25 @@ function clickedAttribute(path: Path) {
 }
 
 function isHighlighted() {
-    return props.selectedData && props.selectedData == props.data;
+  return props.selectedData && props.selectedData == props.data;
 }
-
 </script>
 
 <template>
   <div
     :class="{'bg-yellow-100': isHighlighted(), 'vue-flow__node-schemaobject': !isHighlighted}"
     @click="clickedNode()">
-      <Handle type="target" :position="props.targetPosition!" class="vue-flow__handle"></Handle>
+    <Handle type="target" :position="props.targetPosition!" class="vue-flow__handle"></Handle>
     <!--small><i>{{ props.data.absolutePath }}</i></small-->
     <b>{{ props.data.name }}</b>
     <hr />
     <SchemaObjectAttribute
-            v-if="useSettings().schemaDiagram.showAttributes"
+      v-if="useSettings().schemaDiagram.showAttributes"
       v-for="attribute in props.data!.attributes"
       :data="attribute!"
-            :selected-data="props.selectedData"
+      :selected-data="props.selectedData"
       @select_element="clickedAttribute"></SchemaObjectAttribute>
-      <Handle type="source" :position="props.sourcePosition!" class="vue-flow__handle"></Handle>
+    <Handle type="source" :position="props.sourcePosition!" class="vue-flow__handle"></Handle>
   </div>
 </template>
 
@@ -59,14 +60,13 @@ function isHighlighted() {
   border-radius: 4px;
   box-shadow: 0 0 0 3px lightblue;
   padding: 0px;
-
 }
 
 .vue-flow__handle {
-    border: none;
-    height: unset;
-    width: unset;
-    background: transparent;
-    font-size: 12px;
+  border: none;
+  height: unset;
+  width: unset;
+  background: transparent;
+  font-size: 12px;
 }
 </style>

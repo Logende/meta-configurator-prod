@@ -58,67 +58,74 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
       },
     },
     schemaDiagram: {
-        type: 'object',
-        required: ['vertical', 'showAttributes', 'showEnumValues', 'maxAttributesToShow', 'maxEnumValuesToShow', 'moveViewToSelectedElement', 'automaticZoomMaxValue', 'automaticZoomMinValue'],
-        additionalProperties: false,
-        description: 'Settings of the schema diagram.',
-        properties: {
-            vertical: {
-            type: 'boolean',
-            description: 'If set to true, the schema diagram will be displayed vertically.',
-            default: true,
-            },
-            showAttributes: {
-            type: 'boolean',
-            description: 'If set to true, the attributes of the schema will be displayed in the schema diagram.',
-            default: true,
-            },
-            showEnumValues: {
-            type: 'boolean',
-            description: 'If set to true, the enum values of the schema will be displayed in the schema diagram.',
-            default: true,
-            },
-            maxAttributesToShow: {
-            type: 'integer',
-            description:
-                'The maximum number of attributes to show in the schema diagram. If the number of attributes is higher, they will be hidden.',
-            default: 8,
-            minimum: 1,
-            },
-            maxEnumValuesToShow: {
-            type: 'integer',
-            description:
-                'The maximum number of enum values to show in the schema diagram. If the number of enum values is higher, they will be hidden.',
-            default: 5,
-            minimum: 1,
-            },
-            moveViewToSelectedElement: {
-            type: 'boolean',
-            description:
-                'If set to true, the view will be moved to the selected element in the schema diagram.',
-            default: true,
-            },
-            automaticZoomMaxValue: {
-            type: 'number',
-            description:
-                'The maximum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
-            default: 1,
-            },
-            automaticZoomMinValue: {
-            type: 'number',
-            description:
-                'The minimum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
-            default: 0.5,
-            }
+      type: 'object',
+      required: [
+        'vertical',
+        'showAttributes',
+        'showEnumValues',
+        'maxAttributesToShow',
+        'maxEnumValuesToShow',
+        'moveViewToSelectedElement',
+        'automaticZoomMaxValue',
+        'automaticZoomMinValue',
+      ],
+      additionalProperties: false,
+      description: 'Settings of the schema diagram.',
+      properties: {
+        vertical: {
+          type: 'boolean',
+          description: 'If set to true, the schema diagram will be displayed vertically.',
+          default: true,
         },
+        showAttributes: {
+          type: 'boolean',
+          description:
+            'If set to true, the attributes of the schema will be displayed in the schema diagram.',
+          default: true,
+        },
+        showEnumValues: {
+          type: 'boolean',
+          description:
+            'If set to true, the enum values of the schema will be displayed in the schema diagram.',
+          default: true,
+        },
+        maxAttributesToShow: {
+          type: 'integer',
+          description:
+            'The maximum number of attributes to show in the schema diagram. If the number of attributes is higher, they will be hidden.',
+          default: 8,
+          minimum: 1,
+        },
+        maxEnumValuesToShow: {
+          type: 'integer',
+          description:
+            'The maximum number of enum values to show in the schema diagram. If the number of enum values is higher, they will be hidden.',
+          default: 5,
+          minimum: 1,
+        },
+        moveViewToSelectedElement: {
+          type: 'boolean',
+          description:
+            'If set to true, the view will be moved to the selected element in the schema diagram.',
+          default: true,
+        },
+        automaticZoomMaxValue: {
+          type: 'number',
+          description:
+            'The maximum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
+          default: 1,
+        },
+        automaticZoomMinValue: {
+          type: 'number',
+          description:
+            'The minimum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
+          default: 0.5,
+        },
+      },
     },
     metaSchema: {
       type: 'object',
-      required: [
-        'allowBooleanSchema',
-        'allowMultipleTypes',
-        'objectTypesComfort',
-      ],
+      required: ['allowBooleanSchema', 'allowMultipleTypes', 'objectTypesComfort'],
       additionalProperties: false,
       description:
         'Meta Schema related settings belong here. They affect the functionality of the schema editor. By making the meta schema more expressive (e.g., by allowing multiple data types for a property), the schema editor will be more powerful but also more complicated.',

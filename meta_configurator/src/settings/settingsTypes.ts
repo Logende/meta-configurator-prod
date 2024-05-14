@@ -6,7 +6,7 @@ export interface SettingsInterfaceRoot {
   dataFormat: DataFormat;
   codeEditor: SettingsInterfaceCodeEditor;
   guiEditor: SettingsInterfaceGuiEditor;
-    schemaDiagram: SettingsInterfaceSchemaDiagram;
+  schemaDiagram: SettingsInterfaceSchemaDiagram;
   metaSchema: SettingsInterfaceMetaSchema;
   hideSchemaEditor: boolean;
   panels: SettingsInterfacePanels;
@@ -22,14 +22,14 @@ export interface SettingsInterfaceGuiEditor {
 }
 
 export interface SettingsInterfaceSchemaDiagram {
-  vertical: boolean,
-  showAttributes: boolean,
-  showEnumValues: boolean,
-  maxAttributesToShow: number,
-  maxEnumValuesToShow: number,
-    moveViewToSelectedElement: boolean,
-    automaticZoomMaxValue: number,
-    automaticZoomMinValue: number,
+  vertical: boolean;
+  showAttributes: boolean;
+  showEnumValues: boolean;
+  maxAttributesToShow: number;
+  maxEnumValuesToShow: number;
+  moveViewToSelectedElement: boolean;
+  automaticZoomMaxValue: number;
+  automaticZoomMinValue: number;
 }
 
 export interface SettingsInterfacePanels {

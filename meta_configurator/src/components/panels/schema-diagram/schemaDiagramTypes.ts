@@ -115,16 +115,12 @@ export function pathToNodeId(path: Path): string {
   }
 }
 
-
 export class SchemaElementData {
-
   public constructor(
-      public name: string,
-      public absolutePath: Path,
-      public schema: JsonSchemaObjectType,
-  ) {
-
-  }
+    public name: string,
+    public absolutePath: Path,
+    public schema: JsonSchemaObjectType
+  ) {}
 
   public getNodeType() {
     return 'undefined';
@@ -134,8 +130,8 @@ export class SchemaElementData {
 export class SchemaObjectNodeData extends SchemaElementData {
   public constructor(
     name: string,
-     absolutePath: Path,
-     schema: JsonSchemaObjectType,
+    absolutePath: Path,
+    schema: JsonSchemaObjectType,
     public attributes: SchemaObjectAttributeData[]
   ) {
     super(name, absolutePath, schema);
@@ -162,12 +158,12 @@ export class SchemaEnumNodeData extends SchemaElementData {
 
 export class SchemaObjectAttributeData extends SchemaElementData {
   public constructor(
-     name: string,
+    name: string,
     public typeDescription: string,
-     absolutePath: Path,
+    absolutePath: Path,
     public deprecated: boolean,
     public required: boolean,
-     schema: JsonSchemaObjectType
+    schema: JsonSchemaObjectType
   ) {
     super(name, absolutePath, schema);
   }

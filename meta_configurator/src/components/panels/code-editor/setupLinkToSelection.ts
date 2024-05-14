@@ -4,7 +4,10 @@ import {useDataConverter} from '@/dataformats/formatRegistry';
 import type {Path} from '@/utility/path';
 import {useDebounceFn, watchArray} from '@vueuse/core';
 import _ from 'lodash';
-import {determinePath, updateCursorPositionBasedOnPath} from '@/components/panels/code-editor/aceUtility';
+import {
+  determinePath,
+  updateCursorPositionBasedOnPath,
+} from '@/components/panels/code-editor/aceUtility';
 import type {SessionMode} from '@/store/sessionMode';
 import {getSessionForMode} from '@/data/useDataLink';
 

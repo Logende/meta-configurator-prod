@@ -3,7 +3,8 @@ import {
   EdgeData,
   EdgeType,
   SchemaEnumNodeData,
-  SchemaGraph, SchemaElementData,
+  SchemaGraph,
+  SchemaElementData,
   SchemaObjectAttributeData,
   SchemaObjectNodeData,
 } from '@/components/panels/schema-diagram/schemaDiagramTypes';
@@ -11,7 +12,7 @@ import type {Path} from '@/utility/path';
 import {getTypeDescription} from '@/schema/schemaReadingUtils';
 import {jsonPointerToPath, pathToString} from '@/utility/pathUtils';
 import {mergeAllOfs} from '@/schema/mergeAllOfs';
-import {useSettings} from "@/settings/useSettings";
+import {useSettings} from '@/settings/useSettings';
 
 export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
   // copy schema to avoid modifying the original
@@ -514,12 +515,20 @@ function trimChildren(graph: SchemaGraph) {
   const maxAttributesToShow = useSettings().schemaDiagram.maxAttributesToShow;
   for (const nodeData of graph.nodes) {
     if (nodeData.getNodeType() == 'schemaobject') {
-        const nodeDataObject = nodeData as SchemaObjectNodeData;
-        if (nodeDataObject.attributes.length > maxAttributesToShow) {
-          nodeDataObject.attributes = nodeDataObject.attributes.slice(0, maxAttributesToShow);
-          nodeDataObject.attributes.push(new SchemaObjectAttributeData('...', '', [...nodeDataObject.absolutePath, 'properties'], false, false, {}));
-        }
-
+      const nodeDataObject = nodeData as SchemaObjectNodeData;
+      if (nodeDataObject.attributes.length > maxAttributesToShow) {
+        nodeDataObject.attributes = nodeDataObject.attributes.slice(0, maxAttributesToShow);
+        nodeDataObject.attributes.push(
+          new SchemaObjectAttributeData(
+            '...',
+            '',
+            [...nodeDataObject.absolutePath, 'properties'],
+            false,
+            false,
+            {}
+          )
+        );
+      }
     } else if (nodeData.getNodeType() == 'schemaenum') {
       const nodeDataEnum = nodeData as SchemaEnumNodeData;
       if (nodeDataEnum.values.length > maxEnumValuesToShow) {
