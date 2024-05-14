@@ -1,13 +1,21 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import type {Path} from '@/utility/path';
 import type {TopLevelSchema} from '@/schema/jsonSchemaType';
-import {EdgeType, SchemaEnumNodeData, SchemaGraph, SchemaObjectNodeData} from '../schemaDiagramTypes';
+import {
+  EdgeType,
+  SchemaEnumNodeData,
+  SchemaGraph,
+  SchemaObjectNodeData,
+} from '../schemaDiagramTypes';
 import {
   generateAttributeEdges,
   generateObjectAttributes,
-  identifyObjects, populateGraph, trimGraph, trimNodeChildren,
+  identifyObjects,
+  populateGraph,
+  trimGraph,
+  trimNodeChildren,
 } from '../schemaGraphConstructor';
-import {useSettings} from "@/settings/useSettings";
+import {useSettings} from '@/settings/useSettings';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
   useDataConverter: () => ({
@@ -21,9 +29,9 @@ vi.mock('@/dataformats/formatRegistry', () => ({
         maxEnumValuesToShow: 5,
         showAttributes: true,
         maxAttributesToShow: 5,
-      }
+      },
     };
-  }
+  },
 }));
 
 describe('test schema graph constructor with objects and attributes with enums', () => {
@@ -48,9 +56,9 @@ describe('test schema graph constructor with objects and attributes with enums',
       propertyEnumRef1: {
         $ref: '#/$defs/enumString',
       },
-        propertyEnumRef2: {
-            $ref: '#/$defs/enumInt',
-        },
+      propertyEnumRef2: {
+        $ref: '#/$defs/enumInt',
+      },
     },
   };
 
@@ -92,7 +100,6 @@ describe('test schema graph constructor with objects and attributes with enums',
     expect(rootNode.attributes[2].absolutePath).toEqual(['properties', 'propertyEnumRef2']);
   });
 
-
   it('generate attribute edges', () => {
     for (const node of defs.values()) {
       node.attributes = generateObjectAttributes(node.absolutePath, node.schema, defs);
@@ -121,7 +128,6 @@ describe('test schema graph constructor with objects and attributes with enums',
     expect(graph.edges[2].label).toEqual('propertyEnumRef2');
     expect(graph.edges[2].end.getNodeType() == 'schemaenum').toBeTruthy();
   });
-
 
   it('trim enum values', () => {
     const schemaGraph = new SchemaGraph([], []);

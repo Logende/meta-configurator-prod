@@ -6,7 +6,10 @@ import {
   generateObjectAttributes,
   generateObjectSpecialPropertyEdges,
   generateObjectTitle,
-  identifyObjects, isObjectSchema, populateGraph, trimGraph,
+  identifyObjects,
+  isObjectSchema,
+  populateGraph,
+  trimGraph,
 } from '../schemaGraphConstructor';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
@@ -114,8 +117,8 @@ describe('test schema graph constructor with conditionals', () => {
 
   it('generate object title', () => {
     // filter defs for nodes that have schema.type 'object'
-    const objectNodeCount = Array.from(defs.values()).filter(
-      node => isObjectSchema(node.schema)
+    const objectNodeCount = Array.from(defs.values()).filter(node =>
+      isObjectSchema(node.schema)
     ).length;
     expect(objectNodeCount).toEqual(5);
 
@@ -162,9 +165,7 @@ describe('test schema graph constructor with conditionals', () => {
     expect(graph.edges[1].end.absolutePath).toEqual(['then']);
     expect(graph.edges[1].edgeType).toEqual(EdgeType.THEN);
     expect(graph.edges[1].label).toEqual(EdgeType.THEN);
-
   });
-
 
   it('trim graph', () => {
     const schemaGraph = new SchemaGraph([], []);
@@ -176,6 +177,4 @@ describe('test schema graph constructor with conditionals', () => {
 
     expect(schemaGraph.nodes.length).toEqual(5);
   });
-
-
 });

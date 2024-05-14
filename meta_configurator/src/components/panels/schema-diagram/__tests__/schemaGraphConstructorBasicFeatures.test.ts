@@ -6,7 +6,8 @@ import {
   generateAttributeEdges,
   generateObjectAttributes,
   generateObjectTitle,
-  identifyObjects, isSchemaThatDeservesANode,
+  identifyObjects,
+  isSchemaThatDeservesANode,
 } from '../schemaGraphConstructor';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
@@ -231,8 +232,8 @@ describe('test schema graph constructor with objects and attributes, without adv
   });
 
   it('generate object title', () => {
-    const objectNodeCount = Array.from(defs.values()).filter(
-      node => isSchemaThatDeservesANode(node.schema)
+    const objectNodeCount = Array.from(defs.values()).filter(node =>
+      isSchemaThatDeservesANode(node.schema)
     ).length;
     expect(objectNodeCount).toEqual(6);
 

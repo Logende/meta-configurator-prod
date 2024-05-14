@@ -7,7 +7,9 @@ import {
   generateObjectAttributes,
   generateObjectSpecialPropertyEdges,
   generateObjectTitle,
-  identifyObjects, isObjectSchema, isSchemaThatDeservesANode,
+  identifyObjects,
+  isObjectSchema,
+  isSchemaThatDeservesANode,
 } from '../schemaGraphConstructor';
 
 vi.mock('@/dataformats/formatRegistry', () => ({
@@ -52,7 +54,7 @@ describe('test schema graph constructor with objects and compositional keywords'
         },
       },
       compositionalWithoutObjectType: {
-        oneOf: [ {$ref: '#/$defs/person'}, {$ref: '#/$defs/animal'} ],
+        oneOf: [{$ref: '#/$defs/person'}, {$ref: '#/$defs/animal'}],
       },
     },
     properties: {
@@ -71,9 +73,9 @@ describe('test schema graph constructor with objects and compositional keywords'
       propertyArrayInlineCompositional: {
         type: 'array',
         items: {
-          allOf: [ {$ref: '#/$defs/person'}, {$ref: '#/$defs/animal'} ],
+          allOf: [{$ref: '#/$defs/person'}, {$ref: '#/$defs/animal'}],
         },
-      }
+      },
     },
     allOf: [
       {
@@ -166,19 +168,28 @@ describe('test schema graph constructor with objects and compositional keywords'
     expect(rootNode.attributes[0].absolutePath).toEqual(['properties', 'propertySimple']);
 
     expect(rootNode.attributes[1].name).toEqual('propertyRefToCompositional');
-    expect(rootNode.attributes[1].absolutePath).toEqual(['properties', 'propertyRefToCompositional']);
+    expect(rootNode.attributes[1].absolutePath).toEqual([
+      'properties',
+      'propertyRefToCompositional',
+    ]);
 
     expect(rootNode.attributes[2].name).toEqual('propertyArrayToCompositional');
-    expect(rootNode.attributes[2].absolutePath).toEqual(['properties', 'propertyArrayToCompositional']);
+    expect(rootNode.attributes[2].absolutePath).toEqual([
+      'properties',
+      'propertyArrayToCompositional',
+    ]);
 
     expect(rootNode.attributes[3].name).toEqual('propertyArrayInlineCompositional');
-    expect(rootNode.attributes[3].absolutePath).toEqual(['properties', 'propertyArrayInlineCompositional']);
+    expect(rootNode.attributes[3].absolutePath).toEqual([
+      'properties',
+      'propertyArrayInlineCompositional',
+    ]);
   });
 
   it('generate object title', () => {
     // filter defs for nodes that have schema.type 'object'
-    const objectNodeCount = Array.from(defs.values()).filter(
-      node => isSchemaThatDeservesANode(node.schema)
+    const objectNodeCount = Array.from(defs.values()).filter(node =>
+      isSchemaThatDeservesANode(node.schema)
     ).length;
     expect(objectNodeCount).toEqual(9);
 
@@ -201,12 +212,17 @@ describe('test schema graph constructor with objects and compositional keywords'
     );
 
     const compositionalWithoutObjectType = defs.get('$defs.compositionalWithoutObjectType')!;
-    expect(generateObjectTitle(compositionalWithoutObjectType.absolutePath, compositionalWithoutObjectType.schema)).toEqual(
-      'compositionalWithoutObjectType'
-    );
+    expect(
+      generateObjectTitle(
+        compositionalWithoutObjectType.absolutePath,
+        compositionalWithoutObjectType.schema
+      )
+    ).toEqual('compositionalWithoutObjectType');
 
     const inlineCompositional = defs.get('properties.propertyArrayInlineCompositional.items')!;
-    expect(generateObjectTitle(inlineCompositional.absolutePath, inlineCompositional.schema)).toEqual('items');
+    expect(
+      generateObjectTitle(inlineCompositional.absolutePath, inlineCompositional.schema)
+    ).toEqual('items');
 
     const allOf1 = defs.get('allOf[1]')!;
     // allOf element at index 1 has no title, so we use the index as title
@@ -215,7 +231,6 @@ describe('test schema graph constructor with objects and compositional keywords'
     const oneOf1 = defs.get('oneOf[1]')!;
     // oneOf element at index 1 has a title, so we use it
     expect(generateObjectTitle(oneOf1.absolutePath, oneOf1.schema)).toEqual('Farmer');
-
   });
 
   it('generate special property edges', () => {
@@ -237,15 +252,19 @@ describe('test schema graph constructor with objects and compositional keywords'
     expect(graph.edges[0].start.absolutePath).toEqual([]);
     expect(graph.edges[0].end.absolutePath).toEqual(['$defs', 'compositionalWithoutObjectType']);
     expect(graph.edges[0].edgeType).toEqual(EdgeType.ATTRIBUTE);
-    expect(graph.edges[0].label).toEqual("propertyRefToCompositional");
+    expect(graph.edges[0].label).toEqual('propertyRefToCompositional');
 
     expect(graph.edges[1].start.absolutePath).toEqual([]);
     expect(graph.edges[1].end.absolutePath).toEqual(['$defs', 'compositionalWithoutObjectType']);
     expect(graph.edges[1].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
-    expect(graph.edges[1].label).toEqual("propertyArrayToCompositional");
+    expect(graph.edges[1].label).toEqual('propertyArrayToCompositional');
 
     expect(graph.edges[2].start.absolutePath).toEqual([]);
-    expect(graph.edges[2].end.absolutePath).toEqual(['properties', 'propertyArrayInlineCompositional', 'items']);
+    expect(graph.edges[2].end.absolutePath).toEqual([
+      'properties',
+      'propertyArrayInlineCompositional',
+      'items',
+    ]);
     expect(graph.edges[2].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
 
     // note that the order of the edges as in the same order as in the generation function: oneOf, anyOf, allOf, if, then, else
@@ -279,12 +298,20 @@ describe('test schema graph constructor with objects and compositional keywords'
     expect(graph.edges[8].edgeType).toEqual(EdgeType.ALL_OF);
     expect(graph.edges[8].label).toEqual(EdgeType.ALL_OF);
 
-    expect(graph.edges[9].start.absolutePath).toEqual(['properties', 'propertyArrayInlineCompositional', 'items']);
+    expect(graph.edges[9].start.absolutePath).toEqual([
+      'properties',
+      'propertyArrayInlineCompositional',
+      'items',
+    ]);
     expect(graph.edges[9].end.absolutePath).toEqual(['$defs', 'person']);
     expect(graph.edges[9].edgeType).toEqual(EdgeType.ALL_OF);
     expect(graph.edges[9].label).toEqual(EdgeType.ALL_OF);
 
-    expect(graph.edges[10].start.absolutePath).toEqual(['properties', 'propertyArrayInlineCompositional', 'items']);
+    expect(graph.edges[10].start.absolutePath).toEqual([
+      'properties',
+      'propertyArrayInlineCompositional',
+      'items',
+    ]);
     expect(graph.edges[10].end.absolutePath).toEqual(['$defs', 'animal']);
     expect(graph.edges[10].edgeType).toEqual(EdgeType.ALL_OF);
     expect(graph.edges[10].label).toEqual(EdgeType.ALL_OF);
@@ -298,6 +325,5 @@ describe('test schema graph constructor with objects and compositional keywords'
     expect(graph.edges[12].end.absolutePath).toEqual(['$defs', 'animal']);
     expect(graph.edges[12].edgeType).toEqual(EdgeType.ONE_OF);
     expect(graph.edges[12].label).toEqual(EdgeType.ONE_OF);
-
   });
 });

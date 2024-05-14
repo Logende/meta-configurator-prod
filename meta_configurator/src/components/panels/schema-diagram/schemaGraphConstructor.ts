@@ -6,7 +6,8 @@ import {
   SchemaGraph,
   SchemaElementData,
   SchemaObjectAttributeData,
-  SchemaObjectNodeData, SchemaNodeData,
+  SchemaObjectNodeData,
+  SchemaNodeData,
 } from '@/components/panels/schema-diagram/schemaDiagramTypes';
 import type {Path} from '@/utility/path';
 import {getTypeDescription} from '@/schema/schemaReadingUtils';
@@ -14,7 +15,6 @@ import {jsonPointerToPath, pathToString} from '@/utility/pathUtils';
 import {useSettings} from '@/settings/useSettings';
 
 export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
-
   const objectDefs = new Map<string, SchemaObjectNodeData>();
   identifyObjects([], rootSchema, objectDefs);
 
@@ -38,7 +38,10 @@ export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
   return schemaGraph;
 }
 
-export function populateGraph(objectDefs: Map<string, SchemaObjectNodeData>, schemaGraph: SchemaGraph) {
+export function populateGraph(
+  objectDefs: Map<string, SchemaObjectNodeData>,
+  schemaGraph: SchemaGraph
+) {
   for (const [path, node] of objectDefs.entries()) {
     schemaGraph.nodes.push(node);
 
@@ -402,22 +405,22 @@ export function generateObjectSpecialPropertyEdges(
   }
   if (schema.additionalProperties) {
     generateObjectSubSchemaEdge(
-        node,
-        schema.additionalProperties,
-        [...node.absolutePath, 'additionalProperties'],
-        EdgeType.ADDITIONAL_PROPERTIES,
-        objectDefs,
-        graph
+      node,
+      schema.additionalProperties,
+      [...node.absolutePath, 'additionalProperties'],
+      EdgeType.ADDITIONAL_PROPERTIES,
+      objectDefs,
+      graph
     );
   }
   if (schema.patternProperties) {
     generateObjectSubSchemaEdge(
-        node,
-        schema.patternProperties,
-        [...node.absolutePath, 'patternProperties'],
-        EdgeType.PATTERN_PROPERTIES,
-        objectDefs,
-        graph
+      node,
+      schema.patternProperties,
+      [...node.absolutePath, 'patternProperties'],
+      EdgeType.PATTERN_PROPERTIES,
+      objectDefs,
+      graph
     );
   }
 }
@@ -460,24 +463,23 @@ function isEnumSchema(schema: JsonSchemaType): boolean {
 }
 
 function isCompositionalSchema(schema: JsonSchemaType): boolean {
-    if (schema === true || schema === false) {
-        return false;
-    }
-    if (schema.oneOf || schema.anyOf || schema.allOf) {
-        return true;
-    }
+  if (schema === true || schema === false) {
     return false;
+  }
+  if (schema.oneOf || schema.anyOf || schema.allOf) {
+    return true;
+  }
+  return false;
 }
 
 function isConditionalSchema(schema: JsonSchemaType): boolean {
-    if (schema === true || schema === false) {
-        return false;
-    }
-    if (schema.if && schema.then) {
-        return true;
-    }
+  if (schema === true || schema === false) {
     return false;
-
+  }
+  if (schema.if && schema.then) {
+    return true;
+  }
+  return false;
 }
 
 function generateObjectSubSchemasEdge(
@@ -522,8 +524,7 @@ export function trimGraph(graph: SchemaGraph) {
   //});
 
   graph.nodes = graph.nodes.filter(node => {
-    return isNodeConnectedByEdge(node, graph) ||
-        node.schema.type == 'object';
+    return isNodeConnectedByEdge(node, graph) || node.schema.type == 'object';
   });
 }
 
@@ -557,7 +558,5 @@ export function trimNodeChildren(graph: SchemaGraph) {
 }
 
 function isNodeConnectedByEdge(node: SchemaElementData, graph: SchemaGraph): boolean {
-  return (
-    graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined
-  );
+  return graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined;
 }
