@@ -5,10 +5,15 @@ import {getSessionForMode} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
 import type {Path} from '@/utility/path';
 import {pathToString} from '@/utility/pathUtils';
+import {Position, Handle} from "@vue-flow/core";
+import {onMounted} from "vue";
+import {useSettings} from "@/settings/useSettings";
 
-// props were passed from the slot using `v-bind="customNodeProps"`
+
 const props = defineProps<{
   data: SchemaObjectNodeData;
+  targetPosition?: Position;
+  sourcePosition?: Position;
 }>();
 
 const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
@@ -37,13 +42,16 @@ function isHighlighted() {
   <div
     :class="{'bg-yellow-100': isHighlighted(), 'vue-flow__node-schemaobject': !isHighlighted}"
     @click="clickedNode()">
+      <Handle type="target" :position="props.targetPosition!"></Handle>
     <!--small><i>{{ props.data.absolutePath }}</i></small-->
     <b>{{ props.data.name }}</b>
     <hr />
     <SchemaObjectAttribute
+            v-if="useSettings().schemaDiagram.showAttributes"
       v-for="attribute in props.data!.attributes"
       :data="attribute!"
       @select_element="clickedAttribute"></SchemaObjectAttribute>
+      <Handle type="source" :position="props.sourcePosition!"></Handle>
   </div>
 </template>
 

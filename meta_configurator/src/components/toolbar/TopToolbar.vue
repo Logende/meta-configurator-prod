@@ -486,4 +486,5 @@ const showSearchResultsMenu = event => {
   color: #495057;
   padding: 0.35rem !important;
 }
+
 </style>

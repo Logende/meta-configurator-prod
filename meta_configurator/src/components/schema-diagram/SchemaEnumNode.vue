@@ -4,10 +4,14 @@ import {getSessionForMode} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
 import {Path} from '@/utility/path';
 import {pathToString} from '@/utility/pathUtils';
+import {Handle, Position} from "@vue-flow/core";
+import {useSettings} from "@/settings/useSettings";
 
-// props were passed from the slot using `v-bind="customNodeProps"`
+
 const props = defineProps<{
-  data: SchemaEnumNodeData;
+    data: SchemaEnumNodeData;
+    targetPosition?: Position;
+    sourcePosition?: Position;
 }>();
 
 const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
@@ -32,11 +36,14 @@ function isHighlighted() {
   <div
     :class="{'bg-yellow-100': isHighlighted(), 'vue-flow__node-schemaenum': !isHighlighted}"
     @click="clickedNode()">
+      <Handle type="target" :position="props.targetPosition!"></Handle>
     <p>&lt;enumeration&gt;</p>
     <!--small><i>{{ props.data.absolutePath }}</i></small-->
     <b>{{ props.data.name }}</b>
     <hr />
-    <p v-for="value in props.data!.values">{{ value }}</p>
+    <p v-if="useSettings().schemaDiagram.showEnumValues " v-for="value in props.data!.values">{{ value }}
+    </p>
+      <Handle type="target" :position="props.sourcePosition!"></Handle>
   </div>
 </template>
 

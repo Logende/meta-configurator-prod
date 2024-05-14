@@ -11,10 +11,16 @@ export const SETTINGS_DATA_DEFAULT = {
     maximumDepth: 20,
     propertySorting: 'schemaOrder',
   },
+    schemaDiagram: {
+        vertical: true,
+        showAttributes: true,
+        showEnumValues: true,
+        maxAttributesToShow: 8,
+        maxEnumValuesToShow: 5,
+    },
   metaSchema: {
     allowBooleanSchema: false,
     allowMultipleTypes: false,
-    showAdditionalPropertiesButton: false,
     objectTypesComfort: false,
   },
   hideSchemaEditor: false,

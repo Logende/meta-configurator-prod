@@ -11,6 +11,7 @@ import type {Path} from '@/utility/path';
 import {getTypeDescription} from '@/schema/schemaReadingUtils';
 import {jsonPointerToPath, pathToString} from '@/utility/pathUtils';
 import {mergeAllOfs} from '@/schema/mergeAllOfs';
+import {useSettings} from "@/settings/useSettings";
 
 export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
   // copy schema to avoid modifying the original
@@ -44,6 +45,7 @@ export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
   }
 
   trimGraph(schemaGraph);
+  trimChildren(schemaGraph);
 
   return schemaGraph;
 }
@@ -215,13 +217,7 @@ export function generateObjectAttributes(
 function generateEnumValues(schema: JsonSchemaObjectType): string[] {
   if (schema.enum) {
     // @ts-ignore
-    let result = schema.enum.map(value => value.toString());
-    // TODO: make this a parameter
-    if (result.length > 10) {
-      result = result.slice(0, 10);
-      result.push('...');
-    }
-    return result;
+    return schema.enum.map(value => value.toString());
   }
   if (schema.const) {
     return [schema.const.toString()];
@@ -512,6 +508,28 @@ export function trimGraph(graph: SchemaGraph) {
     return isNodeConnectedByEdge(node, graph);
   });
 }
+
+function trimChildren(graph: SchemaGraph) {
+  const maxEnumValuesToShow = useSettings().schemaDiagram.maxEnumValuesToShow;
+  const maxAttributesToShow = useSettings().schemaDiagram.maxAttributesToShow;
+  for (const nodeData of graph.nodes) {
+    if (nodeData.getNodeType() == 'schemaobject') {
+        const nodeDataObject = nodeData as SchemaObjectNodeData;
+        if (nodeDataObject.attributes.length > maxAttributesToShow) {
+          nodeDataObject.attributes = nodeDataObject.attributes.slice(0, maxAttributesToShow);
+          nodeDataObject.attributes.push(new SchemaObjectAttributeData('...', '', [...nodeDataObject.absolutePath, 'properties'], false, false, {}));
+        }
+
+    } else if (nodeData.getNodeType() == 'schemaenum') {
+      const nodeDataEnum = nodeData as SchemaEnumNodeData;
+      if (nodeDataEnum.values.length > maxEnumValuesToShow) {
+        nodeDataEnum.values = nodeDataEnum.values.slice(0, maxEnumValuesToShow);
+        nodeDataEnum.values.push('...');
+      }
+    }
+  }
+}
+
 function isNodeConnectedByEdge(node: SchemaObjectNodeData, graph: SchemaGraph): boolean {
   return (
     graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined ||

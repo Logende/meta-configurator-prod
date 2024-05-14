@@ -5,7 +5,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
   title: 'Settings',
   description: 'MetaConfigurator settings',
   type: 'object',
-  required: ['dataFormat', 'codeEditor', 'guiEditor', 'metaSchema', 'panels'],
+  required: ['dataFormat', 'codeEditor', 'guiEditor', 'schemaDiagram', 'metaSchema', 'panels'],
   additionalProperties: false,
   properties: {
     toolbarTitle: {
@@ -57,12 +57,48 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         },
       },
     },
+    schemaDiagram: {
+        type: 'object',
+        required: ['vertical', 'showAttributes', 'showEnumValues', 'maxAttributesToShow', 'maxEnumValuesToShow'],
+        additionalProperties: false,
+        description: 'Settings of the schema diagram.',
+        properties: {
+            vertical: {
+            type: 'boolean',
+            description: 'If set to true, the schema diagram will be displayed vertically.',
+            default: true,
+            },
+            showAttributes: {
+            type: 'boolean',
+            description: 'If set to true, the attributes of the schema will be displayed in the schema diagram.',
+            default: true,
+            },
+            showEnumValues: {
+            type: 'boolean',
+            description: 'If set to true, the enum values of the schema will be displayed in the schema diagram.',
+            default: true,
+            },
+            maxAttributesToShow: {
+            type: 'integer',
+            description:
+                'The maximum number of attributes to show in the schema diagram. If the number of attributes is higher, they will be hidden.',
+            default: 8,
+            minimum: 1,
+            },
+            maxEnumValuesToShow: {
+            type: 'integer',
+            description:
+                'The maximum number of enum values to show in the schema diagram. If the number of enum values is higher, they will be hidden.',
+            default: 5,
+            minimum: 1,
+            },
+        },
+    },
     metaSchema: {
       type: 'object',
       required: [
         'allowBooleanSchema',
         'allowMultipleTypes',
-        'showAdditionalPropertiesButton',
         'objectTypesComfort',
       ],
       additionalProperties: false,
@@ -79,12 +115,6 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
           type: 'boolean',
           description:
             "Whether an object property can be assigned to multiple types (e.g., string and number). Having this option enabled will increase the choices that have to be made when defining the type of an object property in the schema editor, but also allows more flexibility. An alternative to defining multiple types directly is using the 'anyOf' or 'oneOf' keywords.",
-          default: false,
-        },
-        showAdditionalPropertiesButton: {
-          type: 'boolean',
-          description:
-            "Most schemas allow additional properties (e.g., adding properties to the data that are not defined in the schema). To resemble this in the editor, it would always provide an 'Add Property' button to allow adding properties unknown to the schema. In practice, this option is not used much, but it can confuse the user.",
           default: false,
         },
         objectTypesComfort: {
@@ -173,7 +203,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         then: {
           properties: {
             mode: {
-              const: 'data_editor',
+              const: 'schema_editor',
             },
           },
         },

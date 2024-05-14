@@ -26,44 +26,32 @@ export class SchemaGraph {
   private toVueFlowEdges(): Edge[] {
     return this.edges.map(data => {
       let type = 'default';
-      let label = 'no label';
       let color = 'black';
       const markerEnd = MarkerType.Arrow;
 
       switch (data.edgeType) {
         case EdgeType.ATTRIBUTE:
-          label = 'contains';
           break;
         case EdgeType.ARRAY_ATTRIBUTE:
-          label = 'contains 0..n';
           break;
         case EdgeType.ALL_OF:
-          label = 'allOf';
-          //  type = "smoothstep";
           color = 'seagreen';
           break;
         case EdgeType.ANY_OF:
-          label = 'anyOf';
-          //type = "smoothstep";
           color = 'seagreen';
           break;
         case EdgeType.ONE_OF:
-          label = 'oneOf';
-          // type = "smoothstep";
           color = 'seagreen';
           break;
         case EdgeType.IF:
-          label = 'if';
           type = 'straight';
           color = 'indianred';
           break;
         case EdgeType.THEN:
-          label = 'then';
           type = 'straight';
           color = 'indianred';
           break;
         case EdgeType.ELSE:
-          label = 'else';
           type = 'straight';
           color = 'indianred';
           break;
@@ -93,8 +81,8 @@ export class SchemaGraph {
 export class VueFlowGraph {
   public constructor(public nodes: Node[], public edges: Edge[]) {}
 
-  public updateLayout() {
-    this.nodes = useLayout().layout(this.nodes, this.edges);
+  public updateLayout(direction: string) {
+    this.nodes = useLayout().layout(this.nodes, this.edges, direction);
   }
 }
 
