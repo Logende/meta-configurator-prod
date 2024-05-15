@@ -23,19 +23,7 @@ export function constructSchemaGraph(rootSchema: TopLevelSchema): SchemaGraph {
       rootSchema = mergeAllOfs(rootSchema);
   }
 
-  const objectDefs = new Map<string, SchemaObjectNodeData>();
-  identifyObjects([], rootSchema, objectDefs);
-
-  if (rootSchema.$defs) {
-    for (const [key, value] of Object.entries(rootSchema.$defs)) {
-      identifyObjects(['$defs', key], value, objectDefs);
-    }
-  }
-  if (rootSchema.definitions) {
-    for (const [key, value] of Object.entries(rootSchema.definitions)) {
-      identifyObjects(['definitions', key], value, objectDefs);
-    }
-  }
+  const objectDefs = identifyAllObjects(rootSchema);
 
   const schemaGraph = new SchemaGraph([], []);
   populateGraph(objectDefs, schemaGraph);
@@ -56,6 +44,24 @@ export function populateGraph(objectDefs: Map<string, SchemaObjectNodeData>, sch
       generateObjectSpecialPropertyEdges(node, objectDefs, schemaGraph);
     }
   }
+}
+
+export function identifyAllObjects(rootSchema: TopLevelSchema): Map<string, SchemaObjectNodeData> {
+    const objectDefs = new Map<string, SchemaObjectNodeData>();
+    identifyObjects([], rootSchema, objectDefs);
+
+    if (rootSchema.$defs) {
+        for (const [key, value] of Object.entries(rootSchema.$defs)) {
+        identifyObjects(['$defs', key], value, objectDefs);
+        }
+    }
+    if (rootSchema.definitions) {
+        for (const [key, value] of Object.entries(rootSchema.definitions)) {
+        identifyObjects(['definitions', key], value, objectDefs);
+        }
+    }
+
+    return objectDefs;
 }
 
 export function identifyObjects(
@@ -272,39 +278,38 @@ export function generateAttributeEdges(
   objectDefs: Map<string, SchemaNodeData>,
   graph: SchemaGraph
 ) {
-  for (const attribute of node.attributes) {
-    let attrSchema = attribute.schema;
-    let attributeNode: SchemaNodeData | undefined = undefined;
+  for (const attributeData of node.attributes) {
+    let attrSchema = attributeData.schema;
+    let attributeTargetNode: SchemaNodeData | undefined = undefined;
 
     if (attrSchema.$ref) {
       const referenceObject = resolveReferenceNode(attrSchema, objectDefs);
       if (referenceObject) {
         attrSchema = referenceObject.schema;
-        attributeNode = referenceObject;
+        attributeTargetNode = referenceObject;
       } else {
         console.warn(
           'Unable to find reference node for attribute ' +
-            attribute.name +
+            attributeData.name +
             ' with path ' +
-            pathToString(attribute.absolutePath)
+            pathToString(attributeData.absolutePath)
         );
       }
     }
 
     if (isSchemaThatDeservesANode(attrSchema)) {
-      if (!attributeNode) {
-        attributeNode = resolveObjectAttributeNode(attribute.absolutePath, attrSchema, objectDefs);
+      if (!attributeTargetNode) {
+        attributeTargetNode = resolveObjectAttributeNode(attributeData.absolutePath, attrSchema, objectDefs);
       }
-      if (attributeNode) {
-        graph.edges.push(new EdgeData(node, attributeNode, EdgeType.ATTRIBUTE, attribute.name));
+      if (attributeTargetNode) {
+        graph.edges.push(new EdgeData(node, attributeTargetNode, EdgeType.ATTRIBUTE, attributeData.name));
       }
     } else if (attrSchema.type == 'array') {
-      if (!attributeNode) {
-        attributeNode = resolveArrayItemNode(attribute.absolutePath, attrSchema, objectDefs);
-      }
-      if (attributeNode && isSchemaThatDeservesANode(attributeNode.schema)) {
+      const pathToResolveArrayItem = attributeTargetNode ? attributeTargetNode.absolutePath : attributeData.absolutePath;
+        attributeTargetNode = resolveArrayItemNode(pathToResolveArrayItem, attrSchema, objectDefs);
+      if (attributeTargetNode && isSchemaThatDeservesANode(attributeTargetNode.schema)) {
         graph.edges.push(
-          new EdgeData(node, attributeNode, EdgeType.ARRAY_ATTRIBUTE, attribute.name)
+          new EdgeData(node, attributeTargetNode, EdgeType.ARRAY_ATTRIBUTE, attributeData.name)
         );
       }
     }
@@ -500,8 +505,8 @@ function isConditionalSchema(schema: JsonSchemaType): boolean {
         return true;
     }
     return false;
-
 }
+
 
 function generateObjectSubSchemasEdge(
   node: SchemaObjectNodeData,
