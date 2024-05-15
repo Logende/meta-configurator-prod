@@ -5,7 +5,7 @@ import {
 } from '@/components/panels/schema-diagram/schemaDiagramTypes';
 import {getSessionForMode} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
-import {Path} from '@/utility/path';
+import type {Path} from '@/utility/path';
 import {Handle, Position} from '@vue-flow/core';
 import {useSettings} from '@/settings/useSettings';
 
@@ -16,7 +16,6 @@ const props = defineProps<{
   selectedData?: SchemaElementData;
 }>();
 
-const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
 
 const emit = defineEmits<{
   (e: 'select_element', path: Path): void;

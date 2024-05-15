@@ -5,7 +5,7 @@ import {MarkerType} from '@vue-flow/core';
 import type {JsonSchemaObjectType} from '@/schema/jsonSchemaType';
 
 export class SchemaGraph {
-  public constructor(public nodes: SchemaElementData[], public edges: EdgeData[]) {}
+  public constructor(public nodes: SchemaNodeData[], public edges: EdgeData[]) {}
 
   public findNode(path: Path | string): SchemaElementData | undefined {
     if (typeof path !== 'string') {
