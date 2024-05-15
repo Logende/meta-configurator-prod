@@ -9,7 +9,8 @@ import {
 } from '../schemaDiagramTypes';
 import {
   generateAttributeEdges,
-  generateObjectAttributes, identifyAllObjects,
+  generateObjectAttributes,
+  identifyAllObjects,
   identifyObjects,
   populateGraph,
   trimGraph,
@@ -25,10 +26,7 @@ vi.mock('@/dataformats/formatRegistry', () => ({
 }));
 
 describe('tests for more difficult scenarios and special cases that result as a combination of keywords', () => {
-
-
   it('anyOf with either one object or an array of these objects', () => {
-
     let schema: TopLevelSchema = {
       title: 'Workflow Schema',
       type: 'object',
@@ -66,8 +64,5 @@ describe('tests for more difficult scenarios and special cases that result as a 
     trimGraph(graph);
 
     expect(graph.nodes.length).toBe(3);
-
-
   });
-
 });
