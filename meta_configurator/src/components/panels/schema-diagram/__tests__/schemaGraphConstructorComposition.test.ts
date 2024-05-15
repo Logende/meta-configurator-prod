@@ -252,11 +252,13 @@ describe('test schema graph constructor with objects and compositional keywords'
     expect(graph.edges[0].start.absolutePath).toEqual([]);
     expect(graph.edges[0].end.absolutePath).toEqual(['$defs', 'compositionalWithoutObjectType']);
     expect(graph.edges[0].edgeType).toEqual(EdgeType.ATTRIBUTE);
+    expect(graph.edges[0].isArray).toEqual(false);
     expect(graph.edges[0].label).toEqual('propertyRefToCompositional');
 
     expect(graph.edges[1].start.absolutePath).toEqual([]);
     expect(graph.edges[1].end.absolutePath).toEqual(['$defs', 'compositionalWithoutObjectType']);
-    expect(graph.edges[1].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
+    expect(graph.edges[1].edgeType).toEqual(EdgeType.ATTRIBUTE);
+    expect(graph.edges[1].isArray).toEqual(true);
     expect(graph.edges[1].label).toEqual('propertyArrayToCompositional');
 
     expect(graph.edges[2].start.absolutePath).toEqual([]);
@@ -265,13 +267,15 @@ describe('test schema graph constructor with objects and compositional keywords'
       'propertyArrayInlineCompositional',
       'items',
     ]);
-    expect(graph.edges[2].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
+    expect(graph.edges[2].edgeType).toEqual(EdgeType.ATTRIBUTE);
+    expect(graph.edges[2].isArray).toEqual(true);
 
     // note that the order of the edges as in the same order as in the generation function: oneOf, anyOf, allOf, if, then, else
     expect(graph.edges[3].start.absolutePath).toEqual([]);
     expect(graph.edges[3].end.absolutePath).toEqual(['$defs', 'researcher']);
     expect(graph.edges[3].edgeType).toEqual(EdgeType.ONE_OF);
     expect(graph.edges[3].label).toEqual(EdgeType.ONE_OF);
+    expect(graph.edges[3].isArray).toEqual(false);
 
     expect(graph.edges[4].start.absolutePath).toEqual([]);
     expect(graph.edges[4].end.absolutePath).toEqual(['oneOf', 1]);

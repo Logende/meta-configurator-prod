@@ -241,17 +241,20 @@ describe('test schema graph constructor with objects and attributes, without adv
       'propertyArrayToComplex',
       'items',
     ]);
-    expect(graph.edges[0].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
+    expect(graph.edges[0].edgeType).toEqual(EdgeType.ATTRIBUTE);
+    expect(graph.edges[0].isArray).toEqual(true);
     expect(graph.edges[0].label).toEqual('propertyArrayToComplex');
 
     // for this array, because the object is not inlined, the edge is to the object node
     expect(graph.edges[1].end.absolutePath).toEqual(['$defs', 'person']);
-    expect(graph.edges[1].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
+    expect(graph.edges[1].edgeType).toEqual(EdgeType.ATTRIBUTE);
+    expect(graph.edges[1].isArray).toEqual(true);
     expect(graph.edges[1].label).toEqual('propertyArrayToRefComplexWithTitle');
 
     // this is a very tricky one: it needs resolving of the reference to the array and then the object behind the array
     expect(graph.edges[2].end.absolutePath).toEqual(['$defs', 'arrayObjectProperty', 'items']);
-    expect(graph.edges[2].edgeType).toEqual(EdgeType.ARRAY_ATTRIBUTE);
+    expect(graph.edges[2].edgeType).toEqual(EdgeType.ATTRIBUTE);
+    expect(graph.edges[2].isArray).toEqual(true);
     expect(graph.edges[2].label).toEqual('propertyRefToArrayComplex');
 
     graph.edges = [];

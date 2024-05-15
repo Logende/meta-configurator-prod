@@ -35,8 +35,6 @@ export class SchemaGraph {
       switch (data.edgeType) {
         case EdgeType.ATTRIBUTE:
           break;
-        case EdgeType.ARRAY_ATTRIBUTE:
-          break;
         case EdgeType.ALL_OF:
           color = 'seagreen';
           break;
@@ -184,13 +182,13 @@ export class EdgeData {
     public start: SchemaNodeData,
     public end: SchemaNodeData,
     public edgeType: EdgeType,
+    public isArray: boolean,
     public label: string
   ) {}
 }
 
 export enum EdgeType {
   ATTRIBUTE = 'attribute',
-  ARRAY_ATTRIBUTE = 'array_attribute',
   ALL_OF = 'allOf',
   ANY_OF = 'anyOf',
   ONE_OF = 'oneOf',
