@@ -30,7 +30,7 @@ export interface SettingsInterfaceSchemaDiagram {
   moveViewToSelectedElement: boolean;
   automaticZoomMaxValue: number;
   automaticZoomMinValue: number;
-    mergeAllOfs: boolean;
+  mergeAllOfs: boolean;
 }
 
 export interface SettingsInterfacePanels {

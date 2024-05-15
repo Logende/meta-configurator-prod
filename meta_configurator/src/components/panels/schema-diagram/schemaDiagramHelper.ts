@@ -9,7 +9,9 @@ import {
 export function findBestMatchingNode(nodes: Node[], selectedPath: Path): Node | undefined {
   const selectedPathString = pathToString(selectedPath);
 
-  const matchingNode = nodes.find(node => pathToString(node.data.absolutePath) === selectedPathString);
+  const matchingNode = nodes.find(
+    node => pathToString(node.data.absolutePath) === selectedPathString
+  );
   if (matchingNode) {
     return matchingNode;
   } else {
@@ -27,16 +29,14 @@ export function findBestMatchingData(
 
   const selectedPathString = pathToString(selectedPath);
 
-
   if (selectedNode.data.getNodeType() === 'schemaobject') {
-
     const matchingAttribute = (selectedNode.data as SchemaObjectNodeData).attributes.find(
-        attribute => pathToString(attribute.absolutePath) === selectedPathString
+      attribute => pathToString(attribute.absolutePath) === selectedPathString
     );
     if (matchingAttribute) {
       return matchingAttribute;
     }
   }
 
-    return selectedNode!.data;
+  return selectedNode!.data;
 }

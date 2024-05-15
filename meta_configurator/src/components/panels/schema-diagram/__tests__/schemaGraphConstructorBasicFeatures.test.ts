@@ -215,7 +215,6 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(graph.edges[2].label).toEqual('propertyRefToComplex');
     expect(graph.edges[2].end.getNodeType() == 'schemaobject').toBeTruthy();
 
-
     // this edge is not to the ref definition but to the resolved object
     expect(graph.edges[3].end.absolutePath).toEqual(['$defs', 'person']);
     expect(graph.edges[3].edgeType).toEqual(EdgeType.ATTRIBUTE);

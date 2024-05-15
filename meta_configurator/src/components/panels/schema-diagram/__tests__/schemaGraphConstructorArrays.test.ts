@@ -5,7 +5,8 @@ import {EdgeType, SchemaGraph, SchemaObjectNodeData} from '../schemaDiagramTypes
 import {
   generateAttributeEdges,
   generateObjectAttributes,
-  generateObjectTitle, identifyAllObjects,
+  generateObjectTitle,
+  identifyAllObjects,
   isSchemaThatDeservesANode,
 } from '../schemaGraphConstructor';
 
@@ -69,13 +70,13 @@ describe('test schema graph constructor with objects and attributes, without adv
       propertyArrayToRefSimple: {
         type: 'array',
         items: {
-            $ref: '#/$defs/lastName',
+          $ref: '#/$defs/lastName',
         },
       },
       propertyArrayToRefComplexWithTitle: {
         type: 'array',
         items: {
-            $ref: '#/$defs/person',
+          $ref: '#/$defs/person',
         },
       },
       propertyRefToArraySimple: {
@@ -91,7 +92,7 @@ describe('test schema graph constructor with objects and attributes, without adv
 
   beforeEach(() => {
     currentPath = [];
-    defs =  identifyAllObjects(schema);
+    defs = identifyAllObjects(schema);
   });
 
   it('identify objects', () => {
@@ -153,7 +154,10 @@ describe('test schema graph constructor with objects and attributes, without adv
     expect(rootNode.attributes[4].required).toBeFalsy();
 
     expect(rootNode.attributes[5].name).toEqual('propertyRefToArrayComplex');
-    expect(rootNode.attributes[5].absolutePath).toEqual(['properties', 'propertyRefToArrayComplex']);
+    expect(rootNode.attributes[5].absolutePath).toEqual([
+      'properties',
+      'propertyRefToArrayComplex',
+    ]);
     expect(rootNode.attributes[5].deprecated).toBeFalsy();
     expect(rootNode.attributes[5].required).toBeFalsy();
   });
@@ -189,8 +193,8 @@ describe('test schema graph constructor with objects and attributes, without adv
   });
 
   it('generate object title', () => {
-    const objectNodeCount = Array.from(defs.values()).filter(
-      node => isSchemaThatDeservesANode(node.schema)
+    const objectNodeCount = Array.from(defs.values()).filter(node =>
+      isSchemaThatDeservesANode(node.schema)
     ).length;
     expect(objectNodeCount).toEqual(4);
 
@@ -204,18 +208,17 @@ describe('test schema graph constructor with objects and attributes, without adv
     ).toEqual('items');
 
     const defsArrayPropItem = defs.get('$defs.arrayObjectProperty.items')!;
-    expect(
-      generateObjectTitle(defsArrayPropItem.absolutePath, defsArrayPropItem.schema)
-    ).toEqual('items');
+    expect(generateObjectTitle(defsArrayPropItem.absolutePath, defsArrayPropItem.schema)).toEqual(
+      'items'
+    );
 
-    const defsArrayObjectPropItem =  defs.get('$defs.arrayObjectProperty.items')!;
+    const defsArrayObjectPropItem = defs.get('$defs.arrayObjectProperty.items')!;
     expect(
       generateObjectTitle(defsArrayObjectPropItem.absolutePath, defsArrayObjectPropItem.schema)
     ).toEqual('items');
 
     const person = defs.get('$defs.person')!;
     expect(generateObjectTitle(person.absolutePath, person.schema)).toEqual('PersonTitle');
-
   });
 
   it('generate attribute edges', () => {
@@ -266,6 +269,5 @@ describe('test schema graph constructor with objects and attributes, without adv
     const arrayObjectPropItem = defs.get('$defs.arrayObjectProperty.items')!;
     generateAttributeEdges(arrayObjectPropItem, defs, graph);
     expect(graph.edges.length).toEqual(0);
-
   });
 });
