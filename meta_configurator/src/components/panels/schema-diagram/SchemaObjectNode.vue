@@ -41,7 +41,7 @@ function isHighlighted() {
   <div
     :class="{'bg-yellow-100': isHighlighted(), 'vue-flow__node-schemaobject': !isHighlighted}"
     @click="clickedNode()"
-  @dblclick="doubleClickedNode()">
+    @dblclick="doubleClickedNode()">
     <Handle type="target" :position="props.targetPosition!" class="vue-flow__handle"></Handle>
     <!--small><i>{{ props.data.absolutePath }}</i></small-->
     <b>{{ props.data.name }}</b>

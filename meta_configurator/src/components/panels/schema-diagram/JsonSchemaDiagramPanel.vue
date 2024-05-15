@@ -12,7 +12,6 @@ import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import VueFlowPanel from '@/components/panels/schema-diagram/VueFlowPanel.vue';
 
-
 const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
 
 function zoomIntoPath(pathAbsolute: Path) {

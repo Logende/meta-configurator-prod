@@ -17,8 +17,7 @@ import {
   findBestMatchingNode,
 } from '@/components/panels/schema-diagram/schemaDiagramHelper';
 import {SchemaElementData} from '@/components/panels/schema-diagram/schemaDiagramTypes';
-import {findForwardConnectedNodesAndEdges} from "@/components/panels/schema-diagram/findConnectedNodes";
-
+import {findForwardConnectedNodesAndEdges} from '@/components/panels/schema-diagram/findConnectedNodes';
 
 const emit = defineEmits<{
   (e: 'zoom_into_path_absolute', path_to_add: Path): void;
@@ -50,7 +49,6 @@ watch(getSchemaForMode(SessionMode.DataEditor).schemaPreprocessed, () => {
     layoutGraph(graphDirection.value);
   });
 });
-
 
 watch(schemaSession.currentPath, () => {
   updateGraph();
@@ -89,7 +87,7 @@ watch(
 
 function updateGraph() {
   // TODO: compare new and old nodes and then if no nodes are added, only update the data and if needed remove some node
-    const schema = dataSchema.schemaPreprocessed.value;
+  const schema = dataSchema.schemaPreprocessed.value;
   const graph = constructSchemaGraph(schema);
 
   const vueFlowGraph = graph.toVueFlowGraph();
@@ -107,7 +105,11 @@ function updateGraph() {
 function updateToSubgraph(path: Path) {
   const bestMatchingNode = findBestMatchingNode(activeNodes.value, path);
   if (bestMatchingNode) {
-    const [currentNodes, currentEdges] = findForwardConnectedNodesAndEdges(activeNodes.value, activeEdges.value, bestMatchingNode);
+    const [currentNodes, currentEdges] = findForwardConnectedNodesAndEdges(
+      activeNodes.value,
+      activeEdges.value,
+      bestMatchingNode
+    );
     activeNodes.value = currentNodes;
     activeEdges.value = currentEdges;
     currentRootNodePath.value = bestMatchingNode.data.absolutePath;

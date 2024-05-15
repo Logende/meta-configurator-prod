@@ -80,7 +80,6 @@ export class SchemaGraph {
 
 export class VueFlowGraph {
   public constructor(public nodes: Node[], public edges: Edge[]) {}
-
 }
 
 export interface Node {

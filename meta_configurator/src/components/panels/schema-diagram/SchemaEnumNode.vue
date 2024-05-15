@@ -16,7 +16,6 @@ const props = defineProps<{
   selectedData?: SchemaElementData;
 }>();
 
-
 const emit = defineEmits<{
   (e: 'select_element', path: Path): void;
 }>();

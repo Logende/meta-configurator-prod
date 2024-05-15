@@ -70,7 +70,6 @@ export class ManagedJsonSchema {
     );
   }
 
-
   /**
    * Returns the effective schema at the given path, i.e., the schema that resolved data dependent keywords.
    */

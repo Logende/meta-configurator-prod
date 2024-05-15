@@ -1,10 +1,10 @@
-import {
-  type Edge,
-  type Node,
-} from "@/components/panels/schema-diagram/schemaDiagramTypes";
+import {type Edge, type Node} from '@/components/panels/schema-diagram/schemaDiagramTypes';
 
-
-export function findForwardConnectedNodesAndEdges(allNodes: Node[], allEdges: Edge[], node: Node): [Node[], Edge[]] {
+export function findForwardConnectedNodesAndEdges(
+  allNodes: Node[],
+  allEdges: Edge[],
+  node: Node
+): [Node[], Edge[]] {
   const connectedNodes: Node[] = [];
   const connectedEdges: Edge[] = [];
   const visitedNodes = new Set<Node>();
@@ -14,8 +14,14 @@ export function findForwardConnectedNodesAndEdges(allNodes: Node[], allEdges: Ed
   return [connectedNodes, connectedEdges];
 }
 
-
-function visitNode(node: Node, visitedNodes: Set<Node>, connectedNodes: Node[], connectedEdges: Edge[], allNodes: Node[], allEdges: Edge[]) {
+function visitNode(
+  node: Node,
+  visitedNodes: Set<Node>,
+  connectedNodes: Node[],
+  connectedEdges: Edge[],
+  allNodes: Node[],
+  allEdges: Edge[]
+) {
   if (visitedNodes.has(node)) {
     return;
   }
@@ -24,7 +30,6 @@ function visitNode(node: Node, visitedNodes: Set<Node>, connectedNodes: Node[], 
 
   allEdges.forEach(edge => {
     if (edge.data.start.absolutePath === node.data.absolutePath) {
-
       if (connectedEdges.includes(edge)) {
         return;
       }
