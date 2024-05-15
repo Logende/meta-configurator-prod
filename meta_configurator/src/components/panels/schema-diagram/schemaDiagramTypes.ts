@@ -7,8 +7,11 @@ import type {JsonSchemaObjectType} from '@/schema/jsonSchemaType';
 export class SchemaGraph {
   public constructor(public nodes: SchemaElementData[], public edges: EdgeData[]) {}
 
-  public findNode(path: Path): SchemaElementData | undefined {
-    return this.nodes.find(node => pathToString(node.absolutePath) === pathToString(path));
+  public findNode(path: Path|string): SchemaElementData | undefined {
+    if (typeof path !== 'string') {
+      path = pathToString(path);
+    }
+    return this.nodes.find(node => pathToString(node.absolutePath) === path);
   }
 
   private toVueFlowNodes(): Node[] {
@@ -166,6 +169,7 @@ export class SchemaObjectAttributeData extends SchemaElementData {
   public constructor(
     name: string,
     public typeDescription: string,
+    public propertyType: 'properties' | 'patternProperties',
     absolutePath: Path,
     public deprecated: boolean,
     public required: boolean,
