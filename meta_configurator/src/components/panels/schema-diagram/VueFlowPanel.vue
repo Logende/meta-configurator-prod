@@ -17,7 +17,9 @@ import {
   findBestMatchingNode,
 } from '@/components/panels/schema-diagram/schemaDiagramHelper';
 import {SchemaElementData} from '@/components/panels/schema-diagram/schemaDiagramTypes';
-import {findForwardConnectedNodesAndEdges} from '@/components/panels/schema-diagram/findConnectedNodes';
+import {findForwardConnectedNodesAndEdges} from "@/components/panels/schema-diagram/findConnectedNodes";
+import {updateNodeData, wasNodeAdded} from "@/components/panels/schema-diagram/updateGraph";
+
 
 const emit = defineEmits<{
   (e: 'zoom_into_path_absolute', path_to_add: Path): void;
@@ -44,18 +46,11 @@ const currentRootNodePath: Ref<Path> = ref([]);
 
 watch(getSchemaForMode(SessionMode.DataEditor).schemaPreprocessed, () => {
   updateGraph();
-
-  nextTick(() => {
-    layoutGraph(graphDirection.value);
-  });
 });
+
 
 watch(schemaSession.currentPath, () => {
   updateGraph();
-
-  nextTick(() => {
-    layoutGraph(graphDirection.value);
-  });
 });
 
 onMounted(() => {
@@ -86,30 +81,42 @@ watch(
 );
 
 function updateGraph() {
-  // TODO: compare new and old nodes and then if no nodes are added, only update the data and if needed remove some node
   const schema = dataSchema.schemaPreprocessed.value;
   const graph = constructSchemaGraph(schema);
+  let graphNeedsLayouting = false;
 
   const vueFlowGraph = graph.toVueFlowGraph();
-  activeNodes.value = vueFlowGraph.nodes;
-  activeEdges.value = vueFlowGraph.edges;
-  currentRootNodePath.value = [];
+  if (wasNodeAdded(activeNodes.value, vueFlowGraph.nodes)) {
+    // node was added -> it is needed to update whole graph
+    activeNodes.value = vueFlowGraph.nodes;
+    activeEdges.value = vueFlowGraph.edges;
+    currentRootNodePath.value = [];
+    graphNeedsLayouting = true;
+  } else {
+    // only data updated or nodes removed
+    const nodesToRemove = updateNodeData(activeNodes.value, vueFlowGraph.nodes);
+    activeNodes.value = activeNodes.value.filter(node => !nodesToRemove.includes(node.id));
+    // we still update edges, because they might have changed
+    activeEdges.value = vueFlowGraph.edges;
+  }
 
   // if not on root level but current path is set: show only subgraph
   const currentPath: Path = schemaSession.currentPath.value;
   if (currentPath.length > 0) {
     updateToSubgraph(currentPath);
   }
+
+  if (graphNeedsLayouting) {
+    nextTick(() => {
+      layoutGraph(graphDirection.value);
+    });
+  }
 }
 
 function updateToSubgraph(path: Path) {
   const bestMatchingNode = findBestMatchingNode(activeNodes.value, path);
   if (bestMatchingNode) {
-    const [currentNodes, currentEdges] = findForwardConnectedNodesAndEdges(
-      activeNodes.value,
-      activeEdges.value,
-      bestMatchingNode
-    );
+    const [currentNodes, currentEdges] = findForwardConnectedNodesAndEdges(activeNodes.value, activeEdges.value, bestMatchingNode);
     activeNodes.value = currentNodes;
     activeEdges.value = currentEdges;
     currentRootNodePath.value = bestMatchingNode.data.absolutePath;
