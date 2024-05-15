@@ -17,9 +17,8 @@ import {
   findBestMatchingNode,
 } from '@/components/panels/schema-diagram/schemaDiagramHelper';
 import {SchemaElementData} from '@/components/panels/schema-diagram/schemaDiagramTypes';
-import {findForwardConnectedNodesAndEdges} from "@/components/panels/schema-diagram/findConnectedNodes";
-import {updateNodeData, wasNodeAdded} from "@/components/panels/schema-diagram/updateGraph";
-
+import {findForwardConnectedNodesAndEdges} from '@/components/panels/schema-diagram/findConnectedNodes';
+import {updateNodeData, wasNodeAdded} from '@/components/panels/schema-diagram/updateGraph';
 
 const emit = defineEmits<{
   (e: 'zoom_into_path_absolute', path_to_add: Path): void;
@@ -47,7 +46,6 @@ const currentRootNodePath: Ref<Path> = ref([]);
 watch(getSchemaForMode(SessionMode.DataEditor).schemaPreprocessed, () => {
   updateGraph();
 });
-
 
 watch(schemaSession.currentPath, () => {
   updateGraph();
@@ -116,7 +114,11 @@ function updateGraph() {
 function updateToSubgraph(path: Path) {
   const bestMatchingNode = findBestMatchingNode(activeNodes.value, path);
   if (bestMatchingNode) {
-    const [currentNodes, currentEdges] = findForwardConnectedNodesAndEdges(activeNodes.value, activeEdges.value, bestMatchingNode);
+    const [currentNodes, currentEdges] = findForwardConnectedNodesAndEdges(
+      activeNodes.value,
+      activeEdges.value,
+      bestMatchingNode
+    );
     activeNodes.value = currentNodes;
     activeEdges.value = currentEdges;
     currentRootNodePath.value = bestMatchingNode.data.absolutePath;
