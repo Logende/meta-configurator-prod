@@ -3,7 +3,7 @@ import {computed, nextTick, onMounted, ref, watch} from 'vue';
 import type {Ref} from 'vue';
 
 import {useVueFlow, VueFlow} from '@vue-flow/core';
-import Divider from "primevue/divider";
+import Divider from 'primevue/divider';
 import SchemaObjectNode from '@/components/panels/schema-diagram/SchemaObjectNode.vue';
 import {getDataForMode, getSchemaForMode, getSessionForMode} from '@/data/useDataLink';
 import {constructSchemaGraph} from '@/components/panels/schema-diagram/schemaGraphConstructor';
@@ -20,8 +20,8 @@ import {
 import {SchemaElementData} from '@/components/panels/schema-diagram/schemaDiagramTypes';
 import {findForwardConnectedNodesAndEdges} from '@/components/panels/schema-diagram/findConnectedNodes';
 import {updateNodeData, wasNodeAdded} from '@/components/panels/schema-diagram/updateGraph';
-import CurrentPathBreadcrump from "@/components/panels/shared-components/CurrentPathBreadcrump.vue";
-import DiagramOptionsPanel from "@/components/panels/schema-diagram/DiagramOptionsPanel.vue";
+import CurrentPathBreadcrump from '@/components/panels/shared-components/CurrentPathBreadcrump.vue';
+import DiagramOptionsPanel from '@/components/panels/schema-diagram/DiagramOptionsPanel.vue';
 
 const emit = defineEmits<{
   (e: 'update_current_path', path: Path): void;
@@ -53,7 +53,6 @@ watch(getSchemaForMode(SessionMode.DataEditor).schemaPreprocessed, () => {
 watch(schemaSession.currentPath, () => {
   updateGraph();
 });
-
 
 onMounted(() => {
   updateGraph();
@@ -162,15 +161,18 @@ function selectElement(path: Path) {
 function updateCurrentPath(path: Path) {
   emit('update_current_path', path);
 }
-
 </script>
 
 <template>
-  <DiagramOptionsPanel @rebuild_graph="updateGraph(true)" @fit_view="fitViewForCurrentlySelectedElement"
-  v-if="useSettings().schemaDiagram.showOptionsPanel"/>
+  <DiagramOptionsPanel
+    @rebuild_graph="updateGraph(true)"
+    @fit_view="fitViewForCurrentlySelectedElement"
+    v-if="useSettings().schemaDiagram.showOptionsPanel" />
 
-  <CurrentPathBreadcrump :path="schemaSession.currentPath.value" root-name="document root"
-                         @update:path="updateCurrentPath"></CurrentPathBreadcrump>
+  <CurrentPathBreadcrump
+    :path="schemaSession.currentPath.value"
+    root-name="document root"
+    @update:path="updateCurrentPath"></CurrentPathBreadcrump>
 
   <Divider />
   <div class="layout-flow">
