@@ -19,10 +19,11 @@ import {
 import {SchemaElementData} from '@/components/panels/schema-diagram/schemaDiagramTypes';
 import {findForwardConnectedNodesAndEdges} from '@/components/panels/schema-diagram/findConnectedNodes';
 import {updateNodeData, wasNodeAdded} from '@/components/panels/schema-diagram/updateGraph';
+import CurrentPathBreadcrump from "@/components/panels/shared-components/CurrentPathBreadcrump.vue";
 
 const emit = defineEmits<{
-  (e: 'zoom_into_path_absolute', path_to_add: Path): void;
-  (e: 'select_path_absolute', path: Path): void;
+  (e: 'update_current_path', path: Path): void;
+  (e: 'select_path', path: Path): void;
 }>();
 
 const schemaData = getDataForMode(SessionMode.SchemaEditor);
@@ -137,16 +138,22 @@ async function layoutGraph(direction: string) {
 
 function selectElement(path: Path) {
   if (schemaData.dataAt(path) != undefined) {
-    emit('select_path_absolute', path);
+    emit('select_path', path);
   }
 }
 
-function zoomIntoElement(path: Path) {
-  emit('zoom_into_path_absolute', path);
+function updateCurrentPath(path: Path) {
+  emit('update_current_path', path);
 }
+
 </script>
 
 <template>
+  <CurrentPathBreadcrump :path="schemaSession.currentPath.value" root-name="document root"
+  @update:path="updateCurrentPath"></CurrentPathBreadcrump>
+
+  <!--TODO: add panel that allows toggling options, such as hiding attributes and even vertical vs horizontal layout -->
+
   <div class="layout-flow">
     <VueFlow
       :nodes="activeNodes"
@@ -158,7 +165,7 @@ function zoomIntoElement(path: Path) {
         <SchemaObjectNode
           :data="props.data"
           @select_element="selectElement"
-          @zoom_into_element="zoomIntoElement"
+          @zoom_into_element="updateCurrentPath"
           :source-position="props.sourcePosition"
           :target-position="props.targetPosition"
           :selected-data="selectedData" />
