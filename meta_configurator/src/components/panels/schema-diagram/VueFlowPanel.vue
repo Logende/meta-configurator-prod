@@ -65,19 +65,31 @@ watch(
     selectedNode.value = bestMatchingNode;
     selectedData.value = findBestMatchingData(bestMatchingNode, absolutePath);
     if (bestMatchingNode && useSettings().schemaDiagram.moveViewToSelectedElement) {
-      nextTick(() => {
-        fitView({
-          nodes: [bestMatchingNode.id],
-          duration: 1000,
-          padding: 1,
-          maxZoom: useSettings().schemaDiagram.automaticZoomMaxValue,
-          minZoom: useSettings().schemaDiagram.automaticZoomMinValue,
-        });
-      });
+      fitViewForNodes([bestMatchingNode]);
     }
   },
   {deep: true}
 );
+
+function fitViewForCurrentlySelectedElement(otherwiseAll: boolean = false) {
+  if (selectedNode.value) {
+    fitViewForNodes([selectedNode.value]);
+  } else if (otherwiseAll) {
+    fitViewForNodes(activeNodes.value);
+  }
+}
+
+function fitViewForNodes(nodes: Node[]) {
+  nextTick(() => {
+    fitView({
+      nodes: nodes.map(node => node.id),
+      duration: 1000,
+      padding: 1,
+      maxZoom: useSettings().schemaDiagram.automaticZoomMaxValue,
+      minZoom: useSettings().schemaDiagram.automaticZoomMinValue,
+    });
+  });
+}
 
 function updateGraph() {
   const schema = dataSchema.schemaPreprocessed.value;
@@ -110,6 +122,8 @@ function updateGraph() {
       layoutGraph(graphDirection.value);
     });
   }
+
+  fitViewForCurrentlySelectedElement(true);
 }
 
 function updateToSubgraph(path: Path) {
