@@ -3,6 +3,7 @@ import {computed, nextTick, onMounted, ref, watch} from 'vue';
 import type {Ref} from 'vue';
 
 import {useVueFlow, VueFlow} from '@vue-flow/core';
+import Divider from "primevue/divider";
 import SchemaObjectNode from '@/components/panels/schema-diagram/SchemaObjectNode.vue';
 import {getDataForMode, getSchemaForMode, getSessionForMode} from '@/data/useDataLink';
 import {constructSchemaGraph} from '@/components/panels/schema-diagram/schemaGraphConstructor';
@@ -20,6 +21,7 @@ import {SchemaElementData} from '@/components/panels/schema-diagram/schemaDiagra
 import {findForwardConnectedNodesAndEdges} from '@/components/panels/schema-diagram/findConnectedNodes';
 import {updateNodeData, wasNodeAdded} from '@/components/panels/schema-diagram/updateGraph';
 import CurrentPathBreadcrump from "@/components/panels/shared-components/CurrentPathBreadcrump.vue";
+import DiagramOptionsPanel from "@/components/panels/schema-diagram/DiagramOptionsPanel.vue";
 
 const emit = defineEmits<{
   (e: 'update_current_path', path: Path): void;
@@ -52,6 +54,7 @@ watch(schemaSession.currentPath, () => {
   updateGraph();
 });
 
+
 onMounted(() => {
   updateGraph();
 });
@@ -71,7 +74,7 @@ watch(
   {deep: true}
 );
 
-function fitViewForCurrentlySelectedElement(otherwiseAll: boolean = false) {
+function fitViewForCurrentlySelectedElement(otherwiseAll: boolean = true) {
   if (selectedNode.value) {
     fitViewForNodes([selectedNode.value]);
   } else if (otherwiseAll) {
@@ -91,10 +94,10 @@ function fitViewForNodes(nodes: Node[]) {
   });
 }
 
-function updateGraph() {
+function updateGraph(forceRebuild: boolean = false) {
   const schema = dataSchema.schemaPreprocessed.value;
   const graph = constructSchemaGraph(schema);
-  let graphNeedsLayouting = false;
+  let graphNeedsLayouting = forceRebuild;
 
   const vueFlowGraph = graph.toVueFlowGraph();
   if (wasNodeAdded(activeNodes.value, vueFlowGraph.nodes)) {
@@ -163,11 +166,13 @@ function updateCurrentPath(path: Path) {
 </script>
 
 <template>
+  <DiagramOptionsPanel @rebuild_graph="updateGraph(true)" @fit_view="fitViewForCurrentlySelectedElement"
+  v-if="useSettings().schemaDiagram.showOptionsPanel"/>
+
   <CurrentPathBreadcrump :path="schemaSession.currentPath.value" root-name="document root"
-  @update:path="updateCurrentPath"></CurrentPathBreadcrump>
+                         @update:path="updateCurrentPath"></CurrentPathBreadcrump>
 
-  <!--TODO: add panel that allows toggling options, such as hiding attributes and even vertical vs horizontal layout -->
-
+  <Divider />
   <div class="layout-flow">
     <VueFlow
       :nodes="activeNodes"

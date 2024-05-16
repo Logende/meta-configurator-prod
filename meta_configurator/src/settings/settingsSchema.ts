@@ -81,52 +81,58 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         showAttributes: {
           type: 'boolean',
           description:
-            'If set to true, the attributes of the schema will be displayed in the schema diagram.',
+              'If set to true, the attributes of the schema will be displayed in the schema diagram.',
           default: true,
         },
         showEnumValues: {
           type: 'boolean',
           description:
-            'If set to true, the enum values of the schema will be displayed in the schema diagram.',
+              'If set to true, the enum values of the schema will be displayed in the schema diagram.',
           default: true,
         },
         maxAttributesToShow: {
           type: 'integer',
           description:
-            'The maximum number of attributes to show in the schema diagram. If the number of attributes is higher, they will be hidden.',
+              'The maximum number of attributes to show in the schema diagram. If the number of attributes is higher, they will be hidden.',
           default: 8,
           minimum: 1,
         },
         maxEnumValuesToShow: {
           type: 'integer',
           description:
-            'The maximum number of enum values to show in the schema diagram. If the number of enum values is higher, they will be hidden.',
+              'The maximum number of enum values to show in the schema diagram. If the number of enum values is higher, they will be hidden.',
           default: 5,
           minimum: 1,
         },
         moveViewToSelectedElement: {
           type: 'boolean',
           description:
-            'If set to true, the view will be moved to the selected element in the schema diagram.',
+              'If set to true, the view will be moved to the selected element in the schema diagram.',
           default: true,
         },
         automaticZoomMaxValue: {
           type: 'number',
           description:
-            'The maximum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
+              'The maximum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
           default: 1,
         },
         automaticZoomMinValue: {
           type: 'number',
           description:
-            'The minimum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
+              'The minimum zoom level of the automatic zoom in the schema diagram, which happens whenever the view moves to a selected element.',
           default: 0.5,
         },
         mergeAllOfs: {
           type: 'boolean',
           description:
-            'If set to true, allOf schemas will be merged in the schema diagram. This can make the diagram more readable, but sometimes also is not desired, because some information gets lost.',
+              'If set to true, allOf schemas will be merged in the schema diagram. This can make the diagram more readable, but sometimes also is not desired, because some information gets lost.',
           default: true,
+        },
+        showOptionsPanel: {
+          type: 'boolean',
+          description:
+              'If set to true, an options panel will be shown in the schema diagram, where the user can configure the settings of the schema diagram.',
+          default: false,
         },
       },
     },
