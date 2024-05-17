@@ -26,7 +26,9 @@ function fitView() {
       <div>
         <label
           >Graph direction vertical
-          <InputSwitch v-model="useSettings().schemaDiagram.vertical" class="options-input-switch" />
+          <InputSwitch
+            v-model="useSettings().schemaDiagram.vertical"
+            class="options-input-switch" />
         </label>
       </div>
       <div>
@@ -41,22 +43,27 @@ function fitView() {
       <div>
         <label
           >Show enum values
-          <InputSwitch v-model="useSettings().schemaDiagram.showEnumValues"  class="options-input-switch" />
+          <InputSwitch
+            v-model="useSettings().schemaDiagram.showEnumValues"
+            class="options-input-switch" />
         </label>
       </div>
       <div>
         <label
           >Move view on element selection
-          <InputSwitch v-model="useSettings().schemaDiagram.moveViewToSelectedElement"  class="options-input-switch" />
+          <InputSwitch
+            v-model="useSettings().schemaDiagram.moveViewToSelectedElement"
+            class="options-input-switch" />
         </label>
       </div>
       <div>
         <label
           >Merge allOfs
-          <InputSwitch v-model="useSettings().schemaDiagram.mergeAllOfs"  class="options-input-switch" />
+          <InputSwitch
+            v-model="useSettings().schemaDiagram.mergeAllOfs"
+            class="options-input-switch" />
         </label>
       </div>
-
 
       <div class="container">
         <div>
@@ -74,16 +81,15 @@ function fitView() {
 .container {
   display: flex;
   justify-content: space-between;
-
 }
-.options-element{
-  font-size:11px;
+.options-element {
+  font-size: 11px;
   position: relative;
   border: 4px;
   padding: 6px;
 }
 
-.options-input-switch{
+.options-input-switch {
   height: 15px;
 }
 </style>
