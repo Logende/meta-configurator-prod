@@ -183,20 +183,15 @@ function updateCurrentPath(path: Path) {
       fit-view-on-init
       :max-zoom="4"
       :min-zoom="0.1">
-
-      <div
-          class="controls">
-
-      <DiagramOptionsPanel
+      <div class="controls">
+        <DiagramOptionsPanel
           @rebuild_graph="updateGraph(true)"
-          @fit_view="fitViewForCurrentlySelectedElement"
-      />
+          @fit_view="fitViewForCurrentlySelectedElement" />
 
-      <CurrentPathBreadcrump
+        <CurrentPathBreadcrump
           :path="schemaSession.currentPath.value"
           root-name="document root"
           @update:path="updateCurrentPath"></CurrentPathBreadcrump>
-
       </div>
 
       <template #node-schemaobject="props">
@@ -227,20 +222,22 @@ function updateCurrentPath(path: Path) {
   width: 100%;
 }
 
-
- .controls{
-  position:absolute;
-  left:0;
-  top:0;
-  z-index:4;
+.controls {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 4;
   background-color: lightgray;
-  padding:8px
+  padding: 8px;
 }
- .controls .label{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;gap:5px;
-  cursor:pointer
+.controls .label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
 }
- .controls .label input{cursor:pointer}
+.controls .label input {
+  cursor: pointer;
+}
 </style>
