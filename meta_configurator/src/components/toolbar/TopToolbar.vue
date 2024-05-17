@@ -250,7 +250,6 @@ function isHighlighted(item: MenuItem) {
   return item.highlighted();
 }
 
-
 const searchTerm: Ref<string> = ref('');
 
 const initialSchemaSelectionDialog = ref();
@@ -440,7 +439,7 @@ const showSearchResultsMenu = event => {
           size="small"
           v-tooltip.bottom="'About'"
           @click="() => (showAboutDialog = true)">
-          <FontAwesomeIcon icon="fa-solid fa-circle-info"/>
+          <FontAwesomeIcon icon="fa-solid fa-circle-info" />
         </Button>
 
         <!-- link to our github, opens in a new tab -->
@@ -480,7 +479,6 @@ const showSearchResultsMenu = event => {
   color: #495057;
   padding: 0.35rem !important;
 }
-
 
 .highlighted-icon {
   color: var(--primary-color);
