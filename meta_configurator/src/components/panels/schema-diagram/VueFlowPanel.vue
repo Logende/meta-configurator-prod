@@ -164,6 +164,17 @@ function updateCurrentPath(path: Path) {
 </script>
 
 <template>
+  <DiagramOptionsPanel
+    @rebuild_graph="updateGraph(true)"
+    @fit_view="fitViewForCurrentlySelectedElement"
+    v-if="useSettings().schemaDiagram.showOptionsPanel" />
+
+  <CurrentPathBreadcrump
+    :path="schemaSession.currentPath.value"
+    root-name="document root"
+    @update:path="updateCurrentPath"></CurrentPathBreadcrump>
+
+  <Divider />
   <div class="layout-flow">
     <VueFlow
       :nodes="activeNodes"
