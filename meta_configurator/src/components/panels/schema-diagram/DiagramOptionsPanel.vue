@@ -19,7 +19,6 @@ function fitView() {
 }
 </script>
 
-<!-- TODO: Make it look better! -->
 <template>
   <Accordion :activeIndex="1" class="options-element">
     <AccordionTab header="Schema Diagram Options">
