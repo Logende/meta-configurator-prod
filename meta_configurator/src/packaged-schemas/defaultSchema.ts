@@ -11,7 +11,9 @@ export const DEFAULT_SCHEMA: TopLevelSchema = {
     name: {
       type: 'string',
       description: 'Last name',
-      examples: ['Doe'],
+      metaConfigurator: {
+        ontologyUri: true,
+      }
     },
     circular: {
       title: 'Circular',
