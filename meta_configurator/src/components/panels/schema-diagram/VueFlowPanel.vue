@@ -3,7 +3,6 @@ import {computed, nextTick, onMounted, ref, watch} from 'vue';
 import type {Ref} from 'vue';
 
 import {useVueFlow, VueFlow} from '@vue-flow/core';
-import Divider from 'primevue/divider';
 import SchemaObjectNode from '@/components/panels/schema-diagram/SchemaObjectNode.vue';
 import {getDataForMode, getSchemaForMode, getSessionForMode} from '@/data/useDataLink';
 import {constructSchemaGraph} from '@/components/panels/schema-diagram/schemaGraphConstructor';
@@ -171,7 +170,10 @@ function updateCurrentPath(path: Path) {
       @nodes-initialized="layoutGraph(graphDirection)"
       fit-view-on-init
       :max-zoom="4"
-      :min-zoom="0.1">
+      :min-zoom="0.1"
+    >
+
+
       <div class="controls">
         <DiagramOptionsPanel
           @rebuild_graph="updateGraph(true)"
@@ -198,7 +200,8 @@ function updateCurrentPath(path: Path) {
           @select_element="selectElement"
           :source-position="props.sourcePosition"
           :target-position="props.targetPosition"
-          :selected-data="selectedData" />
+          :selected-data="selectedData"
+        />
       </template>
     </VueFlow>
   </div>
