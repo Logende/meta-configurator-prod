@@ -13,7 +13,7 @@ export const DEFAULT_SCHEMA: TopLevelSchema = {
       description: 'Last name',
       metaConfigurator: {
         ontologyUri: true,
-      }
+      },
     },
     circular: {
       title: 'Circular',

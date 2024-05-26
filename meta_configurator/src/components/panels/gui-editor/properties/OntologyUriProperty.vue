@@ -10,7 +10,7 @@ import type {PathElement} from '@/utility/path';
 import type {ValidationResult} from '@/schema/validationService';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {isReadOnly} from '@/components/panels/gui-editor/configTreeNodeReadingUtils';
-import {findSuggestionsForSearchTerm} from "@/rdf/useRdf";
+import {findSuggestionsForSearchTerm} from '@/rdf/useRdf';
 
 const props = defineProps<{
   propertyName: PathElement;
@@ -28,15 +28,12 @@ const valueProperty = computed({
     return valueToSelectionOption(props.propertyData);
   },
   set(newValue: {name: string; value: any} | string | undefined) {
-
-
-
     if (typeof newValue !== 'object') {
-      updatePossibleValues(newValue)
+      updatePossibleValues(newValue);
       emit('update:propertyData', newValue);
       return;
     }
-    updatePossibleValues(newValue.value)
+    updatePossibleValues(newValue.value);
     emit('update:propertyData', newValue?.value);
   },
 });
@@ -50,10 +47,6 @@ async function updatePossibleValues(userInput: string | undefined) {
 }
 
 const possibleValues: Ref<string[]> = ref([]);
-
-
-
-
 
 function valueToSelectionOption(value: any): any {
   if (value === undefined) {
@@ -74,7 +67,6 @@ function valueToSelectionOption(value: any): any {
 const allOptions = computed(() => {
   return possibleValues.value.map(val => valueToSelectionOption(val));
 });
-
 </script>
 
 <template>

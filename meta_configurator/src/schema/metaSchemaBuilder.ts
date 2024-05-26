@@ -33,28 +33,26 @@ export function buildMetaSchema(metaSchemaSettings: SettingsInterfaceMetaSchema)
     delete metaSchema.$defs.arrayProperty.properties.unevaluatedItems;
     delete metaSchema.$defs.arrayProperty.properties.items;
   }
-  
+
   if (metaSchemaSettings.showJsonLdFields) {
     for (const key in JSON_LD_DEFS) {
       const value: any = JSON_LD_DEFS[key];
-        metaSchema.$defs[key] = value;
+      metaSchema.$defs[key] = value;
     }
     metaSchema.$defs.rootObjectSubSchema!.allOf! = [
       {
-        $ref: '#/$defs/jsonLdObject'
+        $ref: '#/$defs/jsonLdObject',
       },
-      ...metaSchema.$defs.rootObjectSubSchema!.allOf!
+      ...metaSchema.$defs.rootObjectSubSchema!.allOf!,
     ];
-
 
     metaSchema.$defs.objectSubSchema!.allOf! = [
       {
-        $ref: '#/$defs/jsonLdCommon'
+        $ref: '#/$defs/jsonLdCommon',
       },
-      ...metaSchema.$defs.objectSubSchema!.allOf!
+      ...metaSchema.$defs.objectSubSchema!.allOf!,
     ];
   }
-  
 
   const simplified =
     !metaSchemaSettings.allowBooleanSchema ||
@@ -235,150 +233,154 @@ const ALL_OF_META_DATA = [
 
 const JSON_LD_DEFS = {
   jsonLdObject: {
-    type: "object",
-    title: "JSON-LD object",
+    type: 'object',
+    title: 'JSON-LD object',
     properties: {
       '@context': {
-        title: "Context",
+        title: 'Context',
         oneOf: [
           {
-            title: "Overall context",
-            $ref: "#/$defs/jsonLdContextElement"
+            title: 'Overall context',
+            $ref: '#/$defs/jsonLdContextElement',
           },
           {
-            type: "object",
-            title: "Context elements",
+            type: 'object',
+            title: 'Context elements',
             additionalProperties: {
-              title: "Content element",
-              '$ref': "#/$defs/jsonLdContextElement"
-            }
-          }
-        ]
-      }
-    }
+              title: 'Content element',
+              $ref: '#/$defs/jsonLdContextElement',
+            },
+          },
+        ],
+      },
+    },
   },
   jsonLdContextElement: {
-    title: "Context element",
+    title: 'Context element',
     oneOf: [
       {
-        type: "string",
-        title: "Context element",
-        format: "uri"
+        type: 'string',
+        title: 'Context element',
+        format: 'uri',
       },
       {
-        title: "Context object",
-        '$ref': "#/$defs/jsonLdCommon"
-      }
-    ]
+        title: 'Context object',
+        $ref: '#/$defs/jsonLdCommon',
+      },
+    ],
   },
   jsonLdCommon: {
-    title: "JsonLdCommon",
-    type: "object",
+    title: 'JsonLdCommon',
+    type: 'object',
     properties: {
       '@id': {
-        description: "Used to uniquely identify things that are being described in the document with IRIs or blank node identifiers.",
-        type: "string",
-        format: "uri"
+        description:
+          'Used to uniquely identify things that are being described in the document with IRIs or blank node identifiers.',
+        type: 'string',
+        format: 'uri',
       },
       '@value': {
-        description: "Used to specify the data that is associated with a particular property in the graph.",
-        type: ["string", "boolean", "number"]
+        description:
+          'Used to specify the data that is associated with a particular property in the graph.',
+        type: ['string', 'boolean', 'number'],
       },
       '@language': {
-        description: "Used to specify the language for a particular string value or the default language of a JSON-LD document.",
-        type: ["string"],
+        description:
+          'Used to specify the language for a particular string value or the default language of a JSON-LD document.',
+        type: ['string'],
         metaConfigurator: {
-          advanced: true
-        }
+          advanced: true,
+        },
       },
-      "@type": {
-        description: "Used to set the data type of a node or typed value.",
-        type: ["string", "array"],
+      '@type': {
+        description: 'Used to set the data type of a node or typed value.',
+        type: ['string', 'array'],
         items: {
-          type: "string"
-        }
+          type: 'string',
+        },
       },
-      "@container": {
-        description: "Used to set the default container type for a term.",
-        type: ["string"],
-        "enum": ["@language", "@list", "@index", "@set"]
+      '@container': {
+        description: 'Used to set the default container type for a term.',
+        type: ['string'],
+        enum: ['@language', '@list', '@index', '@set'],
       },
-      "@list": {
-        description: "Used to express an ordered set of data.",
-        type: "array",
+      '@list': {
+        description: 'Used to express an ordered set of data.',
+        type: 'array',
         items: {
           oneOf: [
             {
-              type: "string"
+              type: 'string',
             },
             {
-              type: "number"
+              type: 'number',
             },
             {
-              type: "boolean"
+              type: 'boolean',
             },
             {
-              '$ref': "#/$defs/jsonLdCommon"
-            }
-          ]
+              $ref: '#/$defs/jsonLdCommon',
+            },
+          ],
         },
         metaConfigurator: {
-          advanced: true
-        }
+          advanced: true,
+        },
       },
-      "@set": {
-        description: "Used to express an unordered set of data and to ensure that values are always represented as arrays.",
-        type: "array",
+      '@set': {
+        description:
+          'Used to express an unordered set of data and to ensure that values are always represented as arrays.',
+        type: 'array',
         items: {
           oneOf: [
             {
-              type: "string"
+              type: 'string',
             },
             {
-              type: "number"
+              type: 'number',
             },
             {
-              type: "boolean"
+              type: 'boolean',
             },
             {
-              '$ref': "#/$defs/jsonLdCommon"
-            }
-          ]
+              $ref: '#/$defs/jsonLdCommon',
+            },
+          ],
         },
         metaConfigurator: {
-          advanced: true
-        }
+          advanced: true,
+        },
       },
-      "@reverse": {
-        description: "Used to express reverse properties.",
-        type: ["string", "object"],
-        "additionalProperties": {
+      '@reverse': {
+        description: 'Used to express reverse properties.',
+        type: ['string', 'object'],
+        additionalProperties: {
           anyOf: [
             {
-              '$ref': "#/$defs/jsonLdCommon"
-            }
-          ]
+              $ref: '#/$defs/jsonLdCommon',
+            },
+          ],
         },
         metaConfigurator: {
-          advanced: true
-        }
+          advanced: true,
+        },
       },
-      "@base": {
-        description: "Used to set the base IRI against which relative IRIs are resolved",
-        type: ["string"],
-        format: "uri",
+      '@base': {
+        description: 'Used to set the base IRI against which relative IRIs are resolved',
+        type: ['string'],
+        format: 'uri',
         metaConfigurator: {
-          advanced: true
-        }
+          advanced: true,
+        },
       },
-      "@vocab": {
-        description: "Used to expand properties and values in @type with a common prefix IRI",
-        type: ["string"],
-        format: "uri",
+      '@vocab': {
+        description: 'Used to expand properties and values in @type with a common prefix IRI',
+        type: ['string'],
+        format: 'uri',
         metaConfigurator: {
-          advanced: true
-        }
-      }
-    }
-  }
-    };
+          advanced: true,
+        },
+      },
+    },
+  },
+};
