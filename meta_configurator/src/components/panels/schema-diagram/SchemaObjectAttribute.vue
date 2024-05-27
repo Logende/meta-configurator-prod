@@ -34,12 +34,16 @@ function isHighlighted() {
     v-on:click.stop>
     <span :class="{'line-through': props.data.deprecated}">{{ props.data.name }}</span>
     <span class="text-red-600">{{ props.data.required ? '*' : '' }}</span>
-    <span>: {{ props.data.typeDescription }}</span>
+    <span class="vue-flow__node-schemaattribute-type">: {{ props.data.typeDescription }}</span>
   </div>
 </template>
 
 <style>
 .vue-flow__node-schemaattribute {
   padding: 0px;
+}
+.vue-flow__node-schemaattribute-type {
+  font-size: 0.8em;
+  color: gray;
 }
 </style>

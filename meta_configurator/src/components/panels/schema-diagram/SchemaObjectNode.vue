@@ -60,7 +60,7 @@ function isHighlighted() {
 .vue-flow__node-schemaobject {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  padding: 4px;
   border: 1px solid #ddd;
   color: #2e3d49;
   background: linear-gradient(135deg, #fafcff 0%, #ffffff 100%);
