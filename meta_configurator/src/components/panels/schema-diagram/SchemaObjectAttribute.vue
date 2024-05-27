@@ -3,8 +3,6 @@ import {
   SchemaElementData,
   SchemaObjectAttributeData,
 } from '@/components/panels/schema-diagram/schemaDiagramTypes';
-import {getSessionForMode} from '@/data/useDataLink';
-import {SessionMode} from '@/store/sessionMode';
 import type {Path} from '@/utility/path';
 
 const props = defineProps<{
@@ -12,7 +10,6 @@ const props = defineProps<{
   selectedData?: SchemaElementData;
 }>();
 
-const schemaSession = getSessionForMode(SessionMode.SchemaEditor);
 
 const emit = defineEmits<{
   (e: 'select_element', path: Path): void;
@@ -40,7 +37,7 @@ function isHighlighted() {
 
 <style>
 .vue-flow__node-schemaattribute {
-  padding: 0px;
+  padding: 0;
 }
 .vue-flow__node-schemaattribute-type {
   font-size: 0.8em;
