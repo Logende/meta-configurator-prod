@@ -5,7 +5,7 @@ import {
 } from '@/components/panels/schema-diagram/schemaDiagramTypes';
 import {getSessionForMode} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
-import {Path} from '@/utility/path';
+import type {Path} from '@/utility/path';
 
 const props = defineProps<{
   data: SchemaObjectAttributeData;
