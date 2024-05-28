@@ -25,11 +25,12 @@ import {
   faDiagramProject,
   faGear,
   faCode,
-  faWrench,
+  faWrench, faFileImport, faTable,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFile,
   faFileCode,
+  faCircleCheck,
   faFloppyDisk as faFloppyDiskRegular,
   faFolderOpen as faFolderOpenRegular,
   faEye as faEyeRegular,
@@ -46,6 +47,7 @@ export function registerIcons() {
   library.add(faFloppyDiskRegular);
   library.add(faFolderOpen);
   library.add(faFolderOpenRegular);
+  library.add(faFileImport)
   library.add(faRotateLeft);
   library.add(faRotateRight);
   library.add(faShareNodes);
@@ -67,4 +69,6 @@ export function registerIcons() {
   library.add(faDiagramProject);
   library.add(faCode);
   library.add(faWrench);
+  library.add(faCircleCheck)
+  library.add(faTable)
 }
