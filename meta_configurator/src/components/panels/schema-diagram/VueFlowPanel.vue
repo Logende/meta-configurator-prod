@@ -170,10 +170,7 @@ function updateCurrentPath(path: Path) {
       @nodes-initialized="layoutGraph(graphDirection)"
       fit-view-on-init
       :max-zoom="4"
-      :min-zoom="0.1"
-    >
-
-
+      :min-zoom="0.1">
       <div class="controls">
         <DiagramOptionsPanel
           @rebuild_graph="updateGraph(true)"
@@ -200,8 +197,7 @@ function updateCurrentPath(path: Path) {
           @select_element="selectElement"
           :source-position="props.sourcePosition"
           :target-position="props.targetPosition"
-          :selected-data="selectedData"
-        />
+          :selected-data="selectedData" />
       </template>
     </VueFlow>
   </div>

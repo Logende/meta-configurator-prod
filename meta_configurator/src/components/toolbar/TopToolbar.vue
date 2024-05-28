@@ -31,7 +31,7 @@ import {schemaCollection} from '@/packaged-schemas/schemaCollection';
 import {getSessionForMode} from '@/data/useDataLink';
 import type {SettingsInterfaceRoot} from '@/settings/settingsTypes';
 import {useSettings} from '@/settings/useSettings';
-import ImportCsvDialog from "@/components/dialogs/csvimport/ImportCsvDialog.vue";
+import ImportCsvDialog from '@/components/dialogs/csvimport/ImportCsvDialog.vue';
 
 const props = defineProps<{
   currentMode: SessionMode;
@@ -49,7 +49,12 @@ const showUrlInputDialog = ref(false);
 const schemaUrl = ref('');
 const menu = ref();
 
-const topMenuBar = new MenuItems(handleFromWebClick, handleFromOurExampleClick, showUrlDialog, showCsvImportDialog);
+const topMenuBar = new MenuItems(
+  handleFromWebClick,
+  handleFromOurExampleClick,
+  showUrlDialog,
+  showCsvImportDialog
+);
 
 function getPageName(): string {
   switch (props.currentMode) {
@@ -263,7 +268,7 @@ const csvImportDialog = ref();
 
 function showCsvImportDialog() {
   csvImportDialog.value?.show();
-};
+}
 
 defineExpose({
   showInitialSchemaDialog,
@@ -320,7 +325,7 @@ const showSearchResultsMenu = event => {
     ref="initialSchemaSelectionDialog"
     @user_selected_option="option => handleUserSelection(option)" />
 
-  <ImportCsvDialog ref="csvImportDialog"/>
+  <ImportCsvDialog ref="csvImportDialog" />
 
   <!-- Dialog to select a schema from JSON Schema Store, TODO: move to separate component -->
   <Dialog v-model:visible="topMenuBar.showDialog.value" header="Select a Schema">
