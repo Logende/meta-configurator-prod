@@ -2,7 +2,7 @@ import type {DataFormatDefinition} from '@/dataformats/dataFormatDefinition';
 import {DataConverterJson, DataConverterYaml} from '@/dataformats/dataConverter';
 import {PathIndexLinkJson} from '@/dataformats/pathIndexLinkJson';
 import {formatRegistry} from '@/dataformats/formatRegistry';
-import {PathIndexLinkYaml} from "@/dataformats/pathIndexLinkYaml";
+import {PathIndexLinkYaml} from '@/dataformats/pathIndexLinkYaml';
 
 export const jsonFormat: DataFormatDefinition = {
   dataConverter: new DataConverterJson(),

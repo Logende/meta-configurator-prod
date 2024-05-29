@@ -166,9 +166,7 @@ export class MenuItems {
         command: () => {
           useCurrentData().undoManager.undo();
         },
-        disabled: () =>
-           !useCurrentData().undoManager.canUndo.value
-         ,
+        disabled: () => !useCurrentData().undoManager.canUndo.value,
         key: 'schema_undo',
       },
       {

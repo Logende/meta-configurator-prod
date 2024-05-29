@@ -6,7 +6,7 @@ import {triggerRef} from 'vue';
 import {jsonFormat, registerDefaultDataFormats} from '../defaultFormats';
 import {PathIndexLinkJson} from '../pathIndexLinkJson';
 import {noPathIndexLink} from '../pathIndexLink';
-import {PathIndexLinkYaml} from "../pathIndexLinkYaml";
+import {PathIndexLinkYaml} from '../pathIndexLinkYaml';
 
 function setDataFormat(format: string | undefined) {
   useDataSource().settingsData.value.dataFormat = format;
