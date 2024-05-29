@@ -66,4 +66,7 @@ export const SETTINGS_DATA_DEFAULT = {
       },
     ],
   },
+  rdf: {
+    sparqlEndpointUrl: 'https://dbpedia.org/sparql',
+  }
 };

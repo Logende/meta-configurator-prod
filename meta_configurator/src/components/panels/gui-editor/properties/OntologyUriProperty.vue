@@ -10,7 +10,7 @@ import type {PathElement} from '@/utility/path';
 import type {ValidationResult} from '@/schema/validationService';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {isReadOnly} from '@/components/panels/gui-editor/configTreeNodeReadingUtils';
-import {findSuggestionsForSearchTerm} from '@/rdf/useRdf';
+import {findSuggestionsForSearchTerm} from "@/rdf/findSuggestionsForSearchTerm";
 
 const props = defineProps<{
   propertyName: PathElement;

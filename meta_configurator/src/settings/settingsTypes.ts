@@ -10,6 +10,7 @@ export interface SettingsInterfaceRoot {
   metaSchema: SettingsInterfaceMetaSchema;
   hideSchemaEditor: boolean;
   panels: SettingsInterfacePanels;
+  rdf: SettingsInterfaceRdf;
 }
 
 export interface SettingsInterfaceCodeEditor {
@@ -60,4 +61,8 @@ export enum PropertySorting {
 export enum DataFormat {
   JSON = 'json',
   YAML = 'yaml',
+}
+
+export interface SettingsInterfaceRdf {
+  sparqlEndpointUrl: string;
 }

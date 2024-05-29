@@ -193,6 +193,20 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         },
       },
     },
+    rdf: {
+        type: 'object',
+        required: ['sparqlEndpointUrl'],
+        additionalProperties: false,
+        description: 'Settings for RDF data.',
+        properties: {
+          sparqlEndpointUrl: {
+            type: 'string',
+            description: 'The SPARQL endpoint to use for querying RDF data.',
+            default: 'https://dbpedia.org/sparql',
+            format: 'uri',
+            },
+        },
+        },
   },
   $defs: {
     panels: {
