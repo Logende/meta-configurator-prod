@@ -254,6 +254,7 @@ export class MenuItems {
     } else {
       result.push({
         label: 'Disable advanced schema options',
+        highlighted: true,
         icon: 'fa-solid fa-gear',
         command: () => {
           const metaSchema = useSettings().metaSchema;
