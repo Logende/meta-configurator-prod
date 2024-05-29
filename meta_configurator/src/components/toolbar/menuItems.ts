@@ -89,7 +89,7 @@ export class MenuItems {
         command: () => {
           useCurrentData().undoManager.undo();
         },
-        disabled: () => !useCurrentData().undoManager.canUndo,
+        disabled: () => !useCurrentData().undoManager.canUndo.value,
       },
       {
         label: 'Redo',
@@ -97,7 +97,7 @@ export class MenuItems {
         command: () => {
           useCurrentData().undoManager.redo();
         },
-        disabled: () => !useCurrentData().undoManager.canRedo,
+        disabled: () => !useCurrentData().undoManager.canRedo.value,
         key: 'redo',
       },
     ];
@@ -166,7 +166,9 @@ export class MenuItems {
         command: () => {
           useCurrentData().undoManager.undo();
         },
-        disabled: () => !useCurrentData().undoManager.canUndo,
+        disabled: () =>
+           !useCurrentData().undoManager.canUndo.value
+         ,
         key: 'schema_undo',
       },
       {
@@ -175,7 +177,7 @@ export class MenuItems {
         command: () => {
           useCurrentData().undoManager.redo();
         },
-        disabled: () => !useCurrentData().undoManager.canRedo,
+        disabled: () => !useCurrentData().undoManager.canRedo.value,
         key: 'schema_redo',
       },
       {
@@ -331,7 +333,7 @@ export class MenuItems {
         command: () => {
           useCurrentData().undoManager.undo();
         },
-        disabled: () => !useCurrentData().undoManager.canUndo,
+        disabled: () => !useCurrentData().undoManager.canUndo.value,
         key: 'settings_undo',
       },
       {
@@ -340,7 +342,7 @@ export class MenuItems {
         command: () => {
           useCurrentData().undoManager.redo();
         },
-        disabled: () => !useCurrentData().undoManager.canRedo,
+        disabled: () => !useCurrentData().undoManager.canRedo.value,
         key: 'settings_redo',
       },
       {
