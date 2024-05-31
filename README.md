@@ -76,7 +76,7 @@ To launch the application, follow these steps:
 To cite MetaConfigurator in your publications, please use the following BibTeX entry:
 
 ```bibtex
-@article{metaconfigurator, 
+@article{metaconfigurator2024, 
 year = {2024}, 
 title = {{MetaConfigurator: A User-Friendly Tool for Editing Structured Data Files}}, 
 author = {Neubauer, Felix and Bredl, Paul and Xu, Minye and Patel, Keyuriben and Pleiss, Jürgen and Uekermann, Benjamin}, 
