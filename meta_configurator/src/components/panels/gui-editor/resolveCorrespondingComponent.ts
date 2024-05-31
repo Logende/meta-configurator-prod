@@ -117,7 +117,7 @@ function hasTwoOrMoreExamples(schema: any): boolean {
 }
 
 function isOntologyUri(schema: any): boolean {
-  return schema.metaConfigurator !== undefined && schema.metaConfigurator.ontologyUri === true;
+  return schema.metaConfigurator !== undefined && schema.metaConfigurator.ontology !== undefined && schema.metaConfigurator.ontology.mustBeUri;
 }
 
 function buildProperties(nodeData: ConfigTreeNodeData | AddItemTreeNodeData, mode: SessionMode) {

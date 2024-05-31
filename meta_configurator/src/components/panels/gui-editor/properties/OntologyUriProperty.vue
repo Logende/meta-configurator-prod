@@ -29,6 +29,7 @@ const emit = defineEmits<{
 }>();
 
 
+const mustBeClassOrProperty = props.propertySchema.metaConfigurator!.ontology!.mustBeClassOrProperty;
 
 const currentData = getDataForMode(props.sessionMode);
 
@@ -124,7 +125,7 @@ async function updatePossibleValues(userInput: string | undefined, prefix: strin
     possibleValues.value = [];
     return;
   }
-  possibleValues.value = await findSuggestionsForSearchTerm(userInput, determinePrefixMeaning(prefix || ""));
+  possibleValues.value = await findSuggestionsForSearchTerm(userInput, determinePrefixMeaning(prefix || ""), mustBeClassOrProperty);
 }
 
 

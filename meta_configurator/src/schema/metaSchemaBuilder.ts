@@ -263,10 +263,10 @@ const JSON_LD_DEFS = {
         title: 'Context element',
         format: 'uri',
       },
-      /*{
+      {
         title: 'Context object',
         $ref: '#/$defs/jsonLdCommon',
-      },*/
+      },
     ],
   },
   jsonLdCommon: {
@@ -279,27 +279,40 @@ const JSON_LD_DEFS = {
         type: 'string',
         format: 'uri',
         metaConfigurator: {
-          ontologyUri: true,
+          ontology: {
+            mustBeUri: true,
+            mustBeClassOrProperty: true,
+          }
         }
       },
-      /*'@value': {
+      '@value': {
         description:
           'Used to specify the data that is associated with a particular property in the graph.',
         type: ['string', 'boolean', 'number'],
       },
-      '@language': {
+      /*'@language': {
         description:
           'Used to specify the language for a particular string value or the default language of a JSON-LD document.',
         type: ['string'],
         metaConfigurator: {
           advanced: true,
         },
-      },
+      },*/
       '@type': {
         description: 'Used to set the data type of a node or typed value.',
         type: ['string', 'array'],
+        metaConfigurator: {
+          ontology: {
+            mustBeUri: true,
+          }
+        },
         items: {
           type: 'string',
+          metaConfigurator: {
+            ontology: {
+              mustBeUri: true,
+            }
+          }
         },
       },
       '@container': {
@@ -307,7 +320,7 @@ const JSON_LD_DEFS = {
         type: ['string'],
         enum: ['@language', '@list', '@index', '@set'],
       },
-      '@list': {
+      /*'@list': {
         description: 'Used to express an ordered set of data.',
         type: 'array',
         items: {

@@ -1,11 +1,11 @@
 import {useSettings} from "@/settings/useSettings";
 import {errorService} from "@/main";
 
-export async function findSuggestionsForSearchTerm(searchTerm: string, prefix?: string) {
+export async function findSuggestionsForSearchTerm(searchTerm: string, prefix?: string, mustBeClassOrProperty: boolean = true) {
   const endpointUrl = useSettings().rdf.sparqlEndpointUrl;
 
   try {
-    let results = await performSparqlQueryForSearchTerm(endpointUrl, searchTerm, prefix);
+    let results = await performSparqlQueryForSearchTerm(endpointUrl, searchTerm, prefix, mustBeClassOrProperty);
     if (prefix) {
       results = results.map((result: string) => {
         return result.replace(prefix, "")
