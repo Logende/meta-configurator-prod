@@ -41,7 +41,7 @@ export function buildMetaSchema(metaSchemaSettings: SettingsInterfaceMetaSchema)
     }
     metaSchema.$defs.rootObjectSubSchema!.allOf! = [
       {
-        $ref: '#/$defs/jsonLdObject',
+        $ref: '#/$defs/jsonLdContextHaving',
       },
       ...metaSchema.$defs.rootObjectSubSchema!.allOf!,
     ];
@@ -232,17 +232,17 @@ const ALL_OF_META_DATA = [
 ];
 
 const JSON_LD_DEFS = {
-  jsonLdObject: {
+  jsonLdContextHaving: {
     type: 'object',
     title: 'JSON-LD object',
     properties: {
       '@context': {
         title: 'Context',
         oneOf: [
-          {
+          /*{
             title: 'Overall context',
             $ref: '#/$defs/jsonLdContextElement',
-          },
+          },*/
           {
             type: 'object',
             title: 'Context elements',
@@ -263,10 +263,10 @@ const JSON_LD_DEFS = {
         title: 'Context element',
         format: 'uri',
       },
-      {
+      /*{
         title: 'Context object',
         $ref: '#/$defs/jsonLdCommon',
-      },
+      },*/
     ],
   },
   jsonLdCommon: {
@@ -278,8 +278,11 @@ const JSON_LD_DEFS = {
           'Used to uniquely identify things that are being described in the document with IRIs or blank node identifiers.',
         type: 'string',
         format: 'uri',
+        metaConfigurator: {
+          ontologyUri: true,
+        }
       },
-      '@value': {
+      /*'@value': {
         description:
           'Used to specify the data that is associated with a particular property in the graph.',
         type: ['string', 'boolean', 'number'],
@@ -380,7 +383,7 @@ const JSON_LD_DEFS = {
         metaConfigurator: {
           advanced: true,
         },
-      },
+      },*/
     },
   },
 };

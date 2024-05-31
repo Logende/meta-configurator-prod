@@ -50,6 +50,8 @@ export interface SettingsInterfaceMetaSchema {
   allowBooleanSchema: boolean;
   allowMultipleTypes: boolean;
   objectTypesComfort: boolean;
+  showAdditionalPropertiesButton: boolean;
+  showJsonLdFields: boolean;
 }
 
 export enum PropertySorting {

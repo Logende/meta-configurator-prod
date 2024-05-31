@@ -5,7 +5,13 @@ export async function findSuggestionsForSearchTerm(searchTerm: string, prefix?: 
   const endpointUrl = useSettings().rdf.sparqlEndpointUrl;
 
   try {
-    return await performSparqlQueryForSearchTerm(endpointUrl, searchTerm, prefix);
+    let results = await performSparqlQueryForSearchTerm(endpointUrl, searchTerm, prefix);
+    if (prefix) {
+      results = results.map((result: string) => {
+        return result.replace(prefix, "")
+      });
+    }
+    return results;
   } catch (error) {
     errorService.onError(error);
     return [];
