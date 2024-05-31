@@ -168,10 +168,9 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         },
         showJsonLdFields: {
           type: 'boolean',
-          description:
-              'If set to true, the fields for JSON-LD will be shown in the schema editor.',
+          description: 'If set to true, the fields for JSON-LD will be shown in the schema editor.',
           default: false,
-        }
+        },
       },
     },
     hideSchemaEditor: {
@@ -206,19 +205,19 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
       },
     },
     rdf: {
-        type: 'object',
-        required: ['sparqlEndpointUrl'],
-        additionalProperties: false,
-        description: 'Settings for RDF data.',
-        properties: {
-          sparqlEndpointUrl: {
-            type: 'string',
-            description: 'The SPARQL endpoint to use for querying RDF data.',
-            default: 'https://dbpedia.org/sparql',
-            format: 'uri',
-            },
+      type: 'object',
+      required: ['sparqlEndpointUrl'],
+      additionalProperties: false,
+      description: 'Settings for RDF data.',
+      properties: {
+        sparqlEndpointUrl: {
+          type: 'string',
+          description: 'The SPARQL endpoint to use for querying RDF data.',
+          default: 'https://dbpedia.org/sparql',
+          format: 'uri',
         },
-        },
+      },
+    },
   },
   $defs: {
     panels: {

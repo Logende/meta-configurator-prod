@@ -1,14 +1,23 @@
-import {useSettings} from "@/settings/useSettings";
-import {errorService} from "@/main";
+import {useSettings} from '@/settings/useSettings';
+import {errorService} from '@/main';
 
-export async function findSuggestionsForSearchTerm(searchTerm: string, prefix?: string, mustBeClassOrProperty: boolean = true) {
+export async function findSuggestionsForSearchTerm(
+  searchTerm: string,
+  prefix?: string,
+  mustBeClassOrProperty: boolean = true
+) {
   const endpointUrl = useSettings().rdf.sparqlEndpointUrl;
 
   try {
-    let results = await performSparqlQueryForSearchTerm(endpointUrl, searchTerm, prefix, mustBeClassOrProperty);
+    let results = await performSparqlQueryForSearchTerm(
+      endpointUrl,
+      searchTerm,
+      prefix,
+      mustBeClassOrProperty
+    );
     if (prefix) {
       results = results.map((result: string) => {
-        return result.replace(prefix, "")
+        return result.replace(prefix, '');
       });
     }
     return results;
@@ -18,9 +27,16 @@ export async function findSuggestionsForSearchTerm(searchTerm: string, prefix?: 
   }
 }
 
-async function performSparqlQueryForSearchTerm(endpointUrl: string, searchTerm: string, prefix: string|undefined, mustBeClassOrProperty: boolean = true) {
+async function performSparqlQueryForSearchTerm(
+  endpointUrl: string,
+  searchTerm: string,
+  prefix: string | undefined,
+  mustBeClassOrProperty: boolean = true
+) {
   const prefixFilter = prefix ? `STRSTARTS(STR(?subject), "${prefix}") &&` : '';
-  const classOrPropertyFilter = mustBeClassOrProperty ? `(?type = <http://www.w3.org/2002/07/owl#Class> || ?type = <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property>) &&` : '';
+  const classOrPropertyFilter = mustBeClassOrProperty
+    ? `(?type = <http://www.w3.org/2002/07/owl#Class> || ?type = <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property>) &&`
+    : '';
   const query = `
     SELECT DISTINCT ?subject
     WHERE {
@@ -51,7 +67,4 @@ async function performSparqlQueryForSearchTerm(endpointUrl: string, searchTerm: 
   return data.results.bindings.map((binding: any) => {
     return binding.subject.value;
   });
-
-
 }
-

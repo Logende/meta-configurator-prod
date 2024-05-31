@@ -282,8 +282,8 @@ const JSON_LD_DEFS = {
           ontology: {
             mustBeUri: true,
             mustBeClassOrProperty: true,
-          }
-        }
+          },
+        },
       },
       '@value': {
         description:
@@ -304,15 +304,15 @@ const JSON_LD_DEFS = {
         metaConfigurator: {
           ontology: {
             mustBeUri: true,
-          }
+          },
         },
         items: {
           type: 'string',
           metaConfigurator: {
             ontology: {
               mustBeUri: true,
-            }
-          }
+            },
+          },
         },
       },
       '@container': {
