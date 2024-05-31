@@ -10,10 +10,10 @@ import type {PathElement} from '@/utility/path';
 import type {ValidationResult} from '@/schema/validationService';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {isReadOnly} from '@/components/panels/gui-editor/configTreeNodeReadingUtils';
-import {findSuggestionsForSearchTerm} from "@/rdf/findSuggestionsForSearchTerm";
-import {findJsonLdPrefixes} from "@/rdf/findJsonLdPrefixes";
-import type {SessionMode} from "@/store/sessionMode";
-import {getDataForMode} from "@/data/useDataLink";
+import {findSuggestionsForSearchTerm} from '@/rdf/findSuggestionsForSearchTerm';
+import {findJsonLdPrefixes} from '@/rdf/findJsonLdPrefixes';
+import type {SessionMode} from '@/store/sessionMode';
+import {getDataForMode} from '@/data/useDataLink';
 
 const props = defineProps<{
   propertyName: PathElement;
@@ -23,20 +23,19 @@ const props = defineProps<{
   sessionMode: SessionMode;
 }>();
 
-
 const emit = defineEmits<{
   (e: 'update:propertyData', newValue: any): void;
 }>();
 
-
-const mustBeClassOrProperty = props.propertySchema.metaConfigurator!.ontology!.mustBeClassOrProperty;
+const mustBeClassOrProperty =
+  props.propertySchema.metaConfigurator!.ontology!.mustBeClassOrProperty;
 
 const currentData = getDataForMode(props.sessionMode);
 
 const possibleValues: Ref<string[]> = ref([]);
 
 // computed property to determine possible prefixes
-const contextPrefixes: ComputedRef<[string,string][]> = computed(() => {
+const contextPrefixes: ComputedRef<[string, string][]> = computed(() => {
   return findJsonLdPrefixes(currentData.data.value);
 });
 
@@ -44,14 +43,13 @@ const possiblePrefixes: ComputedRef<string[]> = computed(() => {
   return contextPrefixes.value.map(prefix => prefix[0]);
 });
 
-
 const valueProperty = computed({
   get() {
     return valueToSelectionOption(determineValue(props.propertyData), false);
   },
   set(newValueOption: {name: string; value: any} | string | undefined) {
     const currentPrefix = determinePrefix(props.propertyData);
-    const newValue = ((typeof newValueOption === 'object') ? newValueOption.value : newValueOption) ;
+    const newValue = typeof newValueOption === 'object' ? newValueOption.value : newValueOption;
     const newFullValue = joinPrefixAndValue(currentPrefix, newValue, false);
     emit('update:propertyData', newFullValue);
 
@@ -59,14 +57,13 @@ const valueProperty = computed({
   },
 });
 
-
 const valuePropertyPrefix = computed({
   get() {
     return valueToSelectionOption(determinePrefix(props.propertyData), true);
   },
   set(newPrefixOption: {name: string; value: any} | string | undefined) {
     const currentValue = determineValue(props.propertyData);
-    const newPrefix = ((typeof newPrefixOption === 'object') ? newPrefixOption.value : newPrefixOption) ;
+    const newPrefix = typeof newPrefixOption === 'object' ? newPrefixOption.value : newPrefixOption;
     const newFullValue = joinPrefixAndValue(newPrefix, currentValue, false);
     emit('update:propertyData', newFullValue);
 
@@ -75,18 +72,18 @@ const valuePropertyPrefix = computed({
 });
 
 function determinePrefix(fullValue: any) {
-  if (typeof fullValue === "string") {
-    if (fullValue.includes(":")) {
-      return fullValue.split(":")[0];
+  if (typeof fullValue === 'string') {
+    if (fullValue.includes(':')) {
+      return fullValue.split(':')[0];
     }
   }
   return undefined;
 }
 
 function determineValue(fullValue: any) {
-  if (typeof fullValue === "string") {
-    if (fullValue.includes(":")) {
-      return fullValue.split(":")[1];
+  if (typeof fullValue === 'string') {
+    if (fullValue.includes(':')) {
+      return fullValue.split(':')[1];
     } else {
       return fullValue;
     }
@@ -102,7 +99,11 @@ function determinePrefixMeaning(prefix: string) {
   return undefined;
 }
 
-function joinPrefixAndValue(prefix: string | undefined, value: string | undefined, resolvePrefix: boolean) {
+function joinPrefixAndValue(
+  prefix: string | undefined,
+  value: string | undefined,
+  resolvePrefix: boolean
+) {
   if (!prefix && !value) {
     return undefined;
   }
@@ -113,17 +114,21 @@ function joinPrefixAndValue(prefix: string | undefined, value: string | undefine
     prefix = determinePrefixMeaning(prefix);
   }
   if (!value) {
-    return prefix + ":";
+    return prefix + ':';
   }
   return `${prefix}:${value}`;
 }
 
-
-
-async function updatePossibleValues(userInput: string | undefined, prefix: string | undefined = undefined) {
-  possibleValues.value = await findSuggestionsForSearchTerm(userInput || "", determinePrefixMeaning(prefix || ""), mustBeClassOrProperty);
+async function updatePossibleValues(
+  userInput: string | undefined,
+  prefix: string | undefined = undefined
+) {
+  possibleValues.value = await findSuggestionsForSearchTerm(
+    userInput || '',
+    determinePrefixMeaning(prefix || ''),
+    mustBeClassOrProperty
+  );
 }
-
 
 function valueToSelectionOption(value: any, forPrefix: boolean = false): any {
   if (value === undefined) {
@@ -152,15 +157,15 @@ const allPrefixOptions = computed(() => {
 
 <template>
   <Dropdown
-      class="tableInput w-full"
-      :class="{'underline decoration-wavy decoration-red-600': !props.validationResults.valid}"
-      v-model="valuePropertyPrefix"
-      :editable="true"
-      :options="allPrefixOptions"
-      :disabled="isReadOnly(props.propertySchema)"
-      optionLabel="name"
-      @keydown.stop
-      :placeholder="`Select ${props.propertyName} prefix`" />
+    class="tableInput w-full"
+    :class="{'underline decoration-wavy decoration-red-600': !props.validationResults.valid}"
+    v-model="valuePropertyPrefix"
+    :editable="true"
+    :options="allPrefixOptions"
+    :disabled="isReadOnly(props.propertySchema)"
+    optionLabel="name"
+    @keydown.stop
+    :placeholder="`Select ${props.propertyName} prefix`" />
   <Dropdown
     class="tableInput w-full"
     :class="{'underline decoration-wavy decoration-red-600': !props.validationResults.valid}"
