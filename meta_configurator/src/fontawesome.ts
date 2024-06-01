@@ -27,7 +27,7 @@ import {
   faCode,
   faWrench,
   faFileImport,
-  faTable,
+  faTable, faCircleNodes,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFile,
@@ -73,4 +73,5 @@ export function registerIcons() {
   library.add(faWrench);
   library.add(faCircleCheck);
   library.add(faTable);
+  library.add(faCircleNodes);
 }
