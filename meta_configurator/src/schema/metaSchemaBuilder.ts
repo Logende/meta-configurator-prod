@@ -306,9 +306,9 @@ const JSON_LD_DEFS = {
           'Used to specify the data that is associated with a particular property in the graph.',
         type: ['string', 'boolean', 'number'],
         metaConfigurator: {
-            advanced: true,
-            },
+          advanced: true,
         },
+      },
 
       '@container': {
         description: 'Used to set the default container type for a term.',
@@ -317,7 +317,7 @@ const JSON_LD_DEFS = {
         metaConfigurator: {
           advanced: true,
         },
-      },/*
+      } /*
       '@list': {
         description: 'Used to express an ordered set of data.',
         type: 'array',
@@ -402,7 +402,7 @@ const JSON_LD_DEFS = {
         metaConfigurator: {
           advanced: true,
         },
-      },*/
+      },*/,
     },
   },
 };

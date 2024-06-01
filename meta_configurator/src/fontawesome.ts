@@ -27,7 +27,8 @@ import {
   faCode,
   faWrench,
   faFileImport,
-  faTable, faCircleNodes,
+  faTable,
+  faCircleNodes,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFile,

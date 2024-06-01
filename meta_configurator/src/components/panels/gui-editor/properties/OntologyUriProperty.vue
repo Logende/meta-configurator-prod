@@ -3,7 +3,7 @@ Ontology Uri Property: user can select a prefix and a uri value for a property
 -->
 <script setup lang="ts">
 import {computed, type ComputedRef, type Ref, ref} from 'vue';
-import AutoComplete from "primevue/autocomplete";
+import AutoComplete from 'primevue/autocomplete';
 import _ from 'lodash';
 import {dataToString} from '@/utility/dataToString';
 import type {PathElement} from '@/utility/path';

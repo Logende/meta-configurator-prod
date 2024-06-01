@@ -236,10 +236,12 @@ export class MenuItems {
     });
 
     // toggle between advanced and simple schema options
-    result.push(this.generateToggleButton(
-        () => useSettings().metaSchema.allowBooleanSchema &&
-            useSettings().metaSchema.allowMultipleTypes &&!
-                useSettings().metaSchema.objectTypesComfort,
+    result.push(
+      this.generateToggleButton(
+        () =>
+          useSettings().metaSchema.allowBooleanSchema &&
+          useSettings().metaSchema.allowMultipleTypes &&
+          !useSettings().metaSchema.objectTypesComfort,
         () => {
           const metaSchema = useSettings().metaSchema;
           metaSchema.allowBooleanSchema = true;
@@ -255,11 +257,12 @@ export class MenuItems {
         'fa-solid fa-gear',
         'Enable advanced schema options',
         'Disable advanced schema options'
-    ));
-
+      )
+    );
 
     // toggle to activate/deactivate JSON-LD support
-    result.push(this.generateToggleButton(
+    result.push(
+      this.generateToggleButton(
         () => useSettings().metaSchema.showJsonLdFields,
         () => {
           const metaSchema = useSettings().metaSchema;
@@ -273,8 +276,8 @@ export class MenuItems {
         'fa-solid fa-circle-nodes',
         'Enable JSON-LD fields',
         'Disable JSON-LD fields'
-    ));
-
+      )
+    );
 
     return result;
   }
@@ -313,15 +316,14 @@ export class MenuItems {
     );
   }
 
-
   private generateToggleButton(
-      conditionActive: () => boolean,
-      actionActivate: () => void,
-      actionDeactivate: () => void,
-      iconNameEnabled: string,
-      iconNameDisabled: string,
-      descriptionActivate: string,
-      descriptionDeactivate: string
+    conditionActive: () => boolean,
+    actionActivate: () => void,
+    actionDeactivate: () => void,
+    iconNameEnabled: string,
+    iconNameDisabled: string,
+    descriptionActivate: string,
+    descriptionDeactivate: string
   ): MenuItem {
     if (conditionActive()) {
       return {
