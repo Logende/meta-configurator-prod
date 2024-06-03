@@ -162,23 +162,24 @@ const allPrefixOptions = computed(() => {
 
 <template>
   <AutoComplete
-    class="tableInput w-full prefix-autocomplete"
+    class="tableInput w-full prefix-autocomplete widthThird"
     :class="{'underline decoration-wavy decoration-red-600': !props.validationResults.valid}"
     v-model="valuePropertyPrefix"
     :editable="true"
     :suggestions="allPrefixOptions"
     :disabled="isReadOnly(props.propertySchema)"
     optionLabel="name"
-    :input-style="{width: '100px'}"
+    :input-style="{width: '100%'}"
     @keydown.stop
     placeholder="prefix" />
   <AutoComplete
-    class="tableInput w-full"
+    class="tableInput w-full value-autocomplete widthTwoThirds"
     :class="{'underline decoration-wavy decoration-red-600': !props.validationResults.valid}"
     v-model="valueProperty"
     :editable="true"
     :suggestions="allOptions"
     :disabled="isReadOnly(props.propertySchema)"
+    :input-style="{width: '100%'}"
     optionLabel="name"
     @keydown.stop
     placeholder="uri" />
@@ -192,7 +193,10 @@ const allPrefixOptions = computed(() => {
 ::placeholder {
   color: #a8a8a8;
 }
-.prefix-autocomplete {
-  width: 100px;
+.widthThird {
+  width: 33%;
+}
+.widthTwoThirds {
+  width: 66%;
 }
 </style>
