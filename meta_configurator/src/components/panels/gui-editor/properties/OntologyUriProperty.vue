@@ -93,7 +93,11 @@ function determineValue(fullValue: any) {
 
 function hasPrefix(fullValue: string): boolean {
   // do not consider it a prefix, if the value is an url
-    return fullValue.replace("://", "").includes(':') &&! fullValue.startsWith('http:') && !fullValue.startsWith('https:');
+  return (
+    fullValue.replace('://', '').includes(':') &&
+    !fullValue.startsWith('http:') &&
+    !fullValue.startsWith('https:')
+  );
 }
 
 function determinePrefixMeaning(prefix: string) {
