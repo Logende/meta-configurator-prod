@@ -73,7 +73,7 @@ const valuePropertyPrefix = computed({
 
 function determinePrefix(fullValue: any) {
   if (typeof fullValue === 'string') {
-    if (fullValue.includes(':')) {
+    if (hasPrefix(fullValue)) {
       return fullValue.split(':')[0];
     }
   }
@@ -82,13 +82,18 @@ function determinePrefix(fullValue: any) {
 
 function determineValue(fullValue: any) {
   if (typeof fullValue === 'string') {
-    if (fullValue.includes(':')) {
+    if (hasPrefix(fullValue)) {
       return fullValue.split(':')[1];
     } else {
       return fullValue;
     }
   }
   return undefined;
+}
+
+function hasPrefix(fullValue: string): boolean {
+  // do not consider it a prefix, if the value is an url
+    return fullValue.replace("://", "").includes(':') &&! fullValue.startsWith('http:') && !fullValue.startsWith('https:');
 }
 
 function determinePrefixMeaning(prefix: string) {
