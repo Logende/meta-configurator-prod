@@ -33,12 +33,12 @@ import {
   getSchemaForMode,
   getSessionForMode,
   useCurrentData,
-  useCurrentSchema
+  useCurrentSchema,
 } from '@/data/useDataLink';
 import type {SettingsInterfaceRoot} from '@/settings/settingsTypes';
 import {useSettings} from '@/settings/useSettings';
 import ImportCsvDialog from '@/components/dialogs/csvimport/ImportCsvDialog.vue';
-import {inferJsonSchema} from "@/schema/inferJsonSchema";
+import {inferJsonSchema} from '@/schema/inferJsonSchema';
 
 const props = defineProps<{
   currentMode: SessionMode;
@@ -61,7 +61,7 @@ const topMenuBar = new MenuItems(
   handleFromOurExampleClick,
   showUrlDialog,
   showCsvImportDialog,
-    inferSchemaFromSampleData,
+  inferSchemaFromSampleData
 );
 
 function getPageName(): string {
