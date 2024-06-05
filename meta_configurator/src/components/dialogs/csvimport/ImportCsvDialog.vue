@@ -5,19 +5,19 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Divider from 'primevue/divider';
 import InputText from 'primevue/inputtext';
-import InputSwitch from "primevue/inputswitch";
+import InputSwitch from 'primevue/inputswitch';
 import {useFileDialog} from '@vueuse/core';
 import {readFileContentCsvToRef} from '@/utility/readFileContent';
 import {CsvImportColumnMappingData} from '@/components/dialogs/csvimport/csvImportTypes';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {writeCsvToData} from '@/components/dialogs/csvimport/writeCsvToData';
-import {getDataForMode, getSchemaForMode} from "@/data/useDataLink";
-import {SessionMode} from "@/store/sessionMode";
-import {inferJsonSchema} from "@/schema/inferJsonSchema";
-import {dataPathToSchemaPath, jsonPointerToPath, pathToString} from "@/utility/pathUtils";
-import _ from "lodash";
-import {mergeAllOfs} from "@/schema/mergeAllOfs";
-import type {JsonSchemaType} from "@/schema/jsonSchemaType";
+import {getDataForMode, getSchemaForMode} from '@/data/useDataLink';
+import {SessionMode} from '@/store/sessionMode';
+import {inferJsonSchema} from '@/schema/inferJsonSchema';
+import {dataPathToSchemaPath, jsonPointerToPath, pathToString} from '@/utility/pathUtils';
+import _ from 'lodash';
+import {mergeAllOfs} from '@/schema/mergeAllOfs';
+import type {JsonSchemaType} from '@/schema/jsonSchemaType';
 
 const showDialog = ref(false);
 const currentUserCsv: Ref<any[]> = ref([]);
@@ -54,7 +54,7 @@ function submitImport() {
 
 function addInferredSchema() {
   const data = getDataForMode(SessionMode.DataEditor);
-  const newDataPath = jsonPointerToPath("/" + pathBeforeRowIndex.value);
+  const newDataPath = jsonPointerToPath('/' + pathBeforeRowIndex.value);
   const newData = data.dataAt(newDataPath);
   // we want to obtain an object which contains only the new data, in its proper path
   const dataWithOnlyNew = _.set({}, pathToString(newDataPath), newData);
@@ -69,14 +69,16 @@ function addInferredSchema() {
     const currentSchema = schema.schemaRaw.value;
     // then we merge the new schema into the current one
     getSchemaForMode(SessionMode.DataEditor).schemaRaw.value = mergeAllOfs({
-      allOf: [currentSchema, inferredSchema]
+      allOf: [currentSchema, inferredSchema],
     });
   }
 }
 
-
 function addCustomTitleToSchemaProperty(inferredSchema: any, column: CsvImportColumnMappingData) {
-  const propertySchemaTitlePath = [...dataPathToSchemaPath(column.getPathForJsonDocument(0)), "title"];
+  const propertySchemaTitlePath = [
+    ...dataPathToSchemaPath(column.getPathForJsonDocument(0)),
+    'title',
+  ];
   const titlePathString = pathToString(propertySchemaTitlePath);
   _.set(inferredSchema, titlePathString, column.titleInSchema);
 }
@@ -126,18 +128,17 @@ defineExpose({show: openDialog, close: hideDialog});
         class="flex flex-wrap justify-content-center gap-3 bigger-dialog-content">
         <Divider />
 
-
         <div class="flex align-items-center vertical-center">
           <label for="delimiter" class="mr-2"><b>Infer and generate schema for the data:</b></label>
           <InputSwitch id="delimiter" v-model="isInferSchema" class="small-input" />
         </div>
 
-
         <div class="flex align-items-center vertical-center">
-          <label for="delimiter" class="mr-2"><b>Path for the resulting array in the document:</b></label>
+          <label for="delimiter" class="mr-2"
+            ><b>Path for the resulting array in the document:</b></label
+          >
           <InputText v-model="pathBeforeRowIndex" class="fixed-width" />
         </div>
-
 
         <p>
           CSV file has {{ currentUserCsv.length }} rows and
@@ -145,28 +146,25 @@ defineExpose({show: openDialog, close: hideDialog});
         </p>
         <p>Define the mapping from the CSV to the JSON document for each attribute.</p>
 
-
-
-
         <table>
           <thead>
-          <tr>
-            <th>Column Name</th>
-            <th>Identifier</th>
-            <th v-if="isInferSchema">Title</th>
-          </tr>
+            <tr>
+              <th>Column Name</th>
+              <th>Identifier</th>
+              <th v-if="isInferSchema">Title</th>
+            </tr>
           </thead>
           <tbody>
-          <tr v-for="column in currentColumnMapping">
-            <td>{{ column.name }}</td>
-            <td>
-              <span class="text-xs">/{{column.pathBeforeRowIndex}}/ROW_INDEX/</span>
-              <InputText v-model="column.pathAfterRowIndex" class="fixed-width" />
-            </td>
-            <td v-if="isInferSchema">
-              <InputText v-model="column.titleInSchema" class="fixed-width" />
-            </td>
-          </tr>
+            <tr v-for="column in currentColumnMapping">
+              <td>{{ column.name }}</td>
+              <td>
+                <span class="text-xs">/{{ column.pathBeforeRowIndex }}/ROW_INDEX/</span>
+                <InputText v-model="column.pathAfterRowIndex" class="fixed-width" />
+              </td>
+              <td v-if="isInferSchema">
+                <InputText v-model="column.titleInSchema" class="fixed-width" />
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -195,14 +193,13 @@ defineExpose({show: openDialog, close: hideDialog});
   align-items: center;
 }
 
-
-
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   border: 1px solid black;
   padding: 10px;
   text-align: center;

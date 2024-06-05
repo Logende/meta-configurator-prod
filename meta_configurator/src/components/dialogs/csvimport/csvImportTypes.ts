@@ -20,8 +20,12 @@ export class CsvImportColumnMappingData {
   }
 }
 
-
 function columnNameToElementId(columnName: string): string {
   // remove everything inside parenthesis or brackets (and parenthesis and brackets themselves), trim whitespaces outside and replace whitespaces inside with underscores. Also transform to lower case. And remove all special characters.
-    return columnName.replace(/[\[\(].*?[\]\)]/g, '').trim().replace(/\s/g, '_').toLowerCase().replace(/[^a-z0-9_]/g, '');
+  return columnName
+    .replace(/[\[\(].*?[\]\)]/g, '')
+    .trim()
+    .replace(/\s/g, '_')
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, '');
 }

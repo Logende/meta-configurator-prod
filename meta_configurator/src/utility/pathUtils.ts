@@ -32,13 +32,13 @@ export function jsonPointerToPath(jsonPointer: string): string[] {
 }
 
 export function jsonPointerToPathTyped(jsonPointer: string): Path {
-    return jsonPointerToPath(jsonPointer).map((element: string) => {
-        if (element.match(/^\d+$/)) {
-            return parseInt(element);
-        } else {
-            return element;
-        }
-    });
+  return jsonPointerToPath(jsonPointer).map((element: string) => {
+    if (element.match(/^\d+$/)) {
+      return parseInt(element);
+    } else {
+      return element;
+    }
+  });
 }
 
 /**
@@ -50,19 +50,17 @@ export function pathToJsonPointer(path: Path): string {
   return pointer.compile(path.map((element: PathElement) => element.toString()));
 }
 
-
-
 export function dataPathToSchemaPath(dataPath: Path): Path {
-    const schemaPath: Path = [];
+  const schemaPath: Path = [];
 
-    for (const element of dataPath) {
-        if (typeof element === 'number') {
-            schemaPath.push('items');
-        } else {
-            schemaPath.push('properties');
-            schemaPath.push(element);
-        }
+  for (const element of dataPath) {
+    if (typeof element === 'number') {
+      schemaPath.push('items');
+    } else {
+      schemaPath.push('properties');
+      schemaPath.push(element);
     }
+  }
 
-    return schemaPath;
+  return schemaPath;
 }
