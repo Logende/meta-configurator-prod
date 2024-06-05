@@ -15,17 +15,13 @@ export class CsvImportColumnMappingData {
 
   public getPathForJsonDocument(rowIndex: number): Path {
     return jsonPointerToPathTyped(
-      '/' + this.pathBeforeRowIndex + '/' + rowIndex + '/' + this.pathAfterRowIndex
+        '/' + this.pathBeforeRowIndex + '/' + rowIndex + '/' + this.pathAfterRowIndex
     );
   }
 }
 
+
 function columnNameToElementId(columnName: string): string {
-  // remove everything inside parenthesis or brackets (and parenthesis and brackets themselves), trim whitespaces outside and replace whitespaces inside with underscores. Also transform to lower case. And remove all special characters.
-  return columnName
-    .replace(/[\[\(].*?[\]\)]/g, '')
-    .trim()
-    .replace(/\s/g, '_')
-    .toLowerCase()
-    .replace(/[^a-z0-9_]/g, '');
+  // remove special characters, trim whitespaces outside and replace whitespaces inside with underscores. Also transform to lower case.
+  return columnName.replace(/[^a-zA-Z0-9 ]/g, '').trim().replace(/\s/g, '_').toLowerCase();
 }
