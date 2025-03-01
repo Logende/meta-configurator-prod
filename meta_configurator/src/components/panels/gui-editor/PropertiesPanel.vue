@@ -23,10 +23,10 @@ import type {
   GuiEditorTreeNode,
 } from '@/components/panels/gui-editor/configDataTreeNode';
 import {TreeNodeType} from '@/components/panels/gui-editor/configDataTreeNode';
-import {pathToString} from '@/utility/pathUtils';
+import {arePathsEqual, pathToString} from '@/utility/pathUtils';
 import SchemaInfoOverlay from '@/components/panels/gui-editor/SchemaInfoOverlay.vue';
 import {refDebounced, useDebounceFn} from '@vueuse/core';
-import type {TreeNode} from 'primevue/tree';
+import type {TreeNode} from 'primevue/treenode';
 import {focus, focusOnPath, makeEditableAndSelectContents} from '@/utility/focusUtils';
 import {
   getDataForMode,
@@ -57,10 +57,20 @@ const emit = defineEmits<{
 const session = getSessionForMode(props.sessionMode);
 const data = getDataForMode(props.sessionMode);
 
-// scroll to the current selected element when it changes
+// when the user clicks on a property, the path of the selected element is changed.
+// when the path of the selected element is changed, this panel scrolls to the position accordingly
+// to avoid scrolling on a click in the GUI itself, we remember the last path clicked by the user in the GUI and do not scroll when the user clicks on the same path again
+const lastClickedElement = ref<Path>([]);
+
 watch(
   session.currentSelectedElement,
   () => {
+    if (arePathsEqual(lastClickedElement.value, session.currentSelectedElement.value)) {
+      return;
+    }
+    // if something else is selected, unselect the last clicked element
+    lastClickedElement.value = [];
+
     const absolutePath = session.currentSelectedElement.value;
     const pathToCutOff = session.currentPath.value;
     const relativePath = absolutePath.slice(pathToCutOff.length);
@@ -220,6 +230,7 @@ function updateData(subPath: Path, newValue: any) {
 function clickedPropertyData(nodeData: ConfigTreeNodeData) {
   const path = nodeData.absolutePath;
   if (data.dataAt(path) != undefined) {
+    lastClickedElement.value = path;
     emit('select_path', path);
   }
 }
@@ -562,7 +573,7 @@ function zoomIntoPath(path: Path) {
         </span>
 
         <!-- data nodes, actual edit fields for the data -->
-        <span v-if="displayAsRegularProperty(slotProps.node)" style="max-width: 50%" class="w-full">
+        <span v-if="displayAsRegularProperty(slotProps.node)" style="max-width: 47%" class="w-full">
           <PropertyData
             class="w-full"
             :nodeData="slotProps.node.data"
@@ -609,9 +620,14 @@ function zoomIntoPath(path: Path) {
         <span
           v-if="slotProps.node.type === TreeNodeType.ADVANCED_PROPERTY"
           class="text-gray-500"
-          style="width: 100%; min-width: 100%"
+          style="width: 50%; min-width: 50%"
           :style="addNegativeMarginForTableStyle(slotProps.node.data.depth)">
           Advanced
+        </span>
+        <span
+          v-if="slotProps.node.type === TreeNodeType.ADVANCED_PROPERTY"
+          class="w-full"
+          style="max-width: 47%">
         </span>
       </template>
     </Column>

@@ -8,6 +8,19 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
   required: ['dataFormat', 'codeEditor', 'guiEditor', 'schemaDiagram', 'metaSchema', 'panels'],
   additionalProperties: false,
   properties: {
+    settingsVersion: {
+      type: 'string',
+      description: 'The version of the settings file.',
+      default: '1.0.0',
+      enum: ['1.0.0'],
+      readOnly: true,
+    },
+    preferencesSelected: {
+      type: 'boolean',
+      description:
+        'If set to true, the preferences of the user have been selected. When opening the tool and the preferences have not yet been selected, a preference selection dialog is shown to the user to determine the initial settings and open panels.',
+      default: false,
+    },
     dataFormat: {
       type: 'string',
       description: 'The data format to use for the configuration files.',
@@ -29,32 +42,6 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
       description: 'If set to true, the complete settings view will be hidden.',
       default: false,
     },
-    uiColors: {
-      type: 'object',
-      required: ['schemaEditor', 'dataEditor', 'settings'],
-      additionalProperties: false,
-      description: 'The colors associated with the different panels.',
-      properties: {
-        schemaEditor: {
-          type: 'string',
-          description: 'The color associated with panels that represent schema data.',
-          default: 'olivedrab',
-          format: 'color',
-        },
-        dataEditor: {
-          type: 'string',
-          description: 'The color associated with panels that represent file data.',
-          default: 'black',
-          format: 'color',
-        },
-        settings: {
-          type: 'string',
-          description: 'The color associated with panels that represent settings data.',
-          default: 'darkmagenta',
-          format: 'color',
-        },
-      },
-    },
     codeEditor: {
       type: 'object',
       required: ['fontSize'],
@@ -74,6 +61,12 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
           default: 2,
           minimum: 1,
           maximum: 8,
+        },
+        showFormatSelector: {
+          type: 'boolean',
+          description:
+            'If set to true, a dropdown for selecting the format (JSON or YAML) will be shown in the code editor.',
+          default: true,
         },
       },
     },
@@ -261,19 +254,15 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
             },
           ],
         },
-      },
-    },
-    rdf: {
-      type: 'object',
-      required: ['sparqlEndpointUrl'],
-      additionalProperties: false,
-      description: 'Settings for RDF data.',
-      properties: {
-        sparqlEndpointUrl: {
-          type: 'string',
-          description: 'The SPARQL endpoint to use for querying RDF data.',
-          default: 'https://dbpedia.org/sparql',
-          format: 'uri',
+        hidden: {
+          type: 'array',
+          title: 'Hide Panels',
+          description:
+            'Panels that should be hidden in the editor and not shown to the user. By default, this section contains debugging and experimental panels.',
+          items: {
+            type: 'string',
+            enum: ['aiPrompts', 'debug', 'schemaDiagram', 'guiEditor', 'textEditor', 'tableView'],
+          },
         },
       },
     },
@@ -312,6 +301,57 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         },
       },
     },
+    rdf: {
+      type: 'object',
+      required: ['sparqlEndpointUrl'],
+      additionalProperties: false,
+      description: 'Settings for RDF data.',
+      properties: {
+        sparqlEndpointUrl: {
+          type: 'string',
+          description: 'The SPARQL endpoint to use for querying RDF data.',
+          default: 'https://dbpedia.org/sparql',
+          format: 'uri',
+        },
+      },
+    },
+    aiIntegration: {
+      type: 'object',
+      required: ['model', 'maxTokens', 'temperature', 'endpoint'],
+      additionalProperties: false,
+      description: 'Settings for AI API.',
+      properties: {
+        model: {
+          type: 'string',
+          description: 'The model to use for the AI API.',
+          default: 'gpt-4o-mini',
+          examples: ['gpt-4o-mini', 'gpt-4o'],
+        },
+        maxTokens: {
+          type: 'integer',
+          description: 'The maximum number of tokens to generate.',
+          default: 5000,
+          minimum: 1,
+        },
+        temperature: {
+          type: 'number',
+          description: 'The sampling temperature for the AI API.',
+          default: 0.0,
+          minimum: 0.0,
+          maximum: 1.0,
+        },
+        endpoint: {
+          type: 'string',
+          description:
+            'The endpoint to use for the AI API. Must follow the OpenAI API specification.',
+          default: 'https://api.openai.com/v1/',
+          examples: [
+            'https://api.openai.com/v1/',
+            'https://api.helmholtz-blablador.fz-juelich.de/v1/',
+          ],
+        },
+      },
+    },
   },
   $defs: {
     panels: {
@@ -327,7 +367,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         properties: {
           panelType: {
             type: 'string',
-            enum: ['guiEditor', 'textEditor', 'schemaDiagram'],
+            enum: ['guiEditor', 'textEditor', 'schemaDiagram', 'aiPrompts', 'tableView'],
             title: 'Panel Type',
             description: 'Type of panel to display.',
           },

@@ -3,7 +3,7 @@ List dropdown for enum properties, also used for properties with multiple exampl
 -->
 <script setup lang="ts">
 import {computed} from 'vue';
-import Dropdown from 'primevue/dropdown';
+import Select from 'primevue/select';
 import _ from 'lodash';
 import {dataToString} from '@/utility/dataToString';
 import type {PathElement} from '@/utility/path';
@@ -69,7 +69,7 @@ function isEditable() {
 </script>
 
 <template>
-  <Dropdown
+  <Select
     class="tableInput w-full"
     :class="{'underline decoration-wavy decoration-red-600': !props.validationResults.valid}"
     v-model="valueProperty"
@@ -77,7 +77,10 @@ function isEditable() {
     :options="allOptions"
     :disabled="isReadOnly(props.propertySchema)"
     optionLabel="name"
-    @keydown.stop
+    @keydown.down.stop
+    @keydown.up.stop
+    @keydown.left.stop
+    @keydown.right.stop
     :placeholder="`Select ${props.propertyName}`" />
 </template>
 

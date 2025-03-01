@@ -27,6 +27,7 @@ export function setupLinkToCurrentSelection(editor: Editor, mode: SessionMode) {
  * When the user clicks into the editor, we want to use the cursor position to determine which element from the data
  * the user clicked at. We then update the currentSelectedElement in the store accordingly.
  * @param editor the ace editor
+ * @param mode
  */
 function setupCursorPositionToSelectedPath(editor: Editor, mode: SessionMode) {
   editor.on(
@@ -58,6 +59,7 @@ function setupCursorPositionToSelectedPath(editor: Editor, mode: SessionMode) {
 /**
  * Listens to changes in the currentSelectedElement and update the cursor position accordingly.
  * @param editor the ace editor
+ * @param mode
  */
 function setupSelectedPathToCursorPosition(editor: Editor, mode: SessionMode) {
   watchArray(
@@ -95,11 +97,16 @@ function setupUpdateContentWhenDataChanges(editor: Editor, mode: SessionMode) {
       }
     }
   );
+  // the immediate watch is necessary to update the editor content when the data is loaded. It will, however, also result in currentChangeFromOutside and currentSelectionFromOutside being set to true.
+  // This is why we need to reset the flags after the initial change.
+  currentChangeFromOutside = false;
+  selectionChangeFromOutside = false;
 }
 
 /**
  * When the content of the editor is modified by the user, we want to update the file data accordingly
  * @param editor the ace editor
+ * @param mode
  */
 function setupPropagationOfEditorContentChanges(editor: Editor, mode: SessionMode) {
   editor.on(

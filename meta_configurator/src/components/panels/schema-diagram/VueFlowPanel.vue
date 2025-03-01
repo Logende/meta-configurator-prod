@@ -125,6 +125,9 @@ function fitViewForElementByPath(path: Path) {
       if (areNodesAlreadyWithinViewport([bestMatchingNode])) {
         return;
       }
+      if (path.length == 0) {
+        return;
+      }
     }
 
     fitViewForNodes([bestMatchingNode]);
@@ -381,7 +384,7 @@ function addEnum() {
   const enumPath = findAvailableId(['$defs'], 'enum');
   schemaData.setDataAt(enumPath, {
     type: 'string',
-    enum: ['APPLE', 'BANANA', 'ORANGE'],
+    enum: ['VAL_1', 'VAL_2'],
   });
   selectElement(enumPath);
 }
@@ -389,6 +392,7 @@ function addEnum() {
 function unselectElement() {
   selectedNode.value = undefined;
   selectedData.value = undefined;
+  schemaSession.currentSelectedElement.value = [];
 }
 </script>
 
@@ -453,6 +457,13 @@ function unselectElement() {
   background-color: white;
   height: 100%;
   width: 100%;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .layout-flow {
+    background-color: #121212;
+  }
 }
 
 .controls {

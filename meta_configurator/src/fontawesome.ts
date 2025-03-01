@@ -32,6 +32,10 @@ import {
   faFileExport,
   faTrash,
   faPlus,
+  faInfo,
+  faRobot,
+  faXmark,
+  faBug,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFile,
@@ -81,4 +85,8 @@ export function registerIcons() {
   library.add(faCircleNodes);
   library.add(faTrash);
   library.add(faPlus);
+  library.add(faInfo);
+  library.add(faRobot);
+  library.add(faXmark);
+  library.add(faBug);
 }

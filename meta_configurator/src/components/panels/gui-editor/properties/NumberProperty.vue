@@ -59,7 +59,10 @@ const stepValue = computed(() => {
     :placeholder="generatePlaceholderText(props.propertySchema, props.propertyName)"
     :step="stepValue"
     :disabled="isReadOnly(props.propertySchema)"
-    @keydown.stop
+    @keydown.down.stop
+    @keydown.up.stop
+    @keydown.left.stop
+    @keydown.right.stop
     increment-button-class="p-button-text p-button-secondary"
     decrement-button-class="p-button-text p-button-secondary" />
 </template>

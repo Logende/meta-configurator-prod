@@ -1,29 +1,27 @@
-import type {PanelType} from '@/components/panelType';
 import type {SessionMode} from '@/store/sessionMode';
 
 export interface SettingsInterfaceRoot {
+  settingsVersion: string;
+  preferencesSelected: boolean;
   dataFormat: DataFormat;
   toolbarTitle: string;
   hideSchemaEditor: boolean;
   hideSettings: boolean;
-  uiColors: {
-    schemaEditor: string;
-    dataEditor: string;
-    settings: string;
-  };
   codeEditor: SettingsInterfaceCodeEditor;
   guiEditor: SettingsInterfaceGuiEditor;
   schemaDiagram: SettingsInterfaceSchemaDiagram;
   metaSchema: SettingsInterfaceMetaSchema;
   panels: SettingsInterfacePanels;
-  rdf: SettingsInterfaceRdf;
   frontend: SettingsInterfacFrontend;
   backend: SettingsInterfaceBackend;
+  rdf: SettingsInterfaceRdf;
+  aiIntegration: SettingsInterfaceAiIntegraton;
 }
 
 export interface SettingsInterfaceCodeEditor {
   fontSize: number;
   tabSize: number;
+  showFormatSelector: boolean;
 }
 
 export interface SettingsInterfaceGuiEditor {
@@ -49,10 +47,11 @@ export interface SettingsInterfacePanels {
   dataEditor: SettingsInterfacePanel[];
   schemaEditor: SettingsInterfacePanel[];
   settings: SettingsInterfacePanel[];
+  hidden: string[];
 }
 
 export interface SettingsInterfacePanel {
-  panelType: PanelType;
+  panelType: string;
   mode: SessionMode;
   size: number;
 }
@@ -77,10 +76,6 @@ export enum DataFormat {
   YAML = 'yaml',
 }
 
-export interface SettingsInterfaceRdf {
-  sparqlEndpointUrl: string;
-}
-
 export interface SettingsInterfaceBackend {
   hostname: string;
   port: number;
@@ -88,4 +83,15 @@ export interface SettingsInterfaceBackend {
 
 export interface SettingsInterfacFrontend {
   hostname: string;
+}
+
+export interface SettingsInterfaceRdf {
+  sparqlEndpointUrl: string;
+}
+
+export interface SettingsInterfaceAiIntegraton {
+  model: string;
+  maxTokens: number;
+  temperature: number;
+  endpoint: string;
 }

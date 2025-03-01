@@ -145,7 +145,7 @@ function isAttributeHighlighted() {
         {{ props.data.name }}
       </b>
       <Button
-        v-if="!isDefinedInDefinitions() && isObjectEditable()"
+        v-if="!isDefinedInDefinitions() && isNameEditable()"
         class="vue-flow-object-button"
         size="small"
         v-tooltip.bottom="
@@ -251,7 +251,7 @@ function isAttributeHighlighted() {
   border: none; /* Remove border */
   background: none; /* Remove background */
   padding: 0; /* Remove padding */
-  margin: 0;
+  margin-left: 5px;
   color: black;
 }
 </style>

@@ -32,16 +32,16 @@ function updateData(path: Path, newValue: any) {
       const parentSchemaProps = getSchemaForMode(props.sessionMode).effectiveSchemaAtPath(
         parentSchemaPath
       ).schema.properties;
-      const parentData = structuredClone(data.dataAt(parentPath));
+      const parentData = data.dataAt(parentPath);
       if (!_.isEmpty(parentSchemaProps) && !_.isEmpty(parentData) && !Array.isArray(parentData)) {
         // only proceed with property sorting when parent schema and data are not empty and the parent schema is of type object (not array!)
         // warning: this function only works for normal properties, not for composition, conditionals and other advanced features
         // for those advanced features, the new property will be added at the end of the object
         // TODO: implement sorting for advanced features. This will be more complicated and will require a lot of testing
-        const schemaKeys = Object.keys(parentSchemaProps);
-        const dataKeys = Object.keys(parentData);
         const newElementKey = path[path.length - 1];
         parentData[newElementKey] = newValue; // Add the new property
+        const schemaKeys = Object.keys(parentSchemaProps);
+        const dataKeys = Object.keys(parentData);
 
         // sort the document properties based on the order of schema properties
         const sortedProperties: {[key: string]: any} = {};
@@ -50,7 +50,7 @@ function updateData(path: Path, newValue: any) {
             sortedProperties[key] = parentData[key];
           }
         });
-        // after adding properties from the schema in proper order, add the rest of the properties
+        // after adding properties from the schema in proper order, add the rest of the properties f
         dataKeys.forEach(key => {
           if (!schemaKeys.includes(key)) {
             sortedProperties[key] = parentData[key];

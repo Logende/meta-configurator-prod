@@ -174,7 +174,10 @@ const allPrefixOptions = computed(() => {
     :disabled="isReadOnly(props.propertySchema)"
     optionLabel="name"
     :input-style="{width: '100%'}"
-    @keydown.stop
+    @keydown.down.stop
+    @keydown.up.stop
+    @keydown.left.stop
+    @keydown.right.stop
     placeholder="prefix" />
   <AutoComplete
     class="tableInput w-full value-autocomplete widthTwoThirds"
@@ -185,7 +188,10 @@ const allPrefixOptions = computed(() => {
     :disabled="isReadOnly(props.propertySchema)"
     :input-style="{width: '100%'}"
     optionLabel="name"
-    @keydown.stop
+    @keydown.down.stop
+    @keydown.up.stop
+    @keydown.left.stop
+    @keydown.right.stop
     placeholder="uri" />
 </template>
 

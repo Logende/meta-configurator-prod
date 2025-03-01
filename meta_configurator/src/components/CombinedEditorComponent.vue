@@ -3,7 +3,7 @@ Main component of the application.
 Combines the code editor and the gui editor.
 -->
 <script lang="ts" setup>
-import {computed, onMounted, type Ref, ref, watch} from 'vue';
+import {computed, onMounted, onUnmounted, type Ref, ref, watch} from 'vue';
 import 'primeicons/primeicons.css';
 import SplitterPanel from 'primevue/splitterpanel';
 import Splitter from 'primevue/splitter';
@@ -21,10 +21,10 @@ import {getDataForMode} from '@/data/useDataLink';
 import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
 import {useSessionStore} from '@/store/sessionStore';
-import {getComponentByPanelType} from '@/components/panelType';
 import type {SettingsInterfacePanels, SettingsInterfaceRoot} from '@/settings/settingsTypes';
 import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
 import {addDefaultsForSettings} from '@/utility/settingsUpdater';
+import {panelTypeRegistry} from '@/components/panels/panelTypeRegistry';
 
 const props = defineProps<{
   sessionMode: SessionMode;
@@ -55,7 +55,7 @@ watchImmediate(
 const panels = computed(() => {
   return panelsDefinition[props.sessionMode].map(panel => {
     return {
-      component: getComponentByPanelType(panel.panelType),
+      component: panelTypeRegistry.getPanelTypeDefinition(panel.panelType).getComponent(),
       sessionMode: panel.mode,
       size: panel.size,
     };
@@ -84,8 +84,12 @@ const mainPanel = ref();
 
 onMounted(() => {
   if (!useSessionStore().hasShownInitialDialog) {
-    topToolbarRef.value?.showInitialSchemaDialog();
-    useSessionStore().hasShownInitialDialog = true;
+    if (!useSettings().value.preferencesSelected) {
+      topToolbarRef.value?.showPreferencesDialog();
+    } else {
+      topToolbarRef.value?.showInitialSchemaDialog();
+      useSessionStore().hasShownInitialDialog = true;
+    }
 
     // update user settings by adding default value for missing fields
     addDefaultsForSettings();
@@ -113,6 +117,48 @@ function onDrop(files: File[] | null) {
 
 confirmationService.confirm = useConfirm();
 toastService.toast = useToast();
+
+function undo() {
+  getDataForMode(props.sessionMode).undoManager.undo();
+}
+
+function redo() {
+  getDataForMode(props.sessionMode).undoManager.redo();
+}
+
+function isMacOS() {
+  if ('userAgentData' in navigator) {
+    return (navigator.userAgentData as {platform: string}).platform === 'macOS';
+  } else {
+    return /Mac/i.test(navigator.userAgent);
+  }
+}
+
+// Function to handle keydown events
+function handleKeydown(event: KeyboardEvent) {
+  const isMac = isMacOS();
+  const undoKeys = isMac ? event.metaKey && event.key === 'z' : event.ctrlKey && event.key === 'z';
+  const redoKeys = isMac
+    ? event.metaKey && event.shiftKey && event.key === 'z'
+    : event.ctrlKey && event.key === 'y';
+
+  if (undoKeys && !redoKeys) {
+    event.preventDefault();
+    undo();
+  } else if (redoKeys) {
+    event.preventDefault();
+    redo();
+  }
+}
+
+// Attach and remove event listeners
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown);
+});
 </script>
 
 <template>
@@ -120,15 +166,18 @@ toastService.toast = useToast();
   <ConfirmDialog />
 
   <div class="w-full h-full flex" style="max-height: 100%">
-    <main class="flex flex-col">
+    <main class="flex flex-col w-full h-full">
       <!-- toolbar -->
       <TopToolbar
         ref="topToolbarRef"
-        class="h-12 flex-none"
         :current-mode="props.sessionMode"
         @mode-selected="updateMode" />
       <div class="flex-grow overflow-hidden" ref="mainPanel" id="mainpanel">
-        <Splitter class="h-full" :layout="width < 600 ? 'vertical' : 'horizontal'" :key="panels">
+        <Splitter
+          class="h-full"
+          style="min-width: 0"
+          :layout="width < 600 ? 'vertical' : 'horizontal'"
+          :key="panels">
           <SplitterPanel
             v-for="(panel, index) in panels"
             :key="index + panel"

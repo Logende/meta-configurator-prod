@@ -11,6 +11,7 @@ import Listbox from 'primevue/listbox';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {errorService} from '@/main';
 import InitialSchemaSelectionDialog from '@/components/dialogs/InitialSchemaSelectionDialog.vue';
+import PreferenceDialog from '@/components/dialogs/PreferenceDialog.vue';
 
 import InputText from 'primevue/inputtext';
 import AboutDialog from '@/components/dialogs/AboutDialog.vue';
@@ -78,14 +79,10 @@ function getPageName(): string {
  * Menu items of the page selection menu.
  */
 function getPageSelectionMenuItems(settings: SettingsInterfaceRoot): MenuItem[] {
-  // TODO: make the text actually have the given uiColors. Somehow currently the color in the style has no effect
   const dataEditorItem: MenuItem = {
     label: 'Data Editor',
     icon: 'fa-regular fa-file',
-    style:
-      props.currentMode !== SessionMode.DataEditor
-        ? 'color: ' + settings.uiColors.dataEditor
-        : 'font-weight: bold; color: ' + settings.uiColors.dataEditor,
+    style: props.currentMode !== SessionMode.DataEditor ? '' : 'font-weight: bold;',
     command: () => {
       emit('mode-selected', SessionMode.DataEditor);
     },
@@ -93,10 +90,7 @@ function getPageSelectionMenuItems(settings: SettingsInterfaceRoot): MenuItem[] 
   const schemaEditorItem: MenuItem = {
     label: 'Schema Editor',
     icon: 'fa-regular fa-file-code',
-    style:
-      props.currentMode !== SessionMode.SchemaEditor
-        ? 'color: ' + settings.uiColors.schemaEditor
-        : 'font-weight: bold; color: ' + settings.uiColors.schemaEditor,
+    style: props.currentMode !== SessionMode.SchemaEditor ? '' : 'font-weight: bold;',
     command: () => {
       emit('mode-selected', SessionMode.SchemaEditor);
     },
@@ -104,10 +98,7 @@ function getPageSelectionMenuItems(settings: SettingsInterfaceRoot): MenuItem[] 
   const settingsItem: MenuItem = {
     label: 'Settings',
     icon: 'fa-solid fa-cog',
-    style:
-      props.currentMode !== SessionMode.Settings
-        ? 'color: ' + settings.uiColors.settings
-        : 'font-weight: bold; color: ' + settings.uiColors.settings,
+    style: props.currentMode !== SessionMode.Settings ? '' : 'font-weight: bold;',
     command: () => {
       emit('mode-selected', SessionMode.Settings);
     },
@@ -125,7 +116,7 @@ function getPageSelectionMenuItems(settings: SettingsInterfaceRoot): MenuItem[] 
 
 const items = computed(() => getPageSelectionMenuItems(settings.value));
 
-function handleUserSelection(option: 'Example' | 'JsonStore' | 'File' | 'URL') {
+function handleUserSchemaDialogSelection(option: 'Example' | 'JsonStore' | 'File' | 'URL') {
   switch (option) {
     case 'Example':
       handleFromOurExampleClick();
@@ -222,9 +213,9 @@ const toggle = event => {
   menu.value.toggle(event);
 };
 
-const itemMenuRefs = ref(new Map<string, Menu>());
+const itemMenuRefs = ref(new Map<string, typeof Menu>());
 
-function setItemMenuRef(item: MenuItem, menu: Menu) {
+function setItemMenuRef(item: MenuItem, menu: typeof Menu) {
   itemMenuRefs.value.set(getLabelOfItem(item), menu);
 }
 function handleItemButtonClick(item: MenuItem, event: Event) {
@@ -270,9 +261,15 @@ function isHighlighted(item: MenuItem) {
 const searchTerm: Ref<string> = ref('');
 
 const initialSchemaSelectionDialog = ref();
+const preferencesDialog = ref();
+
 // Function to show the category selection dialog
 const showInitialSchemaDialog = () => {
   initialSchemaSelectionDialog.value?.show();
+};
+
+const showPreferencesDialog = () => {
+  preferencesDialog.value?.show();
 };
 
 const csvImportDialog = ref();
@@ -288,6 +285,7 @@ function showSnapshotDialog() {
 
 defineExpose({
   showInitialSchemaDialog,
+  showPreferencesDialog,
 });
 
 useMagicKeys({
@@ -337,9 +335,11 @@ const showSearchResultsMenu = event => {
 </script>
 
 <template>
+  <PreferenceDialog :open-schema-selection-fct="showInitialSchemaDialog" ref="preferencesDialog" />
+
   <InitialSchemaSelectionDialog
     ref="initialSchemaSelectionDialog"
-    @user_selected_option="option => handleUserSelection(option)" />
+    @user_selected_option="option => handleUserSchemaDialogSelection(option)" />
 
   <ImportCsvDialog ref="csvImportDialog" />
 
@@ -432,7 +432,7 @@ const showSearchResultsMenu = event => {
 
       <!-- search bar -->
       <span class="p-input-icon-left ml-5" style="width: 20rem">
-        <i class="pi pi-search" style="font-size: 0.9rem" />
+        <i class="pi" style="font-size: 0.9rem" />
         <InputText
           show-clear
           class="h-7 w-full"
@@ -501,20 +501,21 @@ const showSearchResultsMenu = event => {
 .main-menu-button {
   font-weight: bold;
   font-size: large;
-  color: #495057;
+  color: var(--p-primary-active-color);
   padding-left: 1rem !important;
   padding-top: 0.3rem !important;
   padding-bottom: 0.3rem !important;
   min-width: 13rem !important;
 }
+
 .toolbar-button {
   font-weight: bold;
   font-size: large;
-  color: #495057;
+  color: var(--p-primary-active-color);
   padding: 0.35rem !important;
 }
 
 .highlighted-icon {
-  color: var(--primary-color);
+  color: var(--p-highlight-color) !important;
 }
 </style>

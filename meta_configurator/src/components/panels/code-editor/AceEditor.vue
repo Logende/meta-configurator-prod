@@ -10,9 +10,7 @@ import 'brace/mode/javascript';
 import 'brace/mode/json';
 import 'brace/mode/yaml';
 import 'brace/theme/clouds';
-import 'brace/theme/ambiance';
-import 'brace/theme/monokai';
-import {watchImmediate} from '@vueuse/core';
+import 'brace/theme/clouds_midnight';
 import {setupAnnotationsFromValidationErrors} from '@/components/panels/code-editor/setupAnnotations';
 import {
   setupLinkToCurrentSelection,
@@ -20,6 +18,9 @@ import {
 } from '@/components/panels/code-editor/setupLinkToSelectionAndData';
 import {useSettings} from '@/settings/useSettings';
 import {SessionMode} from '@/store/sessionMode';
+import {setupAceMode, setupAceProperties} from '@/components/panels/shared-components/aceUtils';
+import Select from 'primevue/select';
+import {formatRegistry} from '@/dataformats/formatRegistry';
 
 const props = defineProps<{
   sessionMode: SessionMode;
@@ -27,62 +28,33 @@ const props = defineProps<{
 
 const settings = useSettings();
 
+const dataFormatOptions = formatRegistry.getFormatNames();
+
 // random id is used to enable multiple Ace Editors of same sessionMode on the same page
 const editor_id = 'code-editor-' + props.sessionMode + '-' + Math.random();
 
 onMounted(() => {
   const editor: Editor = ace.edit(editor_id);
-  setupAceMode(editor);
-  setupAceProperties(editor);
+  setupAceMode(editor, settings.value);
+  setupAceProperties(editor, settings.value);
 
   setupLinkToData(editor, props.sessionMode);
   setupLinkToCurrentSelection(editor, props.sessionMode);
   setupAnnotationsFromValidationErrors(editor, props.sessionMode);
 });
-
-/**
- * change the mode depending on the data format.
- * to support new data formats, they need to be added here too.
- */
-function setupAceMode(editor: Editor) {
-  watchImmediate(
-    () => settings.value.dataFormat,
-    format => {
-      if (format == 'json') {
-        editor.getSession().setMode('ace/mode/json');
-      } else if (format == 'yaml') {
-        editor.getSession().setMode('ace/mode/yaml');
-      }
-    }
-  );
-}
-
-function setupAceProperties(editor: Editor) {
-  editor.$blockScrolling = Infinity;
-  editor.setOptions({
-    autoScrollEditorIntoView: true, // this is needed if editor is inside scrollable page
-  });
-  editor.setTheme('ace/theme/clouds');
-  editor.setShowPrintMargin(false);
-  editor.getSession().setTabSize(settings.value.codeEditor.tabSize);
-
-  // it's not clear why timeout is needed here, but without it the
-  // ace editor starts flashing and becomes unusable
-  window.setTimeout(() => {
-    watchImmediate(
-      () => settings.value.codeEditor.fontSize,
-      fontSize => {
-        if (editor && fontSize && fontSize > 6 && fontSize < 65) {
-          editor.setFontSize(fontSize.toString() + 'px');
-        }
-      }
-    );
-  }, 0);
-}
 </script>
 
 <template>
+  <div class="format-switch-container" v-if="settings.codeEditor.showFormatSelector">
+    <Select :options="dataFormatOptions" v-model="settings.dataFormat" size="small" />
+  </div>
   <div class="h-full" :id="editor_id" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.format-switch-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+</style>

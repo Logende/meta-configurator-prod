@@ -2,7 +2,8 @@ import {getDataForMode} from '@/data/useDataLink';
 import {SessionMode} from '@/store/sessionMode';
 import {SETTINGS_DATA_DEFAULT} from '@/settings/defaultSettingsData';
 import type {SettingsInterfacePanel, SettingsInterfaceRoot} from '@/settings/settingsTypes';
-import {PanelType} from '@/components/panelType';
+import {panelTypeRegistry} from '@/components/panels/panelTypeRegistry';
+import {useDataSource} from '@/data/dataSource';
 
 function addDefaultsForMissingFields(userFile: any, defaultsFile: any) {
   for (const key in defaultsFile) {
@@ -16,6 +17,20 @@ function addDefaultsForMissingFields(userFile: any, defaultsFile: any) {
   }
 }
 
+function overwriteSettingsValues(userFile: any, replaceFile: any) {
+  for (const key in replaceFile) {
+    if (!(key in userFile)) {
+      userFile[key] = replaceFile[key];
+    } else if (typeof replaceFile[key] === 'object' && !Array.isArray(replaceFile[key])) {
+      overwriteSettingsValues(userFile[key], replaceFile[key]);
+    } else {
+      // element is in both files and is not an object
+      // overwrite the value
+      userFile[key] = replaceFile[key];
+    }
+  }
+}
+
 function fixPanels(userData: SettingsInterfaceRoot, defaultData: SettingsInterfaceRoot) {
   let panelsAreMessedUp = false;
 
@@ -23,7 +38,7 @@ function fixPanels(userData: SettingsInterfaceRoot, defaultData: SettingsInterfa
   for (const mode of Object.values(SessionMode)) {
     const modePanels: SettingsInterfacePanel[] = userPanels[mode];
     for (const panel of modePanels) {
-      if (!panel.panelType || !Object.values(PanelType).includes(panel.panelType)) {
+      if (!panel.panelType || !panelTypeRegistry.getPanelTypeNames().includes(panel.panelType)) {
         panelsAreMessedUp = true;
       }
       if (!panel.mode || !Object.values(SessionMode).includes(panel.mode)) {
@@ -42,4 +57,10 @@ export function addDefaultsForSettings() {
   addDefaultsForMissingFields(userSettings, defaultSettings);
 
   fixPanels(userSettings, defaultSettings);
+}
+
+export function overwriteSettings(replaceFile: any) {
+  // overwrites the settings with the values from the replace file. Keeps all other values
+  const userSettings = useDataSource().settingsData.value;
+  overwriteSettingsValues(userSettings, replaceFile);
 }
