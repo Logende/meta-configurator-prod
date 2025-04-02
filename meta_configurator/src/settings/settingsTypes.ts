@@ -22,6 +22,10 @@ export interface SettingsInterfaceCodeEditor {
   fontSize: number;
   tabSize: number;
   showFormatSelector: boolean;
+  xml: SettingsCodeEditorXml;
+}
+export interface SettingsCodeEditorXml {
+  attributeNamePrefix: string;
 }
 
 export interface SettingsInterfaceGuiEditor {
@@ -74,6 +78,7 @@ export enum PropertySorting {
 export enum DataFormat {
   JSON = 'json',
   YAML = 'yaml',
+  XML = 'xml',
 }
 
 export interface SettingsInterfaceBackend {

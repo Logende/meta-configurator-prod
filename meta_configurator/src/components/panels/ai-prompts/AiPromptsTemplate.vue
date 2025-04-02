@@ -5,7 +5,6 @@ import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
-import Divider from 'primevue/divider';
 import SelectButton from 'primevue/selectbutton';
 import {type Editor} from 'brace';
 import * as ace from 'brace';
@@ -297,9 +296,7 @@ function selectRootElement() {
 <template>
   <div class="container">
     <ApiKey />
-    <Divider />
 
-    <label class="heading">AI Prompts</label>
     <Message severity="error" v-if="errorMessage.length > 0">{{ errorMessage }}</Message>
     <div class="p-5 space-y-3">
       <!-- Create Document Prompt -->

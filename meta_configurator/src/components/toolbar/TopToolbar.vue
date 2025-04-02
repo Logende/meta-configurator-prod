@@ -35,6 +35,9 @@ import {useSettings} from '@/settings/useSettings';
 import ImportCsvDialog from '@/components/dialogs/csvimport/ImportCsvDialog.vue';
 import {inferJsonSchema} from '@/schema/inferJsonSchema';
 import SaveSnapshotDialog from '@/components/dialogs/snapshot/SaveSnapshotDialog.vue';
+import Select from 'primevue/select';
+import {formatRegistry} from '@/dataformats/formatRegistry';
+import CodeGenerationDialog from '@/components/dialogs/code-generation/CodeGenerationDialog.vue';
 
 const props = defineProps<{
   currentMode: SessionMode;
@@ -46,6 +49,7 @@ const emit = defineEmits<{
 
 const settings = useSettings();
 const selectedSchema = ref<SchemaOption | null>(null);
+const dataFormatOptions = formatRegistry.getFormatNames();
 
 const showFetchedSchemas = ref(false);
 const showAboutDialog = ref(false);
@@ -59,6 +63,7 @@ const topMenuBar = new MenuItems(
   showUrlDialog,
   showCsvImportDialog,
   showSnapshotDialog,
+  showCodeGenerationDialog,
   inferSchemaFromSampleData
 );
 
@@ -274,6 +279,7 @@ const showPreferencesDialog = () => {
 
 const csvImportDialog = ref();
 const snapshotDialog = ref();
+const codeGenerationDialog = ref();
 
 function showCsvImportDialog() {
   csvImportDialog.value?.show();
@@ -281,6 +287,15 @@ function showCsvImportDialog() {
 
 function showSnapshotDialog() {
   snapshotDialog.value?.show();
+}
+
+function showCodeGenerationDialog(schemaMode: boolean) {
+  if (schemaMode) {
+    codeGenerationDialog.value?.activateSchemaMode();
+  } else {
+    codeGenerationDialog.value?.activateDataMode();
+  }
+  codeGenerationDialog.value?.show();
 }
 
 defineExpose({
@@ -344,6 +359,8 @@ const showSearchResultsMenu = event => {
   <ImportCsvDialog ref="csvImportDialog" />
 
   <SaveSnapshotDialog ref="snapshotDialog" />
+
+  <CodeGenerationDialog ref="codeGenerationDialog" />
 
   <!-- Dialog to select a schema from JSON Schema Store, TODO: move to separate component -->
   <Dialog v-model:visible="topMenuBar.showDialog.value" header="Select a Schema">
@@ -430,13 +447,21 @@ const showSearchResultsMenu = event => {
         </Menu>
       </div>
 
+      <div class="format-switch-container" v-if="settings.codeEditor.showFormatSelector">
+        <Select
+          :options="dataFormatOptions"
+          v-model="settings.dataFormat"
+          size="small"
+          class="custom-select" />
+      </div>
+
       <!-- search bar -->
-      <span class="p-input-icon-left ml-5" style="width: 20rem">
+      <span class="p-input-icon-left ml-5" style="width: 14rem">
         <i class="pi" style="font-size: 0.9rem" />
         <InputText
           show-clear
           class="h-7 w-full"
-          placeholder="Search for data or properties..."
+          placeholder="Search for data or property"
           v-model="searchTerm"
           @focus="showSearchResultsMenu"
           @blur="() => searchResultMenu.value?.hide()"
@@ -493,6 +518,9 @@ const showSearchResultsMenu = event => {
   width: 100%;
 }
 .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
   margin-top: 1rem;
 }
 .no-padding {
@@ -517,5 +545,11 @@ const showSearchResultsMenu = event => {
 
 .highlighted-icon {
   color: var(--p-highlight-color) !important;
+}
+
+.custom-select {
+  height: 1.75rem;
+  line-height: 0.7rem;
+  padding: 0;
 }
 </style>

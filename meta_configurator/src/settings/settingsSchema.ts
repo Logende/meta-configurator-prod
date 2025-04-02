@@ -25,7 +25,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
       type: 'string',
       description: 'The data format to use for the configuration files.',
       default: 'json',
-      enum: ['json', 'yaml'],
+      enum: ['json', 'yaml', 'xml'],
     },
     toolbarTitle: {
       type: 'string',
@@ -67,6 +67,19 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
           description:
             'If set to true, a dropdown for selecting the format (JSON or YAML) will be shown in the code editor.',
           default: true,
+        },
+        xml: {
+          type: 'object',
+          required: ['attributeNamePrefix'],
+          additionalProperties: false,
+          description: 'Settings for the XML format  in the code editor.',
+          properties: {
+            attributeNamePrefix: {
+              type: 'string',
+              description: 'The prefix for attributes in the XML format.',
+              default: '_',
+            },
+          },
         },
       },
     },

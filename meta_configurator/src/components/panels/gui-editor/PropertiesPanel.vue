@@ -36,8 +36,8 @@ import {
 } from '@/data/useDataLink';
 import {dataAt} from '@/utility/resolveDataAtPath';
 import type {SessionMode} from '@/store/sessionMode';
-import {replacePropertyNameUtils} from '@/components/panels/shared-components/renameUtils';
 import _ from 'lodash';
+import {replacePropertyNameUtils} from '@/utility/renameUtils';
 
 const props = defineProps<{
   currentSchema: JsonSchemaWrapper;
@@ -346,8 +346,10 @@ function addEmptyArrayEntry(relativePath: Path) {
 
   if (!arraySchema?.items) {
     addItem(relativePath, '');
+  } else {
+    const itemsSchema = arraySchema.items;
+    addItem(relativePath, itemsSchema.initialValue());
   }
-  addItem(relativePath, arraySchema?.items?.initialValue());
 }
 
 /**
@@ -548,7 +550,7 @@ function zoomIntoPath(path: Path) {
     v-model:expandedKeys="session.currentExpandedElements.value"
     @nodeExpand="expandElementChildren"
     :filters="treeTableFilters">
-    <Column field="name" header="Property" :sortable="true" expander>
+    <Column field="name" expander>
       <template #body="slotProps">
         <!-- data nodes, note: wrapping in another span breaks the styling completely -->
         <span
