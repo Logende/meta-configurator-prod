@@ -6,15 +6,25 @@ export interface SettingsInterfaceRoot {
   toolbarTitle: string;
   hideSchemaEditor: boolean;
   hideSettings: boolean;
+  performance: SettingsInterfacePerformance;
   codeEditor: SettingsInterfaceCodeEditor;
   guiEditor: SettingsInterfaceGuiEditor;
   schemaDiagram: SettingsInterfaceSchemaDiagram;
+  documentation: SettingsInterfaceDocumentation;
   metaSchema: SettingsInterfaceMetaSchema;
   panels: SettingsInterfacePanels;
   frontend: SettingsInterfacFrontend;
   backend: SettingsInterfaceBackend;
   rdf: SettingsInterfaceRdf;
   aiIntegration: SettingsInterfaceAiIntegraton;
+}
+
+export interface SettingsInterfacePerformance {
+  maxDocumentSizeForValidation: number; // in bytes
+  maxDocumentSizeForCursorSynchronization: number; // in bytes
+  maxDocumentSizeForSchemaInference: number; // in bytes
+  minObjectPropertyCountToPreserve: number; // when large document is trimmed, this is minimum count of object properties to be preserved
+  maxShownChildrenInGuiEditor: number;
 }
 
 export interface SettingsInterfaceCodeEditor {
@@ -44,6 +54,12 @@ export interface SettingsInterfaceSchemaDiagram {
   automaticZoomMaxValue: number;
   automaticZoomMinValue: number;
   mergeAllOfs: boolean;
+}
+
+export interface SettingsInterfaceDocumentation {
+  mergeAllOfs: boolean;
+  enumMaxCountToShowWithoutSpoiler: number;
+  repeatMultipleOccurrencesInTableOfContents: boolean;
 }
 
 export interface SettingsInterfacePanels {

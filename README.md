@@ -1,5 +1,15 @@
+> [!NOTE]  
+> You are using MetaConfigurator? Please [get in touch with us](https://forms.gle/MHKvrkMfdymH8TDs5)! We are currently applying for funding to turn the tool into a research infrastructure and want to prepare an overview of the existing user base. Besides, we are interested in your ideas, your feedback, and any feature requests.
+
+
 MetaConfigurator
 ================
+
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/MetaConfigurator/meta-configurator/e2e.yml?label=End%20to%20End%20Tests)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/MetaConfigurator/meta-configurator/npm-test.yml?label=Unit%20Tests)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/MetaConfigurator/meta-configurator/github-pages.yml?label=Github%20Pages%20Build)
+![GitHub License](https://img.shields.io/github/license/MetaConfigurator/meta-configurator)
+
 
 🚀 What is MetaConfigurator?
 ----------------------------
@@ -50,6 +60,8 @@ Creating structured data files (or schemas) manually can be complex and error-pr
 *   **Support for JSON Schema Draft-2020-12** – Ensuring compatibility with modern schema definitions.
 
 *   **Code Generation** – Generate source code from JSON schemas in multiple programming languages (Python, Rust, TypeScript, C++, Java, etc.) using [quicktype](https://github.com/glideapps/quicktype/).
+
+*   **Documentation Generation** (experimental) – Generate documentation from JSON schemas, with export to a Markdown file.
 
 🛠️ Development
 ---------------

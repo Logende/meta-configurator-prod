@@ -1,6 +1,10 @@
 import type {JsonSchemaObjectType, JsonSchemaType, TopLevelSchema} from '@/schema/jsonSchemaType';
 import type {Path} from '@/utility/path';
-import {getTypeDescription, isSubSchemaDefinedInDefinitions} from '@/schema/schemaReadingUtils';
+import {
+  doesSchemaHaveType,
+  getTypeDescription,
+  isSubSchemaDefinedInDefinitions,
+} from '@/schema/schemaReadingUtils';
 import {jsonPointerToPath, pathToString} from '@/utility/pathUtils';
 import {useSettings} from '@/settings/useSettings';
 import {mergeAllOfs} from '@/schema/mergeAllOfs';
@@ -369,11 +373,19 @@ export function generateAttributeTypeDescription(
     if (arrayItemObject) {
       if (arrayItemObject.schema.title) {
         typeDescription = arrayItemObject.title + '[]';
+      } else if (
+        doesSchemaHaveType(arrayItemObject.schema, 'object', true) ||
+        doesSchemaHaveType(arrayItemObject.schema, 'array', true)
+      ) {
+        // if the array item is of type object or array, use the fallback display name
+        typeDescription = arrayItemObject.fallbackDisplayName + '[]';
       } else {
+        // otherwise, use the type description of the array item
         typeDescription = getTypeDescription(arrayItemObject.schema) + '[]';
       }
     } else {
       if (isObjectSchema(schema.items)) {
+        // if there is no corresponding node for the array item, use the type description of the items
         typeDescription = getTypeDescription(schema.items as JsonSchemaObjectType) + '[]';
       }
     }
@@ -392,6 +404,14 @@ export function generateAttributeTypeDescription(
     }
   }
 
+  // if data type is an enum, overwrite with title of the enum if existing
+  // else, leave the type description as is
+  if (isEnumSchema(schema)) {
+    if (schema.title && schema.title.length > 0) {
+      typeDescription = schema.title;
+    }
+  }
+
   return typeDescription;
 }
 
@@ -402,7 +422,6 @@ export function generateAttributeEdges(
 ) {
   for (const attributeData of node.attributes) {
     const [edgeTargetNode, isArray] = resolveEdgeTarget(
-      node,
       attributeData.schema,
       attributeData.absolutePath,
       objectDefs
@@ -411,6 +430,7 @@ export function generateAttributeEdges(
       graph.edges.push(
         new EdgeData(
           node,
+          attributeData.absolutePath,
           'source-' + attributeData.name,
           edgeTargetNode,
           EdgeType.ATTRIBUTE,
@@ -427,8 +447,15 @@ export function generateAttributeEdges(
   }
 }
 
-function resolveEdgeTarget(
-  node: SchemaObjectNodeData,
+export function nodesToObjectDefs(nodes: SchemaNodeData[]) {
+  return new Map(
+    nodes.map(node => {
+      return [pathToString(node.absolutePath), node];
+    })
+  );
+}
+
+export function resolveEdgeTarget(
   subSchema: JsonSchemaType,
   subSchemaPath: Path,
   objectDefs: Map<string, SchemaNodeData>
@@ -670,9 +697,7 @@ function generateObjectSubSchemasEdge(
 ) {
   for (const [index, subSchema] of subSchemas.entries()) {
     const subSchemaPath = [...subSchemasPath, index];
-    if (typeof subSchema === 'object') {
-      generateObjectSubSchemaEdge(node, subSchema, subSchemaPath, edgeType, objectDefs, graph);
-    }
+    generateObjectSubSchemaEdge(node, subSchema, subSchemaPath, edgeType, objectDefs, graph);
   }
 }
 
@@ -684,11 +709,12 @@ function generateObjectSubSchemaEdge(
   objectDefs: Map<string, SchemaNodeData>,
   graph: SchemaGraph
 ) {
-  const [edgeTargetNode, isArray] = resolveEdgeTarget(node, subSchema, subSchemaPath, objectDefs);
+  const [edgeTargetNode, isArray] = resolveEdgeTarget(subSchema, subSchemaPath, objectDefs);
   if (edgeTargetNode) {
     graph.edges.push(
       new EdgeData(
         node,
+        subSchemaPath,
         null,
         edgeTargetNode,
         edgeType,
@@ -743,5 +769,3 @@ export function trimNodeChildren(graph: SchemaGraph) {
 function isNodeConnectedByEdge(node: SchemaElementData, graph: SchemaGraph): boolean {
   return graph.edges.find(edge => edge.start == node || edge.end == node) !== undefined;
 }
-
-function getSubSchema(rootSchema: TopLevelSchema, path: Path) {}
