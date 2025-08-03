@@ -7,25 +7,32 @@ const dataFormats = [ 'json', 'yaml', 'xml' ];
 
 
 export async function getCurrentEditorMode(page: Page): Promise<SessionMode> {
-    const text = await page.getByRole('toolbar').innerText();
+  // the page contains :data-testid="'mode-active-' + (item.index === activeIndex ? 'true' : 'false')" and as child the active mode button
 
-    for (const mode of Object.values(SessionMode)) {
-        if (text.includes(modeToMenuTitle(mode))) {
-            return mode;
-        }
+  const activeModeButton = await page.getByTestId('mode-active-true');
+  const activeModeText = await activeModeButton.innerText();
+  for (let mode of Object.values(SessionMode)) {
+    const modeTitle = modeToMenuTitle(mode);
+    if (activeModeText.includes(modeTitle)) {
+      return mode;
     }
+  }
     throw new Error('Unable to detect editor mode');
 }
 
 export async function forceEditorMode(page: Page, newMode: SessionMode) {
     const currentMode = await getCurrentEditorMode(page);
     const newModeTitle = modeToMenuTitle(newMode);
-    const currentModeTitle = modeToMenuTitle(currentMode);
 
     if (currentMode !== newMode) {
 
-        await page.getByRole('button', { name: currentModeTitle }).click();
-        await page.getByRole('menuitem', { name: newModeTitle }).locator('a').click();
+      // special case for Settings mode, where we need to click on the settings button
+      if (newMode === SessionMode.Settings) {
+          await page.getByTestId('mode-settings-button').click();
+      } else {
+        await page.locator('a').filter({ hasText: newModeTitle }).click();
+      }
+
     }
 }
 
@@ -54,16 +61,9 @@ export async function openAppWithMode(page: Page, mode: SessionMode) {
     await page.goto(url.toString());
 }
 
-export async function getSchemaTitle(page: Page) {
-    // this is an example of how to access the component when the schema is called Person: await page.getByText('GUI Editor Schema: Person')
-    const schemaTitle = page.getByText('GUI Editor Schema:');
-    const schemaTitleText = await schemaTitle.innerText();
-    const schemaTitleTextArray = schemaTitleText.split(':');
-    return schemaTitleTextArray[1].trim();
-}
 
 export async function checkSchemaTitleForText(page: Page, text: string) {
-    const schemaTitle = page.getByText('GUI Editor Schema:');
+    const schemaTitle = page.getByTestId('current-schema');
     await expect(schemaTitle).toContainText(text);
 }
 

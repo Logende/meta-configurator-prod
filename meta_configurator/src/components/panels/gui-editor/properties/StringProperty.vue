@@ -7,6 +7,7 @@ import type {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import type {PathElement} from '@/utility/path';
 import type {ValidationResult} from '@/schema/validationService';
 import {isReadOnly} from '@/components/panels/gui-editor/configTreeNodeReadingUtils';
+import {useSettings} from '@/settings/useSettings';
 
 const props = defineProps<{
   propertyName: PathElement;
@@ -14,6 +15,8 @@ const props = defineProps<{
   propertySchema: JsonSchemaWrapper;
   validationResults: ValidationResult;
 }>();
+
+const settings = useSettings();
 
 const emit = defineEmits<{
   (e: 'update:propertyData', newValue: string | undefined): void;
@@ -24,6 +27,11 @@ const polishedPropertyData = computed(() => {
     return '';
   }
   if (typeof props.propertyData === 'object') {
+    // if the property data is an empty object, we return an empty string
+    if (props.propertyData !== null && Object.keys(props.propertyData).length === 0) {
+      return '';
+    }
+    // if the property data is an object with properties, we stringify it to display it in the input field
     return JSON.stringify(props.propertyData);
   }
   return props.propertyData;
@@ -36,7 +44,7 @@ const newPropertyData = ref(props.propertyData);
 // update the newPropertyData reference when the props change
 watch(polishedPropertyData, setNewPropertyData);
 
-function setNewPropertyData(newValue: string) {
+function setNewPropertyData(newValue: string | undefined) {
   newPropertyData.value = newValue;
 }
 
@@ -64,7 +72,7 @@ function updateValue() {
 <style scoped>
 /* remove border so it fits the look of the table better */
 .tableInput {
-  border: none;
+  border: v-bind("settings.guiEditor.showBorderAroundInputFields ? '1px solid #d1d5db' : 'none'");
 }
 
 ::placeholder {

@@ -10,6 +10,7 @@ import type {PathElement} from '@/utility/path';
 import type {ValidationResult} from '@/schema/validationService';
 import {JsonSchemaWrapper} from '@/schema/jsonSchemaWrapper';
 import {isReadOnly} from '@/components/panels/gui-editor/configTreeNodeReadingUtils';
+import {useSettings} from '@/settings/useSettings';
 
 const props = defineProps<{
   propertyName: PathElement;
@@ -18,6 +19,8 @@ const props = defineProps<{
   propertyData: any | undefined;
   validationResults: ValidationResult;
 }>();
+
+const settings = useSettings();
 
 const emit = defineEmits<{
   (e: 'update:propertyData', newValue: any): void;
@@ -46,6 +49,16 @@ function valueToSelectionOption(value: any): any {
   }
   // check if value is one of the possible values
   if (!props.possibleValues.some(possibleValue => _.isEqual(possibleValue, value))) {
+    // if the value is an empty object and the schema expects a string, we return an empty string
+    if (
+      value !== null &&
+      typeof value === 'object' &&
+      Object.keys(value).length === 0 &&
+      props.propertySchema.hasType('string')
+    ) {
+      return '';
+    }
+
     return value; // don't wrap in object if not in possible values, otherwise the dropdown cannot correctly select the value
   }
   const formattedValue = dataToString(value);
@@ -86,8 +99,8 @@ function isEditable() {
 
 <style scoped>
 .tableInput {
-  border: none;
   box-shadow: none;
+  border: v-bind("settings.guiEditor.showBorderAroundInputFields ? '1px solid #d1d5db' : 'none'");
 }
 ::placeholder {
   color: #a8a8a8;

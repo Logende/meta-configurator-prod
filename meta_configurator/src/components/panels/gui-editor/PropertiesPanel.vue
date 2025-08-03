@@ -44,6 +44,7 @@ const props = defineProps<{
   sessionMode: SessionMode;
   currentData: any;
   currentPath: Path;
+  tableHeader?: string;
 }>();
 
 const emit = defineEmits<{
@@ -538,7 +539,7 @@ function zoomIntoPath(path: Path) {
   <SchemaInfoOverlay ref="schemaInfoOverlay" @hide="overlayShowScheduled = false" />
   <TreeTable
     :value="nodesToDisplay"
-    class="scroll-pt-16"
+    :class="{'scroll-pt-16': true, 'no-header-style': !tableHeader}"
     filter-mode="lenient"
     removable-sort
     resizable-columns
@@ -550,7 +551,7 @@ function zoomIntoPath(path: Path) {
     v-model:expandedKeys="session.currentExpandedElements.value"
     @nodeExpand="expandElementChildren"
     :filters="treeTableFilters">
-    <Column field="name" expander>
+    <Column field="name" :header="tableHeader" expander>
       <template #body="slotProps">
         <!-- data nodes, note: wrapping in another span breaks the styling completely -->
         <span
@@ -668,5 +669,10 @@ function zoomIntoPath(path: Path) {
 
 :deep(.p-button-label) {
   font-weight: 500;
+}
+</style>
+<style>
+.no-header-style .p-treetable-thead {
+  display: none;
 }
 </style>
