@@ -2,7 +2,7 @@
  * The default settings data.
  */
 export const SETTINGS_DATA_DEFAULT = {
-  settingsVersion: '1.0.2',
+  settingsVersion: '1.0.3',
   latestNewsHash: 0,
   dataFormat: 'json',
   toolbarTitle: 'MetaConfigurator',
@@ -27,7 +27,8 @@ export const SETTINGS_DATA_DEFAULT = {
     maximumDepth: 20,
     propertySorting: 'schemaOrder',
     hideAddPropertyButton: true,
-    showBorderAroundInputFields: false,
+    showBorderAroundInputFields: true,
+    showSchemaTitleAsHeader: true,
   },
   schemaDiagram: {
     editMode: true,
@@ -96,7 +97,7 @@ export const SETTINGS_DATA_DEFAULT = {
         size: 50,
       },
     ],
-    hidden: ['aiPrompts', 'debug', 'test'],
+    hidden: ['debug', 'test'],
   },
   frontend: {
     hostname:
