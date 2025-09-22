@@ -86,6 +86,8 @@ For more details, check out the [Developer Documentation](./documentation_develo
 
 Explore how to use MetaConfigurator with real-world examples:
 
+*   **[Schema Creation](./documentation_user/examples/schema_creation)** – Learn how to create and edit JSON schemas using different methods (inference from data, exploring existing schemas, manual editing).
+
 *   **[MOF Synthesis Example](./documentation_user/examples/mof_synthesis)** – Demonstrates schema generation, CSV import, and JSON export.
 
 *   **[Configurator Builder](./documentation_user/examples/configurator_building)** – Learn how to create and share pre-configured MetaConfigurator URLs.
@@ -117,13 +119,13 @@ pages = {1--9}
 ❓ FAQ
 ------
 
-### 🔒 What happens to the data I type into MetaConfigurator?
+### What happens to the data I type into MetaConfigurator?
 
 MetaConfigurator runs entirely **inside your browser** - it does **not** send your schemas, data, or anything you type to any server. The website itself is just a static page delivered by GitHub Pages (like downloading a PDF or image), and all the work happens locally on your computer.
 
 The only exception is if you **click the “Share Snapshot” button**. Then, and only then, the snapshot you create is sent to a **University of Stuttgart** server so you can share a unique link with others.
 
-📜 **See our [full Privacy Policy](PRIVACY.md)** for more information.
+**See our [full Privacy Policy](PRIVACY.md)** for more information.
 
 📝 License
 ----------
