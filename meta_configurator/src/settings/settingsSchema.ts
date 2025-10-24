@@ -5,7 +5,21 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
   title: 'Settings',
   description: 'MetaConfigurator settings',
   type: 'object',
-  required: ['dataFormat', 'codeEditor', 'guiEditor', 'schemaDiagram', 'metaSchema', 'panels'],
+  required: [
+    'dataFormat',
+    'toolbarTitle',
+    'performance',
+    'codeEditor',
+    'guiEditor',
+    'schemaDiagram',
+    'documentation',
+    'metaSchema',
+    'panels',
+    'frontend',
+    'backend',
+    'rdf',
+    'aiIntegration',
+  ],
   additionalProperties: false,
   properties: {
     settingsVersion: {
@@ -51,6 +65,8 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         'maxDocumentSizeForSchemaInference',
         'minObjectPropertyCountToPreserve',
         'maxShownChildrenInGuiEditor',
+        'maxErrorsToShow',
+        'maxErrorsToShowBulkValidation',
       ],
       additionalProperties: false,
       description: 'Performance related settings belong here.',
@@ -90,11 +106,25 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
           default: 50,
           minimum: 5,
         },
+        maxErrorsToShow: {
+          type: 'integer',
+          description:
+            'The maximum number of validation errors to show. If there are more errors, only the first ones will be shown. This is because for huge documents the computation of the position of errors in the document can be expensive.',
+          default: 15,
+          minimum: 1,
+        },
+        maxErrorsToShowBulkValidation: {
+          type: 'integer',
+          description:
+            'The maximum number of validation errors to show in case of internal use of bulk validation, which is supported only for some data formats.',
+          default: 200,
+          minimum: 1,
+        },
       },
     },
     codeEditor: {
       type: 'object',
-      required: ['fontSize'],
+      required: ['fontSize', 'tabSize', 'showFormatSelector', 'xml'],
       additionalProperties: false,
       description: 'Settings of the code editor.',
       properties: {
@@ -135,7 +165,13 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
     },
     guiEditor: {
       type: 'object',
-      required: ['maximumDepth', 'propertySorting'],
+      required: [
+        'maximumDepth',
+        'propertySorting',
+        'hideAddPropertyButton',
+        'showBorderAroundInputFields',
+        'showSchemaTitleAsHeader',
+      ],
       additionalProperties: false,
       description: 'GUI Editor related settings belong here.',
       properties: {
@@ -310,11 +346,9 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
         },
         objectTypesComfort: {
           type: 'boolean',
-          $comment:
-            "Warning: due to incompatibility, this option will disable schema editor support for defining the items of an array, as well as support for many advanced keywords, such as conditionals and 'not'.",
           description:
             'This is a comfort feature: the original JSON Meta Schema allows properties of a particular type to have example values, constant values, default values or enum values of different types. For example, a field for numbers could have a string as a default value. This meta schema option forces the same type for all these values. This enables the tool to auto-select the corresponding type in the schema editor, avoiding the need for the user to manually select the types. ',
-          default: false,
+          default: true,
           metaConfigurator: {
             advanced: true,
           },
@@ -339,7 +373,7 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
       },
     },
     panels: {
-      required: ['dataEditor', 'schemaEditor', 'settings'],
+      required: ['dataEditor', 'schemaEditor', 'settings', 'hidden'],
       title: 'Panels',
       type: 'object',
       additionalProperties: false,
@@ -436,7 +470,26 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
           type: 'string',
           description: 'The model to use for the AI API.',
           default: 'gpt-4o-mini',
-          examples: ['gpt-4o-mini', 'gpt-4o'],
+          examples: [
+            // OpenAI
+            'gpt-4o-mini',
+            'gpt-4o',
+            'gpt-4o-pro',
+            'gpt-4.1',
+            'gpt-3.5-turbo',
+            // Perplexity (Sonar)
+            'sonar',
+            'sonar-pro',
+            // OpenRouter (provider/model format)
+            'openai/gpt-3.5-turbo',
+            'openai/gpt-4o-mini',
+            'anthropic/claude-3.5-sonnet',
+            'anthropic/claude-sonnet-4.5',
+            'mistral/mistral-7b-instruct',
+            'deepseek/deepseek-v3.2-exp',
+            'x-ai/grok-4-fast',
+            'x-ai/grok-4-fast:free',
+          ],
         },
         maxTokens: {
           type: 'integer',
@@ -457,9 +510,17 @@ export const SETTINGS_SCHEMA: TopLevelSchema = {
             'The endpoint to use for the AI API. Must follow the OpenAI API specification.',
           default: 'https://api.openai.com/v1/',
           examples: [
+            // OpenAI official
             'https://api.openai.com/v1/',
-            'https://api.helmholtz-blablador.fz-juelich.de/v1/',
+            // Perplexity (OpenAI-compatible)
+            'https://api.perplexity.ai/',
+            // OpenRouter (aggregator, OpenAI-compatible)
+            // 'https://api.openrouter.ai/v1/', seems to not support this kind of authentication
+            // Academic / institutional deployments (OpenAI-compatible)
             'https://chat-ai.academiccloud.de/v1/',
+            'https://api.helmholtz-blablador.fz-juelich.de/v1/',
+            // Custom/self-hosted proxy
+            'https://my-llm-proxy.example.com/v1/',
           ],
         },
       },

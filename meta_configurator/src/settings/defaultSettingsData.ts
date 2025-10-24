@@ -14,6 +14,8 @@ export const SETTINGS_DATA_DEFAULT = {
     maxDocumentSizeForSchemaInference: 40960, // 40 KiB
     minObjectPropertyCountToPreserve: 16, // when large document is trimmed, this is minimum count of object properties to be preserved
     maxShownChildrenInGuiEditor: 50,
+    maxErrorsToShow: 15,
+    maxErrorsToShowBulkValidation: 200,
   },
   codeEditor: {
     fontSize: 14,
@@ -50,7 +52,7 @@ export const SETTINGS_DATA_DEFAULT = {
   metaSchema: {
     allowBooleanSchema: false,
     allowMultipleTypes: false,
-    objectTypesComfort: false,
+    objectTypesComfort: true,
     markMoreFieldsAsAdvanced: true,
     showAdditionalPropertiesButton: false,
     showJsonLdFields: false,
@@ -114,6 +116,6 @@ export const SETTINGS_DATA_DEFAULT = {
     model: 'gpt-4o-mini',
     maxTokens: 5000,
     temperature: 0.0,
-    endpoint: 'https://api.openai.com/v1/chat/completions',
+    endpoint: 'https://api.openai.com/v1/',
   },
 };

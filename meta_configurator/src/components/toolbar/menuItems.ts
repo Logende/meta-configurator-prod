@@ -26,6 +26,7 @@ export class MenuItems {
   private readonly showImportCsvDialog: () => void;
   private readonly showSnapshotDialog: () => void;
   private readonly showCodeGenerationDialog: (schemaMode: boolean) => void;
+  private readonly showDataExportDialog: (schemaMode: boolean) => void;
   private readonly showDataMappingDialog: () => void;
   private readonly inferJsonSchemaFromSampleData: () => void;
 
@@ -36,6 +37,7 @@ export class MenuItems {
     showImportCsvDialog: () => void,
     showSnapshotDialog: () => void,
     showCodeGenerationDialog: (schemaMode: boolean) => void,
+    showDataExportDialog: (schemaMode: boolean) => void,
     showDataMappingDialog: () => void,
     inferJsonSchemaFromSampleData: () => void
   ) {
@@ -45,6 +47,7 @@ export class MenuItems {
     this.showImportCsvDialog = showImportCsvDialog;
     this.showSnapshotDialog = showSnapshotDialog;
     this.showCodeGenerationDialog = showCodeGenerationDialog;
+    this.showDataExportDialog = showDataExportDialog;
     this.showDataMappingDialog = showDataMappingDialog;
     this.inferJsonSchemaFromSampleData = inferJsonSchemaFromSampleData;
   }
@@ -64,7 +67,6 @@ export class MenuItems {
             label: 'Generate Data...',
             icon: 'fa-solid fa-gears',
             command: openGenerateDataDialog,
-            disabled: true, // currently not working in the deployed version
           },
         ],
       },
@@ -99,6 +101,11 @@ export class MenuItems {
             label: 'Transform Data to match the Schema',
             icon: 'fa-solid fa-wand-magic-sparkles',
             command: this.showDataMappingDialog,
+          },
+          {
+            label: 'Export Data via Text Template',
+            icon: 'fa-solid fa-file-export',
+            command: () => this.showDataExportDialog(false),
           },
         ],
       },
@@ -262,13 +269,11 @@ export class MenuItems {
         () =>
           settings.metaSchema.allowBooleanSchema &&
           settings.metaSchema.allowMultipleTypes &&
-          !settings.metaSchema.objectTypesComfort &&
           !settings.metaSchema.markMoreFieldsAsAdvanced,
         () => {
           const metaSchema = settings.metaSchema;
           metaSchema.allowBooleanSchema = true;
           metaSchema.allowMultipleTypes = true;
-          metaSchema.objectTypesComfort = false;
           metaSchema.markMoreFieldsAsAdvanced = false;
         },
         () => {
@@ -276,6 +281,7 @@ export class MenuItems {
           metaSchema.allowBooleanSchema = false;
           metaSchema.allowMultipleTypes = false;
           metaSchema.markMoreFieldsAsAdvanced = true;
+          metaSchema.objectTypesComfort = true;
         },
         'fa-solid fa-lock',
         'fa-solid fa-lock-open',
