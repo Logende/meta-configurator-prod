@@ -18,7 +18,7 @@ jobs:
         env:
           USE_META_CONFIGURATOR_BASE_PATH: false
           VITE_FRONTEND_HOSTNAME: https://www.metaconfigurator.org
-          EXPERIMENTAL: true
+          EXPERIMENTAL: false
         run: |
           cd meta_configurator
           npm ci
