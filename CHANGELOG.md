@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.0] - 2026-04-22
+
+### Added
+
+- Add next/previous buttons to the search bar for easier navigation through search results
+- Add copy/paste support for schema diagrams
+
+## [2.4.0] - 2026-04-15
+
+### Added
+
+- Add RDF Panel to support RDF authoring workflows
+- Add JSON to JSON-LD conversion using RML mapping
+- Add SPARQL querying support in RDF Panel
+- Add Knowledge Graph visualization for RDF data exploration
+
 ## [2.3.0] - 2026-04-14
 
 ### Changed
